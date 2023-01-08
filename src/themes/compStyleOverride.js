@@ -55,16 +55,19 @@ export default function componentStyleOverrides(theme) {
                     paddingBottom: '10px',
                     '&.Mui-selected': {
                         color: theme.menuSelected,
-                        backgroundColor: theme.menuSelectedBack,
+                        backgroundColor:
+                            theme.menuSelectedBack,
                         '&:hover': {
-                            backgroundColor: theme.menuSelectedBack
+                            backgroundColor:
+                                theme.menuSelectedBack
                         },
                         '& .MuiListItemIcon-root': {
                             color: theme.menuSelected
                         }
                     },
                     '&:hover': {
-                        backgroundColor: theme.menuSelectedBack,
+                        backgroundColor:
+                            theme.menuSelectedBack,
                         color: theme.menuSelected,
                         '& .MuiListItemIcon-root': {
                             color: theme.menuSelected
@@ -108,7 +111,8 @@ export default function componentStyleOverrides(theme) {
                         borderColor: theme.colors?.grey400
                     },
                     '&:hover $notchedOutline': {
-                        borderColor: theme.colors?.primaryLight
+                        borderColor:
+                            theme.colors?.primaryLight
                     },
                     '&.MuiInputBase-multiline': {
                         padding: 1
@@ -121,9 +125,10 @@ export default function componentStyleOverrides(theme) {
                     borderRadius: `${theme?.customization?.borderRadius}px`,
                     '&.MuiInputBase-inputSizeSmall': {
                         padding: '10px 14px',
-                        '&.MuiInputBase-inputAdornedStart': {
-                            paddingLeft: 0
-                        }
+                        '&.MuiInputBase-inputAdornedStart':
+                            {
+                                paddingLeft: 0
+                            }
                     }
                 },
                 inputAdornedStart: {
@@ -169,9 +174,10 @@ export default function componentStyleOverrides(theme) {
         MuiChip: {
             styleOverrides: {
                 root: {
-                    '&.MuiChip-deletable .MuiChip-deleteIcon': {
-                        color: 'inherit'
-                    }
+                    '&.MuiChip-deletable .MuiChip-deleteIcon':
+                        {
+                            color: 'inherit'
+                        }
                 }
             }
         },

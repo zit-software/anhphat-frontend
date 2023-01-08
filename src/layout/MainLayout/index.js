@@ -4,7 +4,13 @@ import { Outlet } from 'react-router-dom';
 
 // material-ui
 import { styled, useTheme } from '@mui/material/styles';
-import { AppBar, Box, CssBaseline, Toolbar, useMediaQuery } from '@mui/material';
+import {
+    AppBar,
+    Box,
+    CssBaseline,
+    Toolbar,
+    useMediaQuery
+} from '@mui/material';
 
 // project imports
 import Breadcrumbs from 'ui-component/extended/Breadcrumbs';
@@ -19,14 +25,17 @@ import { SET_MENU } from 'store/actions';
 import { IconChevronRight } from '@tabler/icons';
 
 // styles
-const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
+const Main = styled('main', {
+    shouldForwardProp: (prop) => prop !== 'open'
+})(({ theme, open }) => ({
     ...theme.typography.mainContent,
     ...(!open && {
         borderBottomLeftRadius: 0,
         borderBottomRightRadius: 0,
         transition: theme.transitions.create('margin', {
             easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen
+            duration:
+                theme.transitions.duration.leavingScreen
         }),
         [theme.breakpoints.up('md')]: {
             marginLeft: -(drawerWidth - 20),
@@ -47,7 +56,8 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({
     ...(open && {
         transition: theme.transitions.create('margin', {
             easing: theme.transitions.easing.easeOut,
-            duration: theme.transitions.duration.enteringScreen
+            duration:
+                theme.transitions.duration.enteringScreen
         }),
         marginLeft: 0,
         borderBottomLeftRadius: 0,
@@ -66,13 +76,20 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({
 
 const MainLayout = () => {
     const theme = useTheme();
-    const matchDownMd = useMediaQuery(theme.breakpoints.down('lg'));
+    const matchDownMd = useMediaQuery(
+        theme.breakpoints.down('lg')
+    );
 
     // Handle left drawer
-    const leftDrawerOpened = useSelector((state) => state.customization.opened);
+    const leftDrawerOpened = useSelector(
+        (state) => state.customization.opened
+    );
     const dispatch = useDispatch();
     const handleLeftDrawerToggle = () => {
-        dispatch({ type: SET_MENU, opened: !leftDrawerOpened });
+        dispatch({
+            type: SET_MENU,
+            opened: !leftDrawerOpened
+        });
     };
 
     useEffect(() => {
@@ -90,22 +107,38 @@ const MainLayout = () => {
                 color="inherit"
                 elevation={0}
                 sx={{
-                    bgcolor: theme.palette.background.default,
-                    transition: leftDrawerOpened ? theme.transitions.create('width') : 'none'
+                    bgcolor:
+                        theme.palette.background.default,
+                    transition: leftDrawerOpened
+                        ? theme.transitions.create('width')
+                        : 'none'
                 }}
             >
                 <Toolbar>
-                    <Header handleLeftDrawerToggle={handleLeftDrawerToggle} />
+                    <Header
+                        handleLeftDrawerToggle={
+                            handleLeftDrawerToggle
+                        }
+                    />
                 </Toolbar>
             </AppBar>
 
             {/* drawer */}
-            <Sidebar drawerOpen={leftDrawerOpened} drawerToggle={handleLeftDrawerToggle} />
+            <Sidebar
+                drawerOpen={leftDrawerOpened}
+                drawerToggle={handleLeftDrawerToggle}
+            />
 
             {/* main content */}
             <Main theme={theme} open={leftDrawerOpened}>
                 {/* breadcrumb */}
-                <Breadcrumbs separator={IconChevronRight} navigation={navigation} icon title rightAlign />
+                <Breadcrumbs
+                    separator={IconChevronRight}
+                    navigation={navigation}
+                    icon
+                    title
+                    rightAlign
+                />
                 <Outlet />
             </Main>
             <Customization />

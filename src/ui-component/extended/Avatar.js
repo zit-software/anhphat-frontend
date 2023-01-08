@@ -6,15 +6,27 @@ import MuiAvatar from '@mui/material/Avatar';
 
 // ==============================|| AVATAR ||============================== //
 
-const Avatar = ({ color, outline, size, sx, ...others }) => {
+const Avatar = ({
+    color,
+    outline,
+    size,
+    sx,
+    ...others
+}) => {
     const theme = useTheme();
 
-    const colorSX = color && !outline && { color: theme.palette.background.paper, bgcolor: `${color}.main` };
+    const colorSX = color &&
+        !outline && {
+            color: theme.palette.background.paper,
+            bgcolor: `${color}.main`
+        };
     const outlineSX = outline && {
         color: color ? `${color}.main` : `primary.main`,
         bgcolor: theme.palette.background.paper,
         border: '2px solid',
-        borderColor: color ? `${color}.main` : `primary.main`
+        borderColor: color
+            ? `${color}.main`
+            : `primary.main`
     };
     let sizeSX = {};
     switch (size) {
@@ -58,7 +70,17 @@ const Avatar = ({ color, outline, size, sx, ...others }) => {
             sizeSX = {};
     }
 
-    return <MuiAvatar sx={{ ...colorSX, ...outlineSX, ...sizeSX, ...sx }} {...others} />;
+    return (
+        <MuiAvatar
+            sx={{
+                ...colorSX,
+                ...outlineSX,
+                ...sizeSX,
+                ...sx
+            }}
+            {...others}
+        />
+    );
 };
 
 Avatar.propTypes = {

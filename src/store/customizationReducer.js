@@ -13,7 +13,10 @@ export const initialState = {
 
 // ==============================|| CUSTOMIZATION REDUCER ||============================== //
 
-const customizationReducer = (state = initialState, action) => {
+const customizationReducer = (
+    state = initialState,
+    action
+) => {
     let id;
     switch (action.type) {
         case actionTypes.MENU_OPEN:
@@ -36,6 +39,12 @@ const customizationReducer = (state = initialState, action) => {
             return {
                 ...state,
                 borderRadius: action.borderRadius
+            };
+
+        case actionTypes.SET_USER:
+            return {
+                ...state,
+                auth: action.payload
             };
         default:
             return state;

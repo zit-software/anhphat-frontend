@@ -21,7 +21,9 @@ const AuthCardWrapper = ({ children, ...other }) => (
         content={false}
         {...other}
     >
-        <Box sx={{ p: { xs: 2, sm: 3, xl: 5 } }}>{children}</Box>
+        <Box sx={{ p: { xs: 2, sm: 3, xl: 5 } }}>
+            {children}
+        </Box>
     </MainCard>
 );
 

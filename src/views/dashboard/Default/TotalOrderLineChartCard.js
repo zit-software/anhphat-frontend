@@ -3,7 +3,13 @@ import { useState } from 'react';
 
 // material-ui
 import { useTheme, styled } from '@mui/material/styles';
-import { Avatar, Box, Button, Grid, Typography } from '@mui/material';
+import {
+    Avatar,
+    Box,
+    Button,
+    Grid,
+    Typography
+} from '@mui/material';
 
 // third-party
 import Chart from 'react-apexcharts';
@@ -80,14 +86,24 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                     <Box sx={{ p: 2.25 }}>
                         <Grid container direction="column">
                             <Grid item>
-                                <Grid container justifyContent="space-between">
+                                <Grid
+                                    container
+                                    justifyContent="space-between"
+                                >
                                     <Grid item>
                                         <Avatar
                                             variant="rounded"
                                             sx={{
-                                                ...theme.typography.commonAvatar,
-                                                ...theme.typography.largeAvatar,
-                                                backgroundColor: theme.palette.primary[800],
+                                                ...theme
+                                                    .typography
+                                                    .commonAvatar,
+                                                ...theme
+                                                    .typography
+                                                    .largeAvatar,
+                                                backgroundColor:
+                                                    theme
+                                                        .palette
+                                                        .primary[800],
                                                 color: '#fff',
                                                 mt: 1
                                             }}
@@ -98,19 +114,41 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                                     <Grid item>
                                         <Button
                                             disableElevation
-                                            variant={timeValue ? 'contained' : 'text'}
+                                            variant={
+                                                timeValue
+                                                    ? 'contained'
+                                                    : 'text'
+                                            }
                                             size="small"
-                                            sx={{ color: 'inherit' }}
-                                            onClick={(e) => handleChangeTime(e, true)}
+                                            sx={{
+                                                color: 'inherit'
+                                            }}
+                                            onClick={(e) =>
+                                                handleChangeTime(
+                                                    e,
+                                                    true
+                                                )
+                                            }
                                         >
                                             Month
                                         </Button>
                                         <Button
                                             disableElevation
-                                            variant={!timeValue ? 'contained' : 'text'}
+                                            variant={
+                                                !timeValue
+                                                    ? 'contained'
+                                                    : 'text'
+                                            }
                                             size="small"
-                                            sx={{ color: 'inherit' }}
-                                            onClick={(e) => handleChangeTime(e, false)}
+                                            sx={{
+                                                color: 'inherit'
+                                            }}
+                                            onClick={(e) =>
+                                                handleChangeTime(
+                                                    e,
+                                                    false
+                                                )
+                                            }
                                         >
                                             Year
                                         </Button>
@@ -118,16 +156,40 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                                 </Grid>
                             </Grid>
                             <Grid item sx={{ mb: 0.75 }}>
-                                <Grid container alignItems="center">
+                                <Grid
+                                    container
+                                    alignItems="center"
+                                >
                                     <Grid item xs={6}>
-                                        <Grid container alignItems="center">
+                                        <Grid
+                                            container
+                                            alignItems="center"
+                                        >
                                             <Grid item>
                                                 {timeValue ? (
-                                                    <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>
+                                                    <Typography
+                                                        sx={{
+                                                            fontSize:
+                                                                '2.125rem',
+                                                            fontWeight: 500,
+                                                            mr: 1,
+                                                            mt: 1.75,
+                                                            mb: 0.75
+                                                        }}
+                                                    >
                                                         $108
                                                     </Typography>
                                                 ) : (
-                                                    <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>
+                                                    <Typography
+                                                        sx={{
+                                                            fontSize:
+                                                                '2.125rem',
+                                                            fontWeight: 500,
+                                                            mr: 1,
+                                                            mt: 1.75,
+                                                            mb: 0.75
+                                                        }}
+                                                    >
                                                         $961
                                                     </Typography>
                                                 )}
@@ -135,30 +197,59 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                                             <Grid item>
                                                 <Avatar
                                                     sx={{
-                                                        ...theme.typography.smallAvatar,
+                                                        ...theme
+                                                            .typography
+                                                            .smallAvatar,
                                                         cursor: 'pointer',
-                                                        backgroundColor: theme.palette.primary[200],
-                                                        color: theme.palette.primary.dark
+                                                        backgroundColor:
+                                                            theme
+                                                                .palette
+                                                                .primary[200],
+                                                        color: theme
+                                                            .palette
+                                                            .primary
+                                                            .dark
                                                     }}
                                                 >
-                                                    <ArrowDownwardIcon fontSize="inherit" sx={{ transform: 'rotate3d(1, 1, 1, 45deg)' }} />
+                                                    <ArrowDownwardIcon
+                                                        fontSize="inherit"
+                                                        sx={{
+                                                            transform:
+                                                                'rotate3d(1, 1, 1, 45deg)'
+                                                        }}
+                                                    />
                                                 </Avatar>
                                             </Grid>
-                                            <Grid item xs={12}>
+                                            <Grid
+                                                item
+                                                xs={12}
+                                            >
                                                 <Typography
                                                     sx={{
-                                                        fontSize: '1rem',
+                                                        fontSize:
+                                                            '1rem',
                                                         fontWeight: 500,
-                                                        color: theme.palette.primary[200]
+                                                        color: theme
+                                                            .palette
+                                                            .primary[200]
                                                     }}
                                                 >
-                                                    Total Order
+                                                    Total
+                                                    Order
                                                 </Typography>
                                             </Grid>
                                         </Grid>
                                     </Grid>
                                     <Grid item xs={6}>
-                                        {timeValue ? <Chart {...ChartDataMonth} /> : <Chart {...ChartDataYear} />}
+                                        {timeValue ? (
+                                            <Chart
+                                                {...ChartDataMonth}
+                                            />
+                                        ) : (
+                                            <Chart
+                                                {...ChartDataYear}
+                                            />
+                                        )}
                                     </Grid>
                                 </Grid>
                             </Grid>
