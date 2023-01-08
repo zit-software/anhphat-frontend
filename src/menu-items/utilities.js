@@ -1,34 +1,41 @@
 // assets
-import { IconTypography, IconPalette, IconShadow, IconWindmill } from '@tabler/icons';
+import {
+    IconTypography,
+    IconPalette,
+    IconShadow,
+    IconWindmill,
+    IconPackage
+} from '@tabler/icons';
 
 // constant
 const icons = {
     IconTypography,
     IconPalette,
     IconShadow,
-    IconWindmill
+    IconWindmill,
+    IconPackage
 };
 
 // ==============================|| UTILITIES MENU ITEMS ||============================== //
 
 const utilities = {
-    id: 'utilities',
-    title: 'Utilities',
+    id: 'hanghoa',
+    title: 'Hàng hóa',
     type: 'group',
     children: [
         {
-            id: 'util-typography',
-            title: 'Typography',
+            id: 'hanghoa-loaihoang',
+            title: 'Loại hàng',
             type: 'item',
-            url: '/utils/util-typography',
-            icon: icons.IconTypography,
+            url: '/hanghoa/loaihang',
+            icon: icons.IconPackage,
             breadcrumbs: false
         },
         {
-            id: 'util-color',
-            title: 'Color',
+            id: 'hanghoa-mathang',
+            title: 'Mặt hàng',
             type: 'item',
-            url: '/utils/util-color',
+            url: '/hanghoa/mathang',
             icon: icons.IconPalette,
             breadcrumbs: false
         },

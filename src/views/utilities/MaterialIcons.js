@@ -15,9 +15,18 @@ const IFrameWrapper = styled('iframe')(({ theme }) => ({
 // ============================|| MATERIAL ICONS ||============================ //
 
 const MaterialIcons = () => (
-    <MainCard title="Material Icons" secondary={<SecondaryAction link="https://next.material-ui.com/components/material-icons/" />}>
+    <MainCard
+        title="Material Icons"
+        secondary={
+            <SecondaryAction link="https://next.material-ui.com/components/material-icons/" />
+        }
+    >
         <Card sx={{ overflow: 'hidden' }}>
-            <IFrameWrapper title="Material Icon" width="100%" src="https://material-ui.com/components/material-icons/" />
+            <IFrameWrapper
+                title="Material Icon"
+                width="100%"
+                src="https://material-ui.com/components/material-icons/"
+            />
         </Card>
     </MainCard>
 );

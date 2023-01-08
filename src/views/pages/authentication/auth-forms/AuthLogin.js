@@ -1,52 +1,38 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
 
 // material-ui
-import { useTheme } from '@mui/material/styles';
 import {
     Box,
     Button,
-    Checkbox,
-    Divider,
     FormControl,
-    FormControlLabel,
     FormHelperText,
     Grid,
     IconButton,
     InputAdornment,
     InputLabel,
-    OutlinedInput,
-    Stack,
-    Typography,
-    useMediaQuery
+    OutlinedInput
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 // third party
-import * as Yup from 'yup';
 import { Formik } from 'formik';
+import * as Yup from 'yup';
 
 // project imports
-import useScriptRef from 'hooks/useScriptRef';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 
 // assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import AuthService from 'services/auth.service';
+import accessToken from 'utils/access-token';
 
-import Google from 'assets/images/icons/social-google.svg';
+import config from '../../../../config';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
 const FirebaseLogin = ({ ...others }) => {
     const theme = useTheme();
-    const scriptedRef = useScriptRef();
-    const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
-    const customization = useSelector((state) => state.customization);
-    const [checked, setChecked] = useState(true);
-
-    const googleHandler = async () => {
-        console.error('Login');
-    };
 
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => {
@@ -59,166 +45,163 @@ const FirebaseLogin = ({ ...others }) => {
 
     return (
         <>
-            <Grid container direction="column" justifyContent="center" spacing={2}>
-                <Grid item xs={12}>
-                    <AnimateButton>
-                        <Button
-                            disableElevation
-                            fullWidth
-                            onClick={googleHandler}
-                            size="large"
-                            variant="outlined"
-                            sx={{
-                                color: 'grey.700',
-                                backgroundColor: theme.palette.grey[50],
-                                borderColor: theme.palette.grey[100]
-                            }}
-                        >
-                            <Box sx={{ mr: { xs: 1, sm: 2, width: 20 } }}>
-                                <img src={Google} alt="google" width={16} height={16} style={{ marginRight: matchDownSM ? 8 : 16 }} />
-                            </Box>
-                            Sign in with Google
-                        </Button>
-                    </AnimateButton>
-                </Grid>
-                <Grid item xs={12}>
-                    <Box
-                        sx={{
-                            alignItems: 'center',
-                            display: 'flex'
-                        }}
-                    >
-                        <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
-
-                        <Button
-                            variant="outlined"
-                            sx={{
-                                cursor: 'unset',
-                                m: 2,
-                                py: 0.5,
-                                px: 7,
-                                borderColor: `${theme.palette.grey[100]} !important`,
-                                color: `${theme.palette.grey[900]}!important`,
-                                fontWeight: 500,
-                                borderRadius: `${customization.borderRadius}px`
-                            }}
-                            disableRipple
-                            disabled
-                        >
-                            OR
-                        </Button>
-
-                        <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
-                    </Box>
-                </Grid>
-                <Grid item xs={12} container alignItems="center" justifyContent="center">
-                    <Box sx={{ mb: 2 }}>
-                        <Typography variant="subtitle1">Sign in with Email address</Typography>
-                    </Box>
-                </Grid>
-            </Grid>
+            <Grid
+                container
+                direction="column"
+                justifyContent="center"
+                spacing={2}
+            ></Grid>
 
             <Formik
                 initialValues={{
-                    email: 'info@codedthemes.com',
-                    password: '123456',
+                    ma: '',
+                    matkhau: '',
                     submit: null
                 }}
                 validationSchema={Yup.object().shape({
-                    email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-                    password: Yup.string().max(255).required('Password is required')
+                    ma: Yup.string()
+                        .max(255)
+                        .required('Mã số là bắt buộc'),
+                    matkhau: Yup.string()
+                        .max(255)
+                        .required('Mật khẩu là bắt buộc')
                 })}
-                onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+                onSubmit={async (
+                    values,
+                    { setErrors, setStatus, setSubmitting }
+                ) => {
                     try {
-                        if (scriptedRef.current) {
-                            setStatus({ success: true });
-                            setSubmitting(false);
-                        }
+                        const res = await AuthService.login(
+                            values
+                        );
+
+                        accessToken.set(
+                            res.data.accessToken
+                        );
+
+                        window.location =
+                            config.defaultPath;
                     } catch (err) {
-                        console.error(err);
-                        if (scriptedRef.current) {
-                            setStatus({ success: false });
-                            setErrors({ submit: err.message });
-                            setSubmitting(false);
-                        }
+                        setErrors({
+                            submit: 'Tên đăng nhập hoặc mật khẩu không chính xác'
+                        });
+                    } finally {
+                        setSubmitting(false);
                     }
                 }}
             >
-                {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
-                    <form noValidate onSubmit={handleSubmit} {...others}>
-                        <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
-                            <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
+                {({
+                    errors,
+                    handleBlur,
+                    handleChange,
+                    handleSubmit,
+                    isSubmitting,
+                    touched,
+                    values
+                }) => (
+                    <form
+                        noValidate
+                        onSubmit={handleSubmit}
+                        {...others}
+                    >
+                        <FormControl
+                            fullWidth
+                            error={Boolean(
+                                touched.email &&
+                                    errors.email
+                            )}
+                            sx={{
+                                ...theme.typography
+                                    .customInput
+                            }}
+                        >
+                            <InputLabel htmlFor="outlined-adornment-email-login">
+                                Mã nhân viên
+                            </InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-email-login"
-                                type="email"
-                                value={values.email}
-                                name="email"
+                                type="ma"
+                                value={values.ma}
+                                name="ma"
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                label="Email Address / Username"
+                                label="Mã nhân viên"
                                 inputProps={{}}
                             />
-                            {touched.email && errors.email && (
-                                <FormHelperText error id="standard-weight-helper-text-email-login">
-                                    {errors.email}
+                            {touched.ma && errors.ma && (
+                                <FormHelperText
+                                    error
+                                    id="standard-weight-helper-text-email-login"
+                                >
+                                    {errors.ma}
                                 </FormHelperText>
                             )}
                         </FormControl>
 
                         <FormControl
                             fullWidth
-                            error={Boolean(touched.password && errors.password)}
-                            sx={{ ...theme.typography.customInput }}
+                            error={Boolean(
+                                touched.password &&
+                                    errors.password
+                            )}
+                            sx={{
+                                ...theme.typography
+                                    .customInput
+                            }}
                         >
-                            <InputLabel htmlFor="outlined-adornment-password-login">Password</InputLabel>
+                            <InputLabel htmlFor="outlined-adornment-password-login">
+                                Mật khẩu
+                            </InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-password-login"
-                                type={showPassword ? 'text' : 'password'}
-                                value={values.password}
-                                name="password"
+                                type={
+                                    showPassword
+                                        ? 'text'
+                                        : 'password'
+                                }
+                                value={values.matkhau}
+                                name="matkhau"
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 endAdornment={
                                     <InputAdornment position="end">
                                         <IconButton
                                             aria-label="toggle password visibility"
-                                            onClick={handleClickShowPassword}
-                                            onMouseDown={handleMouseDownPassword}
+                                            onClick={
+                                                handleClickShowPassword
+                                            }
+                                            onMouseDown={
+                                                handleMouseDownPassword
+                                            }
                                             edge="end"
                                             size="large"
                                         >
-                                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                                            {showPassword ? (
+                                                <Visibility />
+                                            ) : (
+                                                <VisibilityOff />
+                                            )}
                                         </IconButton>
                                     </InputAdornment>
                                 }
-                                label="Password"
+                                label="Mật khẩu"
                                 inputProps={{}}
                             />
-                            {touched.password && errors.password && (
-                                <FormHelperText error id="standard-weight-helper-text-password-login">
-                                    {errors.password}
-                                </FormHelperText>
-                            )}
+                            {touched.matkhau &&
+                                errors.matkhau && (
+                                    <FormHelperText
+                                        error
+                                        id="standard-weight-helper-text-password-login"
+                                    >
+                                        {errors.password}
+                                    </FormHelperText>
+                                )}
                         </FormControl>
-                        <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={checked}
-                                        onChange={(event) => setChecked(event.target.checked)}
-                                        name="checked"
-                                        color="primary"
-                                    />
-                                }
-                                label="Remember me"
-                            />
-                            <Typography variant="subtitle1" color="secondary" sx={{ textDecoration: 'none', cursor: 'pointer' }}>
-                                Forgot Password?
-                            </Typography>
-                        </Stack>
                         {errors.submit && (
                             <Box sx={{ mt: 3 }}>
-                                <FormHelperText error>{errors.submit}</FormHelperText>
+                                <FormHelperText error>
+                                    {errors.submit}
+                                </FormHelperText>
                             </Box>
                         )}
 
@@ -232,8 +215,9 @@ const FirebaseLogin = ({ ...others }) => {
                                     type="submit"
                                     variant="contained"
                                     color="secondary"
+                                    onClick={handleSubmit}
                                 >
-                                    Sign in
+                                    Đăng nhập
                                 </Button>
                             </AnimateButton>
                         </Box>

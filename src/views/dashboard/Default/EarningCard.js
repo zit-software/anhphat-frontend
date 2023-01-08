@@ -3,7 +3,14 @@ import { useState } from 'react';
 
 // material-ui
 import { styled, useTheme } from '@mui/material/styles';
-import { Avatar, Box, Grid, Menu, MenuItem, Typography } from '@mui/material';
+import {
+    Avatar,
+    Box,
+    Grid,
+    Menu,
+    MenuItem,
+    Typography
+} from '@mui/material';
 
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
@@ -78,72 +85,157 @@ const EarningCard = ({ isLoading }) => {
                     <Box sx={{ p: 2.25 }}>
                         <Grid container direction="column">
                             <Grid item>
-                                <Grid container justifyContent="space-between">
+                                <Grid
+                                    container
+                                    justifyContent="space-between"
+                                >
                                     <Grid item>
                                         <Avatar
                                             variant="rounded"
                                             sx={{
-                                                ...theme.typography.commonAvatar,
-                                                ...theme.typography.largeAvatar,
-                                                backgroundColor: theme.palette.secondary[800],
+                                                ...theme
+                                                    .typography
+                                                    .commonAvatar,
+                                                ...theme
+                                                    .typography
+                                                    .largeAvatar,
+                                                backgroundColor:
+                                                    theme
+                                                        .palette
+                                                        .secondary[800],
                                                 mt: 1
                                             }}
                                         >
-                                            <img src={EarningIcon} alt="Notification" />
+                                            <img
+                                                src={
+                                                    EarningIcon
+                                                }
+                                                alt="Notification"
+                                            />
                                         </Avatar>
                                     </Grid>
                                     <Grid item>
                                         <Avatar
                                             variant="rounded"
                                             sx={{
-                                                ...theme.typography.commonAvatar,
-                                                ...theme.typography.mediumAvatar,
-                                                backgroundColor: theme.palette.secondary.dark,
-                                                color: theme.palette.secondary[200],
+                                                ...theme
+                                                    .typography
+                                                    .commonAvatar,
+                                                ...theme
+                                                    .typography
+                                                    .mediumAvatar,
+                                                backgroundColor:
+                                                    theme
+                                                        .palette
+                                                        .secondary
+                                                        .dark,
+                                                color: theme
+                                                    .palette
+                                                    .secondary[200],
                                                 zIndex: 1
                                             }}
                                             aria-controls="menu-earning-card"
                                             aria-haspopup="true"
-                                            onClick={handleClick}
+                                            onClick={
+                                                handleClick
+                                            }
                                         >
                                             <MoreHorizIcon fontSize="inherit" />
                                         </Avatar>
                                         <Menu
                                             id="menu-earning-card"
-                                            anchorEl={anchorEl}
+                                            anchorEl={
+                                                anchorEl
+                                            }
                                             keepMounted
-                                            open={Boolean(anchorEl)}
-                                            onClose={handleClose}
+                                            open={Boolean(
+                                                anchorEl
+                                            )}
+                                            onClose={
+                                                handleClose
+                                            }
                                             variant="selectedMenu"
                                             anchorOrigin={{
-                                                vertical: 'bottom',
-                                                horizontal: 'right'
+                                                vertical:
+                                                    'bottom',
+                                                horizontal:
+                                                    'right'
                                             }}
                                             transformOrigin={{
-                                                vertical: 'top',
-                                                horizontal: 'right'
+                                                vertical:
+                                                    'top',
+                                                horizontal:
+                                                    'right'
                                             }}
                                         >
-                                            <MenuItem onClick={handleClose}>
-                                                <GetAppTwoToneIcon sx={{ mr: 1.75 }} /> Import Card
+                                            <MenuItem
+                                                onClick={
+                                                    handleClose
+                                                }
+                                            >
+                                                <GetAppTwoToneIcon
+                                                    sx={{
+                                                        mr: 1.75
+                                                    }}
+                                                />{' '}
+                                                Import Card
                                             </MenuItem>
-                                            <MenuItem onClick={handleClose}>
-                                                <FileCopyTwoToneIcon sx={{ mr: 1.75 }} /> Copy Data
+                                            <MenuItem
+                                                onClick={
+                                                    handleClose
+                                                }
+                                            >
+                                                <FileCopyTwoToneIcon
+                                                    sx={{
+                                                        mr: 1.75
+                                                    }}
+                                                />{' '}
+                                                Copy Data
                                             </MenuItem>
-                                            <MenuItem onClick={handleClose}>
-                                                <PictureAsPdfTwoToneIcon sx={{ mr: 1.75 }} /> Export
+                                            <MenuItem
+                                                onClick={
+                                                    handleClose
+                                                }
+                                            >
+                                                <PictureAsPdfTwoToneIcon
+                                                    sx={{
+                                                        mr: 1.75
+                                                    }}
+                                                />{' '}
+                                                Export
                                             </MenuItem>
-                                            <MenuItem onClick={handleClose}>
-                                                <ArchiveTwoToneIcon sx={{ mr: 1.75 }} /> Archive File
+                                            <MenuItem
+                                                onClick={
+                                                    handleClose
+                                                }
+                                            >
+                                                <ArchiveTwoToneIcon
+                                                    sx={{
+                                                        mr: 1.75
+                                                    }}
+                                                />{' '}
+                                                Archive File
                                             </MenuItem>
                                         </Menu>
                                     </Grid>
                                 </Grid>
                             </Grid>
                             <Grid item>
-                                <Grid container alignItems="center">
+                                <Grid
+                                    container
+                                    alignItems="center"
+                                >
                                     <Grid item>
-                                        <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>
+                                        <Typography
+                                            sx={{
+                                                fontSize:
+                                                    '2.125rem',
+                                                fontWeight: 500,
+                                                mr: 1,
+                                                mt: 1.75,
+                                                mb: 0.75
+                                            }}
+                                        >
                                             $500.00
                                         </Typography>
                                     </Grid>
@@ -151,12 +243,26 @@ const EarningCard = ({ isLoading }) => {
                                         <Avatar
                                             sx={{
                                                 cursor: 'pointer',
-                                                ...theme.typography.smallAvatar,
-                                                backgroundColor: theme.palette.secondary[200],
-                                                color: theme.palette.secondary.dark
+                                                ...theme
+                                                    .typography
+                                                    .smallAvatar,
+                                                backgroundColor:
+                                                    theme
+                                                        .palette
+                                                        .secondary[200],
+                                                color: theme
+                                                    .palette
+                                                    .secondary
+                                                    .dark
                                             }}
                                         >
-                                            <ArrowUpwardIcon fontSize="inherit" sx={{ transform: 'rotate3d(1, 1, 1, 45deg)' }} />
+                                            <ArrowUpwardIcon
+                                                fontSize="inherit"
+                                                sx={{
+                                                    transform:
+                                                        'rotate3d(1, 1, 1, 45deg)'
+                                                }}
+                                            />
                                         </Avatar>
                                     </Grid>
                                 </Grid>
@@ -166,7 +272,8 @@ const EarningCard = ({ isLoading }) => {
                                     sx={{
                                         fontSize: '1rem',
                                         fontWeight: 500,
-                                        color: theme.palette.secondary[200]
+                                        color: theme.palette
+                                            .secondary[200]
                                     }}
                                 >
                                     Total Earning

@@ -5,7 +5,15 @@ import { useDispatch, useSelector } from 'react-redux';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Avatar, Chip, ListItemButton, ListItemIcon, ListItemText, Typography, useMediaQuery } from '@mui/material';
+import {
+    Avatar,
+    Chip,
+    ListItemButton,
+    ListItemIcon,
+    ListItemText,
+    Typography,
+    useMediaQuery
+} from '@mui/material';
 
 // project imports
 import { MENU_OPEN, SET_MENU } from 'store/actions';
@@ -18,8 +26,12 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 const NavItem = ({ item, level }) => {
     const theme = useTheme();
     const dispatch = useDispatch();
-    const customization = useSelector((state) => state.customization);
-    const matchesSM = useMediaQuery(theme.breakpoints.down('lg'));
+    const customization = useSelector(
+        (state) => state.customization
+    );
+    const matchesSM = useMediaQuery(
+        theme.breakpoints.down('lg')
+    );
 
     const Icon = item.icon;
     const itemIcon = item?.icon ? (
@@ -27,8 +39,18 @@ const NavItem = ({ item, level }) => {
     ) : (
         <FiberManualRecordIcon
             sx={{
-                width: customization.isOpen.findIndex((id) => id === item?.id) > -1 ? 8 : 6,
-                height: customization.isOpen.findIndex((id) => id === item?.id) > -1 ? 8 : 6
+                width:
+                    customization.isOpen.findIndex(
+                        (id) => id === item?.id
+                    ) > -1
+                        ? 8
+                        : 6,
+                height:
+                    customization.isOpen.findIndex(
+                        (id) => id === item?.id
+                    ) > -1
+                        ? 8
+                        : 6
             }}
             fontSize={level > 0 ? 'inherit' : 'medium'}
         />
@@ -40,15 +62,27 @@ const NavItem = ({ item, level }) => {
     }
 
     let listItemProps = {
-        component: forwardRef((props, ref) => <Link ref={ref} {...props} to={item.url} target={itemTarget} />)
+        component: forwardRef((props, ref) => (
+            <Link
+                ref={ref}
+                {...props}
+                to={item.url}
+                target={itemTarget}
+            />
+        ))
     };
     if (item?.external) {
-        listItemProps = { component: 'a', href: item.url, target: itemTarget };
+        listItemProps = {
+            component: 'a',
+            href: item.url,
+            target: itemTarget
+        };
     }
 
     const itemHandler = (id) => {
         dispatch({ type: MENU_OPEN, id });
-        if (matchesSM) dispatch({ type: SET_MENU, opened: false });
+        if (matchesSM)
+            dispatch({ type: SET_MENU, opened: false });
     };
 
     // active menu item on page load
@@ -71,23 +105,54 @@ const NavItem = ({ item, level }) => {
                 borderRadius: `${customization.borderRadius}px`,
                 mb: 0.5,
                 alignItems: 'flex-start',
-                backgroundColor: level > 1 ? 'transparent !important' : 'inherit',
+                backgroundColor:
+                    level > 1
+                        ? 'transparent !important'
+                        : 'inherit',
                 py: level > 1 ? 1 : 1.25,
                 pl: `${level * 24}px`
             }}
-            selected={customization.isOpen.findIndex((id) => id === item.id) > -1}
+            selected={
+                customization.isOpen.findIndex(
+                    (id) => id === item.id
+                ) > -1
+            }
             onClick={() => itemHandler(item.id)}
         >
-            <ListItemIcon sx={{ my: 'auto', minWidth: !item?.icon ? 18 : 36 }}>{itemIcon}</ListItemIcon>
+            <ListItemIcon
+                sx={{
+                    my: 'auto',
+                    minWidth: !item?.icon ? 18 : 36
+                }}
+            >
+                {itemIcon}
+            </ListItemIcon>
             <ListItemText
                 primary={
-                    <Typography variant={customization.isOpen.findIndex((id) => id === item.id) > -1 ? 'h5' : 'body1'} color="inherit">
+                    <Typography
+                        variant={
+                            customization.isOpen.findIndex(
+                                (id) => id === item.id
+                            ) > -1
+                                ? 'h5'
+                                : 'body1'
+                        }
+                        color="inherit"
+                    >
                         {item.title}
                     </Typography>
                 }
                 secondary={
                     item.caption && (
-                        <Typography variant="caption" sx={{ ...theme.typography.subMenuCaption }} display="block" gutterBottom>
+                        <Typography
+                            variant="caption"
+                            sx={{
+                                ...theme.typography
+                                    .subMenuCaption
+                            }}
+                            display="block"
+                            gutterBottom
+                        >
                             {item.caption}
                         </Typography>
                     )
@@ -99,7 +164,13 @@ const NavItem = ({ item, level }) => {
                     variant={item.chip.variant}
                     size={item.chip.size}
                     label={item.chip.label}
-                    avatar={item.chip.avatar && <Avatar>{item.chip.avatar}</Avatar>}
+                    avatar={
+                        item.chip.avatar && (
+                            <Avatar>
+                                {item.chip.avatar}
+                            </Avatar>
+                        )
+                    }
                 />
             )}
         </ListItemButton>
