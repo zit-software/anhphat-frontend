@@ -4,12 +4,7 @@ import { useSelector } from 'react-redux';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import {
-    Grid,
-    MenuItem,
-    TextField,
-    Typography
-} from '@mui/material';
+import { Grid, MenuItem, TextField, Typography } from '@mui/material';
 
 // third-party
 import ApexCharts from 'apexcharts';
@@ -43,9 +38,7 @@ const status = [
 const TotalGrowthBarChart = ({ isLoading }) => {
     const [value, setValue] = useState('today');
     const theme = useTheme();
-    const customization = useSelector(
-        (state) => state.customization
-    );
+    const customization = useSelector((state) => state.customization);
 
     const { navType } = customization;
     const { primary } = theme.palette.text;
@@ -61,12 +54,7 @@ const TotalGrowthBarChart = ({ isLoading }) => {
     useEffect(() => {
         const newChartData = {
             ...chartData.options,
-            colors: [
-                primary200,
-                primaryDark,
-                secondaryMain,
-                secondaryLight
-            ],
+            colors: [primary200, primaryDark, secondaryMain, secondaryLight],
             xaxis: {
                 labels: {
                     style: {
@@ -109,11 +97,7 @@ const TotalGrowthBarChart = ({ isLoading }) => {
 
         // do not load chart when loading
         if (!isLoading) {
-            ApexCharts.exec(
-                `bar-chart`,
-                'updateOptions',
-                newChartData
-            );
+            ApexCharts.exec(`bar-chart`, 'updateOptions', newChartData);
         }
     }, [
         navType,
@@ -136,26 +120,16 @@ const TotalGrowthBarChart = ({ isLoading }) => {
                 <MainCard>
                     <Grid container spacing={gridSpacing}>
                         <Grid item xs={12}>
-                            <Grid
-                                container
-                                alignItems="center"
-                                justifyContent="space-between"
-                            >
+                            <Grid container alignItems="center" justifyContent="space-between">
                                 <Grid item>
-                                    <Grid
-                                        container
-                                        direction="column"
-                                        spacing={1}
-                                    >
+                                    <Grid container direction="column" spacing={1}>
                                         <Grid item>
                                             <Typography variant="subtitle2">
                                                 Total Growth
                                             </Typography>
                                         </Grid>
                                         <Grid item>
-                                            <Typography variant="h3">
-                                                $2,324.00
-                                            </Typography>
+                                            <Typography variant="h3">$2,324.00</Typography>
                                         </Grid>
                                     </Grid>
                                 </Grid>
@@ -164,29 +138,13 @@ const TotalGrowthBarChart = ({ isLoading }) => {
                                         id="standard-select-currency"
                                         select
                                         value={value}
-                                        onChange={(e) =>
-                                            setValue(
-                                                e.target
-                                                    .value
-                                            )
-                                        }
+                                        onChange={(e) => setValue(e.target.value)}
                                     >
-                                        {status.map(
-                                            (option) => (
-                                                <MenuItem
-                                                    key={
-                                                        option.value
-                                                    }
-                                                    value={
-                                                        option.value
-                                                    }
-                                                >
-                                                    {
-                                                        option.label
-                                                    }
-                                                </MenuItem>
-                                            )
-                                        )}
+                                        {status.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
                                     </TextField>
                                 </Grid>
                             </Grid>

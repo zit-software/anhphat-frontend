@@ -47,8 +47,7 @@ export const theme = (customization) => {
     };
 
     const themes = createTheme(themeOptions);
-    themes.components =
-        componentStyleOverrides(themeOption);
+    themes.components = componentStyleOverrides(themeOption);
 
     return themes;
 };

@@ -4,13 +4,7 @@ import { Link } from 'react-router-dom';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import {
-    Box,
-    Card,
-    Divider,
-    Grid,
-    Typography
-} from '@mui/material';
+import { Box, Card, Divider, Grid, Typography } from '@mui/material';
 import MuiBreadcrumbs from '@mui/material/Breadcrumbs';
 
 // project imports
@@ -63,19 +57,10 @@ const Breadcrumbs = ({
     const getCollapse = (menu) => {
         if (menu.children) {
             menu.children.filter((collapse) => {
-                if (
-                    collapse.type &&
-                    collapse.type === 'collapse'
-                ) {
+                if (collapse.type && collapse.type === 'collapse') {
                     getCollapse(collapse);
-                } else if (
-                    collapse.type &&
-                    collapse.type === 'item'
-                ) {
-                    if (
-                        document.location.pathname ===
-                        config.basename + collapse.url
-                    ) {
+                } else if (collapse.type && collapse.type === 'item') {
+                    if (document.location.pathname === config.basename + collapse.url) {
                         setMain(menu);
                         setItem(collapse);
                     }
@@ -111,19 +96,10 @@ const Breadcrumbs = ({
 
     // collapse item
     if (main && main.type === 'collapse') {
-        CollapseIcon = main.icon
-            ? main.icon
-            : AccountTreeTwoToneIcon;
+        CollapseIcon = main.icon ? main.icon : AccountTreeTwoToneIcon;
         mainContent = (
-            <Typography
-                component={Link}
-                to="#"
-                variant="subtitle1"
-                sx={linkSX}
-            >
-                {icons && (
-                    <CollapseIcon style={iconStyle} />
-                )}
+            <Typography component={Link} to="#" variant="subtitle1" sx={linkSX}>
+                {icons && <CollapseIcon style={iconStyle} />}
                 {main.title}
             </Typography>
         );
@@ -133,9 +109,7 @@ const Breadcrumbs = ({
     if (item && item.type === 'item') {
         itemTitle = item.title;
 
-        ItemIcon = item.icon
-            ? item.icon
-            : AccountTreeTwoToneIcon;
+        ItemIcon = item.icon ? item.icon : AccountTreeTwoToneIcon;
         itemContent = (
             <Typography
                 variant="subtitle1"
@@ -157,23 +131,11 @@ const Breadcrumbs = ({
             breadcrumbContent = (
                 <Card
                     sx={{
-                        marginBottom:
-                            card === false
-                                ? 0
-                                : theme.spacing(
-                                      gridSpacing
-                                  ),
-                        border:
-                            card === false
-                                ? 'none'
-                                : '1px solid',
-                        borderColor:
-                            theme.palette.primary[200] + 75,
+                        marginBottom: card === false ? 0 : theme.spacing(gridSpacing),
+                        border: card === false ? 'none' : '1px solid',
+                        borderColor: theme.palette.primary[200] + 75,
                         background:
-                            card === false
-                                ? 'transparent'
-                                : theme.palette.background
-                                      .default
+                            card === false ? 'transparent' : theme.palette.background.default
                     }}
                     {...others}
                 >
@@ -185,21 +147,9 @@ const Breadcrumbs = ({
                     >
                         <Grid
                             container
-                            direction={
-                                rightAlign
-                                    ? 'row'
-                                    : 'column'
-                            }
-                            justifyContent={
-                                rightAlign
-                                    ? 'space-between'
-                                    : 'flex-start'
-                            }
-                            alignItems={
-                                rightAlign
-                                    ? 'center'
-                                    : 'flex-start'
-                            }
+                            direction={rightAlign ? 'row' : 'column'}
+                            justifyContent={rightAlign ? 'space-between' : 'flex-start'}
+                            alignItems={rightAlign ? 'center' : 'flex-start'}
                             spacing={1}
                         >
                             {title && !titleBottom && (
@@ -217,18 +167,15 @@ const Breadcrumbs = ({
                             <Grid item>
                                 <MuiBreadcrumbs
                                     sx={{
-                                        '& .MuiBreadcrumbs-separator':
-                                            {
-                                                width: 16,
-                                                ml: 1.25,
-                                                mr: 1.25
-                                            }
+                                        '& .MuiBreadcrumbs-separator': {
+                                            width: 16,
+                                            ml: 1.25,
+                                            mr: 1.25
+                                        }
                                     }}
                                     aria-label="breadcrumb"
                                     maxItems={maxItems || 8}
-                                    separator={
-                                        separatorIcon
-                                    }
+                                    separator={separatorIcon}
                                 >
                                     <Typography
                                         component={Link}
@@ -237,13 +184,7 @@ const Breadcrumbs = ({
                                         variant="subtitle1"
                                         sx={linkSX}
                                     >
-                                        {icons && (
-                                            <HomeTwoToneIcon
-                                                sx={
-                                                    iconStyle
-                                                }
-                                            />
-                                        )}
+                                        {icons && <HomeTwoToneIcon sx={iconStyle} />}
                                         {icon && (
                                             <HomeIcon
                                                 sx={{
@@ -252,8 +193,7 @@ const Breadcrumbs = ({
                                                 }}
                                             />
                                         )}
-                                        {!icon &&
-                                            'Dashboard'}
+                                        {!icon && 'Dashboard'}
                                     </Typography>
                                     {mainContent}
                                     {itemContent}
@@ -276,9 +216,7 @@ const Breadcrumbs = ({
                     {card === false && divider !== false && (
                         <Divider
                             sx={{
-                                borderColor:
-                                    theme.palette.primary
-                                        .main,
+                                borderColor: theme.palette.primary.main,
                                 mb: gridSpacing
                             }}
                         />
@@ -299,10 +237,7 @@ Breadcrumbs.propTypes = {
     maxItems: PropTypes.number,
     navigation: PropTypes.object,
     rightAlign: PropTypes.bool,
-    separator: PropTypes.oneOfType([
-        PropTypes.func,
-        PropTypes.object
-    ]),
+    separator: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
     title: PropTypes.bool,
     titleBottom: PropTypes.bool
 };

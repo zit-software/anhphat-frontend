@@ -1,9 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import {
-    CssBaseline,
-    StyledEngineProvider
-} from '@mui/material';
+import { CssBaseline, StyledEngineProvider } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 
 // routing
@@ -23,9 +20,7 @@ import { setUser } from 'store/actions';
 // ==============================|| APP ||============================== //
 
 const App = () => {
-    const customization = useSelector(
-        (state) => state.customization
-    );
+    const customization = useSelector((state) => state.customization);
 
     const navigator = useNavigate();
 

@@ -1,12 +1,7 @@
 import { Link } from 'react-router-dom';
 
 // material-ui
-import {
-    Grid,
-    Stack,
-    Typography,
-    useMediaQuery
-} from '@mui/material';
+import { Grid, Stack, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 // project imports
@@ -22,9 +17,7 @@ import AuthWrapper1 from '../AuthWrapper1';
 
 const Login = () => {
     const theme = useTheme();
-    const matchDownSM = useMediaQuery(
-        theme.breakpoints.down('md')
-    );
+    const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
 
     return (
         <AuthWrapper1>
@@ -57,10 +50,7 @@ const Login = () => {
                                     alignItems="center"
                                     justifyContent="center"
                                 >
-                                    <Grid
-                                        item
-                                        sx={{ mb: 3 }}
-                                    >
+                                    <Grid item sx={{ mb: 3 }}>
                                         <Link to="#">
                                             <Logo />
                                         </Link>
@@ -68,11 +58,7 @@ const Login = () => {
                                     <Grid item xs={12}>
                                         <Grid
                                             container
-                                            direction={
-                                                matchDownSM
-                                                    ? 'column-reverse'
-                                                    : 'row'
-                                            }
+                                            direction={matchDownSM ? 'column-reverse' : 'row'}
                                             alignItems="center"
                                             justifyContent="center"
                                         >
@@ -80,46 +66,23 @@ const Login = () => {
                                                 <Stack
                                                     alignItems="center"
                                                     justifyContent="center"
-                                                    spacing={
-                                                        1
-                                                    }
+                                                    spacing={1}
                                                 >
                                                     <Typography
-                                                        color={
-                                                            theme
-                                                                .palette
-                                                                .secondary
-                                                                .main
-                                                        }
+                                                        color={theme.palette.secondary.main}
                                                         gutterBottom
-                                                        variant={
-                                                            matchDownSM
-                                                                ? 'h3'
-                                                                : 'h2'
-                                                        }
+                                                        variant={matchDownSM ? 'h3' : 'h2'}
                                                     >
-                                                        Chào
-                                                        mừng
-                                                        bạn
-                                                        quay
-                                                        trở
-                                                        lại
+                                                        Chào mừng bạn quay trở lại
                                                     </Typography>
                                                     <Typography
                                                         variant="caption"
                                                         fontSize="16px"
                                                         textAlign={
-                                                            matchDownSM
-                                                                ? 'center'
-                                                                : 'inherit'
+                                                            matchDownSM ? 'center' : 'inherit'
                                                         }
                                                     >
-                                                        Hãy
-                                                        đăng
-                                                        nhập
-                                                        để
-                                                        tiếp
-                                                        tục
+                                                        Hãy đăng nhập để tiếp tục
                                                     </Typography>
                                                 </Stack>
                                             </Grid>

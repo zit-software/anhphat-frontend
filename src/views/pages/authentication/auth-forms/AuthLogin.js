@@ -45,12 +45,7 @@ const FirebaseLogin = ({ ...others }) => {
 
     return (
         <>
-            <Grid
-                container
-                direction="column"
-                justifyContent="center"
-                spacing={2}
-            ></Grid>
+            <Grid container direction="column" justifyContent="center" spacing={2}></Grid>
 
             <Formik
                 initialValues={{
@@ -59,28 +54,16 @@ const FirebaseLogin = ({ ...others }) => {
                     submit: null
                 }}
                 validationSchema={Yup.object().shape({
-                    ma: Yup.string()
-                        .max(255)
-                        .required('Mã số là bắt buộc'),
-                    matkhau: Yup.string()
-                        .max(255)
-                        .required('Mật khẩu là bắt buộc')
+                    ma: Yup.string().max(255).required('Mã số là bắt buộc'),
+                    matkhau: Yup.string().max(255).required('Mật khẩu là bắt buộc')
                 })}
-                onSubmit={async (
-                    values,
-                    { setErrors, setStatus, setSubmitting }
-                ) => {
+                onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
-                        const res = await AuthService.login(
-                            values
-                        );
+                        const res = await AuthService.login(values);
 
-                        accessToken.set(
-                            res.data.accessToken
-                        );
+                        accessToken.set(res.data.accessToken);
 
-                        window.location =
-                            config.defaultPath;
+                        window.location = config.defaultPath;
                     } catch (err) {
                         setErrors({
                             submit: 'Tên đăng nhập hoặc mật khẩu không chính xác'
@@ -99,20 +82,12 @@ const FirebaseLogin = ({ ...others }) => {
                     touched,
                     values
                 }) => (
-                    <form
-                        noValidate
-                        onSubmit={handleSubmit}
-                        {...others}
-                    >
+                    <form noValidate onSubmit={handleSubmit} {...others}>
                         <FormControl
                             fullWidth
-                            error={Boolean(
-                                touched.email &&
-                                    errors.email
-                            )}
+                            error={Boolean(touched.email && errors.email)}
                             sx={{
-                                ...theme.typography
-                                    .customInput
+                                ...theme.typography.customInput
                             }}
                         >
                             <InputLabel htmlFor="outlined-adornment-email-login">
@@ -129,10 +104,7 @@ const FirebaseLogin = ({ ...others }) => {
                                 inputProps={{}}
                             />
                             {touched.ma && errors.ma && (
-                                <FormHelperText
-                                    error
-                                    id="standard-weight-helper-text-email-login"
-                                >
+                                <FormHelperText error id="standard-weight-helper-text-email-login">
                                     {errors.ma}
                                 </FormHelperText>
                             )}
@@ -140,13 +112,9 @@ const FirebaseLogin = ({ ...others }) => {
 
                         <FormControl
                             fullWidth
-                            error={Boolean(
-                                touched.password &&
-                                    errors.password
-                            )}
+                            error={Boolean(touched.password && errors.password)}
                             sx={{
-                                ...theme.typography
-                                    .customInput
+                                ...theme.typography.customInput
                             }}
                         >
                             <InputLabel htmlFor="outlined-adornment-password-login">
@@ -154,11 +122,7 @@ const FirebaseLogin = ({ ...others }) => {
                             </InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-password-login"
-                                type={
-                                    showPassword
-                                        ? 'text'
-                                        : 'password'
-                                }
+                                type={showPassword ? 'text' : 'password'}
                                 value={values.matkhau}
                                 name="matkhau"
                                 onBlur={handleBlur}
@@ -167,41 +131,30 @@ const FirebaseLogin = ({ ...others }) => {
                                     <InputAdornment position="end">
                                         <IconButton
                                             aria-label="toggle password visibility"
-                                            onClick={
-                                                handleClickShowPassword
-                                            }
-                                            onMouseDown={
-                                                handleMouseDownPassword
-                                            }
+                                            onClick={handleClickShowPassword}
+                                            onMouseDown={handleMouseDownPassword}
                                             edge="end"
                                             size="large"
                                         >
-                                            {showPassword ? (
-                                                <Visibility />
-                                            ) : (
-                                                <VisibilityOff />
-                                            )}
+                                            {showPassword ? <Visibility /> : <VisibilityOff />}
                                         </IconButton>
                                     </InputAdornment>
                                 }
                                 label="Mật khẩu"
                                 inputProps={{}}
                             />
-                            {touched.matkhau &&
-                                errors.matkhau && (
-                                    <FormHelperText
-                                        error
-                                        id="standard-weight-helper-text-password-login"
-                                    >
-                                        {errors.password}
-                                    </FormHelperText>
-                                )}
+                            {touched.matkhau && errors.matkhau && (
+                                <FormHelperText
+                                    error
+                                    id="standard-weight-helper-text-password-login"
+                                >
+                                    {errors.matkhau}
+                                </FormHelperText>
+                            )}
                         </FormControl>
                         {errors.submit && (
                             <Box sx={{ mt: 3 }}>
-                                <FormHelperText error>
-                                    {errors.submit}
-                                </FormHelperText>
+                                <FormHelperText error>{errors.submit}</FormHelperText>
                             </Box>
                         )}
 

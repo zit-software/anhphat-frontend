@@ -24,10 +24,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 // project imports
 import SubCard from 'ui-component/cards/SubCard';
 import AnimateButton from 'ui-component/extended/AnimateButton';
-import {
-    SET_BORDER_RADIUS,
-    SET_FONT_FAMILY
-} from 'store/actions';
+import { SET_BORDER_RADIUS, SET_FONT_FAMILY } from 'store/actions';
 import { gridSpacing } from 'store/constant';
 
 // concat 'px'
@@ -40,9 +37,7 @@ function valueText(value) {
 const Customization = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
-    const customization = useSelector(
-        (state) => state.customization
-    );
+    const customization = useSelector((state) => state.customization);
 
     // drawer on/off
     const [open, setOpen] = useState(false);
@@ -51,9 +46,7 @@ const Customization = () => {
     };
 
     // state - border radius
-    const [borderRadius, setBorderRadius] = useState(
-        customization.borderRadius
-    );
+    const [borderRadius, setBorderRadius] = useState(customization.borderRadius);
     const handleBorderRadius = (event, newValue) => {
         setBorderRadius(newValue);
     };
@@ -77,8 +70,7 @@ const Customization = () => {
     }
 
     // state - font family
-    const [fontFamily, setFontFamily] =
-        useState(initialFont);
+    const [fontFamily, setFontFamily] = useState(initialFont);
     useEffect(() => {
         let newFont;
         switch (fontFamily) {
@@ -122,11 +114,7 @@ const Customization = () => {
                     }}
                 >
                     <AnimateButton type="rotate">
-                        <IconButton
-                            color="inherit"
-                            size="large"
-                            disableRipple
-                        >
+                        <IconButton color="inherit" size="large" disableRipple>
                             <IconSettings />
                         </IconButton>
                     </AnimateButton>
@@ -144,11 +132,7 @@ const Customization = () => {
                 }}
             >
                 <PerfectScrollbar component="div">
-                    <Grid
-                        container
-                        spacing={gridSpacing}
-                        sx={{ p: 3 }}
-                    >
+                    <Grid container spacing={gridSpacing} sx={{ p: 3 }}>
                         <Grid item xs={12}>
                             {/* font family */}
                             <SubCard title="Font Family">
@@ -156,69 +140,46 @@ const Customization = () => {
                                     <RadioGroup
                                         aria-label="font-family"
                                         value={fontFamily}
-                                        onChange={(e) =>
-                                            setFontFamily(
-                                                e.target
-                                                    .value
-                                            )
-                                        }
+                                        onChange={(e) => setFontFamily(e.target.value)}
                                         name="row-radio-buttons-group"
                                     >
                                         <FormControlLabel
                                             value="Roboto"
-                                            control={
-                                                <Radio />
-                                            }
+                                            control={<Radio />}
                                             label="Roboto"
                                             sx={{
-                                                '& .MuiSvgIcon-root':
-                                                    {
-                                                        fontSize: 28
-                                                    },
-                                                '& .MuiFormControlLabel-label':
-                                                    {
-                                                        color: theme
-                                                            .palette
-                                                            .grey[900]
-                                                    }
+                                                '& .MuiSvgIcon-root': {
+                                                    fontSize: 28
+                                                },
+                                                '& .MuiFormControlLabel-label': {
+                                                    color: theme.palette.grey[900]
+                                                }
                                             }}
                                         />
                                         <FormControlLabel
                                             value="Poppins"
-                                            control={
-                                                <Radio />
-                                            }
+                                            control={<Radio />}
                                             label="Poppins"
                                             sx={{
-                                                '& .MuiSvgIcon-root':
-                                                    {
-                                                        fontSize: 28
-                                                    },
-                                                '& .MuiFormControlLabel-label':
-                                                    {
-                                                        color: theme
-                                                            .palette
-                                                            .grey[900]
-                                                    }
+                                                '& .MuiSvgIcon-root': {
+                                                    fontSize: 28
+                                                },
+                                                '& .MuiFormControlLabel-label': {
+                                                    color: theme.palette.grey[900]
+                                                }
                                             }}
                                         />
                                         <FormControlLabel
                                             value="Inter"
-                                            control={
-                                                <Radio />
-                                            }
+                                            control={<Radio />}
                                             label="Inter"
                                             sx={{
-                                                '& .MuiSvgIcon-root':
-                                                    {
-                                                        fontSize: 28
-                                                    },
-                                                '& .MuiFormControlLabel-label':
-                                                    {
-                                                        color: theme
-                                                            .palette
-                                                            .grey[900]
-                                                    }
+                                                '& .MuiSvgIcon-root': {
+                                                    fontSize: 28
+                                                },
+                                                '& .MuiFormControlLabel-label': {
+                                                    color: theme.palette.grey[900]
+                                                }
                                             }}
                                         />
                                     </RadioGroup>
@@ -237,25 +198,16 @@ const Customization = () => {
                                     sx={{ mt: 2.5 }}
                                 >
                                     <Grid item>
-                                        <Typography
-                                            variant="h6"
-                                            color="secondary"
-                                        >
+                                        <Typography variant="h6" color="secondary">
                                             4px
                                         </Typography>
                                     </Grid>
                                     <Grid item xs>
                                         <Slider
                                             size="small"
-                                            value={
-                                                borderRadius
-                                            }
-                                            onChange={
-                                                handleBorderRadius
-                                            }
-                                            getAriaValueText={
-                                                valueText
-                                            }
+                                            value={borderRadius}
+                                            onChange={handleBorderRadius}
+                                            getAriaValueText={valueText}
                                             valueLabelDisplay="on"
                                             aria-labelledby="discrete-slider-small-steps"
                                             marks
@@ -264,18 +216,14 @@ const Customization = () => {
                                             max={24}
                                             color="secondary"
                                             sx={{
-                                                '& .MuiSlider-valueLabel':
-                                                    {
-                                                        color: 'secondary.light'
-                                                    }
+                                                '& .MuiSlider-valueLabel': {
+                                                    color: 'secondary.light'
+                                                }
                                             }}
                                         />
                                     </Grid>
                                     <Grid item>
-                                        <Typography
-                                            variant="h6"
-                                            color="secondary"
-                                        >
+                                        <Typography variant="h6" color="secondary">
                                             24px
                                         </Typography>
                                     </Grid>
