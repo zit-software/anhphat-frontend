@@ -21,18 +21,11 @@ const TablerIcons = () => (
     <MainCard
         title="Tabler Icons"
         secondary={
-            <SecondaryAction
-                icon={<LinkIcon fontSize="small" />}
-                link="https://tablericons.com/"
-            />
+            <SecondaryAction icon={<LinkIcon fontSize="small" />} link="https://tablericons.com/" />
         }
     >
         <Card sx={{ overflow: 'hidden' }}>
-            <IFrameWrapper
-                title="Tabler Icons"
-                width="100%"
-                src="https://tablericons.com/"
-            />
+            <IFrameWrapper title="Tabler Icons" width="100%" src="https://tablericons.com/" />
         </Card>
     </MainCard>
 );

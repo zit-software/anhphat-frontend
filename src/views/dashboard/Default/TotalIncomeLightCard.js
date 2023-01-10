@@ -58,30 +58,15 @@ const TotalIncomeLightCard = ({ isLoading }) => {
                 <CardWrapper border={false} content={false}>
                     <Box sx={{ p: 2 }}>
                         <List sx={{ py: 0 }}>
-                            <ListItem
-                                alignItems="center"
-                                disableGutters
-                                sx={{ py: 0 }}
-                            >
+                            <ListItem alignItems="center" disableGutters sx={{ py: 0 }}>
                                 <ListItemAvatar>
                                     <Avatar
                                         variant="rounded"
                                         sx={{
-                                            ...theme
-                                                .typography
-                                                .commonAvatar,
-                                            ...theme
-                                                .typography
-                                                .largeAvatar,
-                                            backgroundColor:
-                                                theme
-                                                    .palette
-                                                    .warning
-                                                    .light,
-                                            color: theme
-                                                .palette
-                                                .warning
-                                                .dark
+                                            ...theme.typography.commonAvatar,
+                                            ...theme.typography.largeAvatar,
+                                            backgroundColor: theme.palette.warning.light,
+                                            color: theme.palette.warning.dark
                                         }}
                                     >
                                         <StorefrontTwoToneIcon fontSize="inherit" />
@@ -93,18 +78,12 @@ const TotalIncomeLightCard = ({ isLoading }) => {
                                         mt: 0.45,
                                         mb: 0.45
                                     }}
-                                    primary={
-                                        <Typography variant="h4">
-                                            $203k
-                                        </Typography>
-                                    }
+                                    primary={<Typography variant="h4">$203k</Typography>}
                                     secondary={
                                         <Typography
                                             variant="subtitle2"
                                             sx={{
-                                                color: theme
-                                                    .palette
-                                                    .grey[500],
+                                                color: theme.palette.grey[500],
                                                 mt: 0.5
                                             }}
                                         >

@@ -4,7 +4,9 @@ import {
     IconPalette,
     IconShadow,
     IconWindmill,
-    IconPackage
+    IconPackage,
+    IconBox,
+    IconFileInvoice
 } from '@tabler/icons';
 
 // constant
@@ -13,7 +15,9 @@ const icons = {
     IconPalette,
     IconShadow,
     IconWindmill,
-    IconPackage
+    IconPackage,
+    IconBox,
+    IconFileInvoice
 };
 
 // ==============================|| UTILITIES MENU ITEMS ||============================== //
@@ -36,35 +40,27 @@ const utilities = {
             title: 'Mặt hàng',
             type: 'item',
             url: '/hanghoa/mathang',
-            icon: icons.IconPalette,
+            icon: icons.IconBox,
             breadcrumbs: false
         },
         {
-            id: 'util-shadow',
-            title: 'Shadow',
-            type: 'item',
-            url: '/utils/util-shadow',
-            icon: icons.IconShadow,
-            breadcrumbs: false
-        },
-        {
-            id: 'icons',
-            title: 'Icons',
+            id: 'hoadon',
+            title: 'Hóa đơn',
             type: 'collapse',
-            icon: icons.IconWindmill,
+            icon: icons.IconFileInvoice,
             children: [
                 {
-                    id: 'tabler-icons',
-                    title: 'Tabler Icons',
+                    id: 'hoadon-nhap',
+                    title: 'Hóa đơn nhập',
                     type: 'item',
-                    url: '/icons/tabler-icons',
+                    url: '/hoadon/nhap',
                     breadcrumbs: false
                 },
                 {
-                    id: 'material-icons',
-                    title: 'Material Icons',
+                    id: 'hoadon-xuat',
+                    title: 'Hóa đơn xuất',
                     type: 'item',
-                    url: '/icons/material-icons',
+                    url: '/hoadon/xuat',
                     breadcrumbs: false
                 }
             ]

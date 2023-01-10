@@ -25,10 +25,7 @@ const ColorBox = ({ bgcolor, title, data, dark }) => (
                 }}
             >
                 {title && (
-                    <Typography
-                        variant="subtitle1"
-                        color="inherit"
-                    >
+                    <Typography variant="subtitle1" color="inherit">
                         {title}
                     </Typography>
                 )}
@@ -36,21 +33,12 @@ const ColorBox = ({ bgcolor, title, data, dark }) => (
             </Box>
         </Card>
         {data && (
-            <Grid
-                container
-                justifyContent="space-between"
-                alignItems="center"
-            >
+            <Grid container justifyContent="space-between" alignItems="center">
                 <Grid item>
-                    <Typography variant="subtitle2">
-                        {data.label}
-                    </Typography>
+                    <Typography variant="subtitle2">{data.label}</Typography>
                 </Grid>
                 <Grid item>
-                    <Typography
-                        variant="subtitle1"
-                        sx={{ textTransform: 'uppercase' }}
-                    >
+                    <Typography variant="subtitle1" sx={{ textTransform: 'uppercase' }}>
                         {data.color}
                     </Typography>
                 </Grid>
@@ -71,21 +59,13 @@ ColorBox.propTypes = {
 const UIColor = () => (
     <MainCard
         title="Color Palette"
-        secondary={
-            <SecondaryAction link="https://next.material-ui.com/system/palette/" />
-        }
+        secondary={<SecondaryAction link="https://next.material-ui.com/system/palette/" />}
     >
         <Grid container spacing={gridSpacing}>
             <Grid item xs={12}>
                 <SubCard title="Primary Color">
                     <Grid container spacing={gridSpacing}>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="primary.light"
                                 data={{
@@ -96,13 +76,7 @@ const UIColor = () => (
                                 dark
                             />
                         </Grid>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="primary.200"
                                 data={{
@@ -113,13 +87,7 @@ const UIColor = () => (
                                 dark
                             />
                         </Grid>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="primary.main"
                                 data={{
@@ -129,13 +97,7 @@ const UIColor = () => (
                                 title="primary.main"
                             />
                         </Grid>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="primary.dark"
                                 data={{
@@ -145,13 +107,7 @@ const UIColor = () => (
                                 title="primary.dark"
                             />
                         </Grid>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="primary.800"
                                 data={{
@@ -167,13 +123,7 @@ const UIColor = () => (
             <Grid item xs={12}>
                 <SubCard title="Secondary Color">
                     <Grid container spacing={gridSpacing}>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="secondary.light"
                                 data={{
@@ -184,13 +134,7 @@ const UIColor = () => (
                                 dark
                             />
                         </Grid>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="secondary.200"
                                 data={{
@@ -201,13 +145,7 @@ const UIColor = () => (
                                 dark
                             />
                         </Grid>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="secondary.main"
                                 data={{
@@ -217,13 +155,7 @@ const UIColor = () => (
                                 title="secondary.main"
                             />
                         </Grid>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="secondary.dark"
                                 data={{
@@ -233,13 +165,7 @@ const UIColor = () => (
                                 title="secondary.dark"
                             />
                         </Grid>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="secondary.800"
                                 data={{
@@ -255,13 +181,7 @@ const UIColor = () => (
             <Grid item xs={12}>
                 <SubCard title="Success Color">
                     <Grid container spacing={gridSpacing}>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="success.light"
                                 data={{
@@ -272,13 +192,7 @@ const UIColor = () => (
                                 dark
                             />
                         </Grid>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="success.main"
                                 data={{
@@ -288,13 +202,7 @@ const UIColor = () => (
                                 title="success[200]"
                             />
                         </Grid>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="success.main"
                                 data={{
@@ -304,13 +212,7 @@ const UIColor = () => (
                                 title="success.main"
                             />
                         </Grid>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="success.dark"
                                 data={{
@@ -326,13 +228,7 @@ const UIColor = () => (
             <Grid item xs={12}>
                 <SubCard title="Orange Color">
                     <Grid container spacing={gridSpacing}>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="orange.light"
                                 data={{
@@ -343,13 +239,7 @@ const UIColor = () => (
                                 dark
                             />
                         </Grid>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="orange.main"
                                 data={{
@@ -359,13 +249,7 @@ const UIColor = () => (
                                 title="orange.main"
                             />
                         </Grid>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="orange.dark"
                                 data={{
@@ -381,13 +265,7 @@ const UIColor = () => (
             <Grid item xs={12}>
                 <SubCard title="Error Color">
                     <Grid container spacing={gridSpacing}>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="error.light"
                                 data={{
@@ -398,13 +276,7 @@ const UIColor = () => (
                                 dark
                             />
                         </Grid>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="error.main"
                                 data={{
@@ -414,13 +286,7 @@ const UIColor = () => (
                                 title="error.main"
                             />
                         </Grid>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="error.dark"
                                 data={{
@@ -436,13 +302,7 @@ const UIColor = () => (
             <Grid item xs={12}>
                 <SubCard title="Warning Color">
                     <Grid container spacing={gridSpacing}>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="warning.light"
                                 data={{
@@ -453,13 +313,7 @@ const UIColor = () => (
                                 dark
                             />
                         </Grid>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="warning.main"
                                 data={{
@@ -470,13 +324,7 @@ const UIColor = () => (
                                 dark
                             />
                         </Grid>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="warning.dark"
                                 data={{
@@ -492,13 +340,7 @@ const UIColor = () => (
             <Grid item xs={12}>
                 <SubCard title="Grey Color">
                     <Grid container spacing={gridSpacing}>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="grey.50"
                                 data={{
@@ -509,13 +351,7 @@ const UIColor = () => (
                                 dark
                             />
                         </Grid>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="grey.100"
                                 data={{
@@ -526,13 +362,7 @@ const UIColor = () => (
                                 dark
                             />
                         </Grid>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="grey.200"
                                 data={{
@@ -543,13 +373,7 @@ const UIColor = () => (
                                 dark
                             />
                         </Grid>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="grey.300"
                                 data={{
@@ -560,13 +384,7 @@ const UIColor = () => (
                                 dark
                             />
                         </Grid>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="grey.500"
                                 data={{
@@ -576,13 +394,7 @@ const UIColor = () => (
                                 title="grey[500]"
                             />
                         </Grid>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="grey.700"
                                 data={{
@@ -592,13 +404,7 @@ const UIColor = () => (
                                 title="grey[600]"
                             />
                         </Grid>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="grey.700"
                                 data={{
@@ -608,13 +414,7 @@ const UIColor = () => (
                                 title="grey[700]"
                             />
                         </Grid>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="grey.900"
                                 data={{
@@ -624,13 +424,7 @@ const UIColor = () => (
                                 title="grey[900]"
                             />
                         </Grid>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2}
-                        >
+                        <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="#fff"
                                 data={{

@@ -36,9 +36,7 @@ import accessToken from 'utils/access-token';
 
 const ProfileSection = () => {
     const theme = useTheme();
-    const customization = useSelector(
-        (state) => state.customization
-    );
+    const customization = useSelector((state) => state.customization);
     const user = useSelector((state) => state.auth.user);
 
     const navigate = useNavigate();
@@ -54,20 +52,13 @@ const ProfileSection = () => {
     };
 
     const handleClose = (event) => {
-        if (
-            anchorRef.current &&
-            anchorRef.current.contains(event.target)
-        ) {
+        if (anchorRef.current && anchorRef.current.contains(event.target)) {
             return;
         }
         setOpen(false);
     };
 
-    const handleListItemClick = (
-        event,
-        index,
-        route = ''
-    ) => {
+    const handleListItemClick = (event, index, route = '') => {
         setSelectedIndex(index);
         handleClose(event);
 
@@ -96,22 +87,16 @@ const ProfileSection = () => {
                     alignItems: 'center',
                     borderRadius: '27px',
                     transition: 'all .2s ease-in-out',
-                    borderColor:
-                        theme.palette.primary.light,
-                    backgroundColor:
-                        theme.palette.primary.light,
-                    '&[aria-controls="menu-list-grow"], &:hover':
-                        {
-                            borderColor:
-                                theme.palette.primary.main,
-                            background: `${theme.palette.primary.main}!important`,
-                            color: theme.palette.primary
-                                .light,
-                            '& svg': {
-                                stroke: theme.palette
-                                    .primary.light
-                            }
-                        },
+                    borderColor: theme.palette.primary.light,
+                    backgroundColor: theme.palette.primary.light,
+                    '&[aria-controls="menu-list-grow"], &:hover': {
+                        borderColor: theme.palette.primary.main,
+                        background: `${theme.palette.primary.main}!important`,
+                        color: theme.palette.primary.light,
+                        '& svg': {
+                            stroke: theme.palette.primary.light
+                        }
+                    },
                     '& .MuiChip-label': {
                         lineHeight: 0
                     }
@@ -120,33 +105,22 @@ const ProfileSection = () => {
                     <Avatar
                         src="http://www.gravatar.com/avatar/?d=identicon"
                         sx={{
-                            ...theme.typography
-                                .mediumAvatar,
+                            ...theme.typography.mediumAvatar,
                             margin: '8px 0 8px 8px !important',
                             cursor: 'pointer'
                         }}
                         ref={anchorRef}
-                        aria-controls={
-                            open
-                                ? 'menu-list-grow'
-                                : undefined
-                        }
+                        aria-controls={open ? 'menu-list-grow' : undefined}
                         aria-haspopup="true"
                         color="inherit"
                     />
                 }
                 label={
-                    <IconSettings
-                        stroke={1.5}
-                        size="1.5rem"
-                        color={theme.palette.primary.main}
-                    />
+                    <IconSettings stroke={1.5} size="1.5rem" color={theme.palette.primary.main} />
                 }
                 variant="outlined"
                 ref={anchorRef}
-                aria-controls={
-                    open ? 'menu-list-grow' : undefined
-                }
+                aria-controls={open ? 'menu-list-grow' : undefined}
                 aria-haspopup="true"
                 onClick={handleToggle}
                 color="primary"
@@ -170,36 +144,24 @@ const ProfileSection = () => {
                 }}
             >
                 {({ TransitionProps }) => (
-                    <Transitions
-                        in={open}
-                        {...TransitionProps}
-                    >
+                    <Transitions in={open} {...TransitionProps}>
                         <Paper>
-                            <ClickAwayListener
-                                onClickAway={handleClose}
-                            >
+                            <ClickAwayListener onClickAway={handleClose}>
                                 <MainCard
                                     border={false}
                                     elevation={16}
                                     content={false}
                                     boxShadow
-                                    shadow={
-                                        theme.shadows[16]
-                                    }
+                                    shadow={theme.shadows[16]}
                                 >
                                     <Box sx={{ p: 2 }}>
                                         <Stack>
                                             <Stack
                                                 direction="row"
-                                                spacing={
-                                                    0.5
-                                                }
+                                                spacing={0.5}
                                                 alignItems="center"
                                             >
-                                                <Typography variant="h4">
-                                                    Xin
-                                                    chào,
-                                                </Typography>
+                                                <Typography variant="h4">Xin chào,</Typography>
                                                 <Typography
                                                     component="span"
                                                     variant="h4"
@@ -207,14 +169,11 @@ const ProfileSection = () => {
                                                         fontWeight: 400
                                                     }}
                                                 >
-                                                    {
-                                                        user.ten
-                                                    }
+                                                    {user.ten}
                                                 </Typography>
                                             </Stack>
                                             <Typography variant="subtitle2">
-                                                Anh Phat
-                                                Admin
+                                                Anh Phat Admin
                                             </Typography>
                                         </Stack>
                                         <Divider />
@@ -222,10 +181,8 @@ const ProfileSection = () => {
                                     <PerfectScrollbar
                                         style={{
                                             height: '100%',
-                                            maxHeight:
-                                                'calc(100vh - 250px)',
-                                            overflowX:
-                                                'hidden'
+                                            maxHeight: 'calc(100vh - 250px)',
+                                            overflowX: 'hidden'
                                         }}
                                     >
                                         <Box sx={{ p: 2 }}>
@@ -235,36 +192,22 @@ const ProfileSection = () => {
                                                     width: '100%',
                                                     maxWidth: 350,
                                                     minWidth: 300,
-                                                    backgroundColor:
-                                                        theme
-                                                            .palette
-                                                            .background
-                                                            .paper,
-                                                    borderRadius:
-                                                        '10px',
-                                                    [theme.breakpoints.down(
-                                                        'md'
-                                                    )]: {
-                                                        minWidth:
-                                                            '100%'
+                                                    backgroundColor: theme.palette.background.paper,
+                                                    borderRadius: '10px',
+                                                    [theme.breakpoints.down('md')]: {
+                                                        minWidth: '100%'
                                                     },
-                                                    '& .MuiListItemButton-root':
-                                                        {
-                                                            mt: 0.5
-                                                        }
+                                                    '& .MuiListItemButton-root': {
+                                                        mt: 0.5
+                                                    }
                                                 }}
                                             >
                                                 <ListItemButton
                                                     sx={{
                                                         borderRadius: `${customization.borderRadius}px`
                                                     }}
-                                                    selected={
-                                                        selectedIndex ===
-                                                        0
-                                                    }
-                                                    onClick={(
-                                                        event
-                                                    ) =>
+                                                    selected={selectedIndex === 0}
+                                                    onClick={(event) =>
                                                         handleListItemClick(
                                                             event,
                                                             0,
@@ -273,20 +216,12 @@ const ProfileSection = () => {
                                                     }
                                                 >
                                                     <ListItemIcon>
-                                                        <IconSettings
-                                                            stroke={
-                                                                1.5
-                                                            }
-                                                            size="1.3rem"
-                                                        />
+                                                        <IconSettings stroke={1.5} size="1.3rem" />
                                                     </ListItemIcon>
                                                     <ListItemText
                                                         primary={
                                                             <Typography variant="body2">
-                                                                Cài
-                                                                đặt
-                                                                tài
-                                                                khoản
+                                                                Cài đặt tài khoản
                                                             </Typography>
                                                         }
                                                     />
@@ -295,27 +230,16 @@ const ProfileSection = () => {
                                                     sx={{
                                                         borderRadius: `${customization.borderRadius}px`
                                                     }}
-                                                    selected={
-                                                        selectedIndex ===
-                                                        4
-                                                    }
-                                                    onClick={
-                                                        handleLogout
-                                                    }
+                                                    selected={selectedIndex === 4}
+                                                    onClick={handleLogout}
                                                 >
                                                     <ListItemIcon>
-                                                        <IconLogout
-                                                            stroke={
-                                                                1.5
-                                                            }
-                                                            size="1.3rem"
-                                                        />
+                                                        <IconLogout stroke={1.5} size="1.3rem" />
                                                     </ListItemIcon>
                                                     <ListItemText
                                                         primary={
                                                             <Typography variant="body2">
-                                                                Đăng
-                                                                xuất
+                                                                Đăng xuất
                                                             </Typography>
                                                         }
                                                     />

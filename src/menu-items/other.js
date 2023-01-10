@@ -1,31 +1,23 @@
 // assets
-import { IconBrandChrome, IconHelp } from '@tabler/icons';
+import { IconBrandChrome, IconHelp, IconUser } from '@tabler/icons';
 
 // constant
-const icons = { IconBrandChrome, IconHelp };
+const icons = { IconBrandChrome, IconHelp, IconUser };
 
 // ==============================|| SAMPLE PAGE & DOCUMENTATION MENU ITEMS ||============================== //
 
 const other = {
-    id: 'sample-docs-roadmap',
+    id: 'quantri',
+    title: 'Quản trị',
     type: 'group',
     children: [
         {
-            id: 'sample-page',
-            title: 'Sample Page',
+            id: 'quantri-taikhoan',
+            title: 'Tài khoản',
             type: 'item',
-            url: '/sample-page',
-            icon: icons.IconBrandChrome,
-            breadcrumbs: false
-        },
-        {
-            id: 'documentation',
-            title: 'Documentation',
-            type: 'item',
-            url: 'https://codedthemes.gitbook.io/berry/',
-            icon: icons.IconHelp,
-            external: true,
-            target: true
+            url: '/quantri/taikhoan',
+            icon: icons.IconUser,
+            breadcrumbs: true
         }
     ]
 };

@@ -6,11 +6,7 @@ import MinimalLayout from 'layout/MinimalLayout';
 
 // login option 3 routing
 const AuthLogin3 = Loadable(
-    lazy(() =>
-        import(
-            'views/pages/authentication/authentication3/Login3'
-        )
-    )
+    lazy(() => import('views/pages/authentication/authentication3/Login3'))
 );
 
 // ==============================|| AUTHENTICATION ROUTING ||============================== //

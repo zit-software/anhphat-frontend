@@ -60,25 +60,14 @@ const TotalIncomeDarkCard = ({ isLoading }) => {
                 <CardWrapper border={false} content={false}>
                     <Box sx={{ p: 2 }}>
                         <List sx={{ py: 0 }}>
-                            <ListItem
-                                alignItems="center"
-                                disableGutters
-                                sx={{ py: 0 }}
-                            >
+                            <ListItem alignItems="center" disableGutters sx={{ py: 0 }}>
                                 <ListItemAvatar>
                                     <Avatar
                                         variant="rounded"
                                         sx={{
-                                            ...theme
-                                                .typography
-                                                .commonAvatar,
-                                            ...theme
-                                                .typography
-                                                .largeAvatar,
-                                            backgroundColor:
-                                                theme
-                                                    .palette
-                                                    .primary[800],
+                                            ...theme.typography.commonAvatar,
+                                            ...theme.typography.largeAvatar,
+                                            backgroundColor: theme.palette.primary[800],
                                             color: '#fff'
                                         }}
                                     >

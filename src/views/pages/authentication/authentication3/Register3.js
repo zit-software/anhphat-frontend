@@ -2,13 +2,7 @@ import { Link } from 'react-router-dom';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import {
-    Divider,
-    Grid,
-    Stack,
-    Typography,
-    useMediaQuery
-} from '@mui/material';
+import { Divider, Grid, Stack, Typography, useMediaQuery } from '@mui/material';
 
 // project imports
 import AuthWrapper1 from '../AuthWrapper1';
@@ -23,9 +17,7 @@ import AuthFooter from 'ui-component/cards/AuthFooter';
 
 const Register = () => {
     const theme = useTheme();
-    const matchDownSM = useMediaQuery(
-        theme.breakpoints.down('md')
-    );
+    const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
 
     return (
         <AuthWrapper1>
@@ -58,10 +50,7 @@ const Register = () => {
                                     alignItems="center"
                                     justifyContent="center"
                                 >
-                                    <Grid
-                                        item
-                                        sx={{ mb: 3 }}
-                                    >
+                                    <Grid item sx={{ mb: 3 }}>
                                         <Link to="#">
                                             <Logo />
                                         </Link>
@@ -69,11 +58,7 @@ const Register = () => {
                                     <Grid item xs={12}>
                                         <Grid
                                             container
-                                            direction={
-                                                matchDownSM
-                                                    ? 'column-reverse'
-                                                    : 'row'
-                                            }
+                                            direction={matchDownSM ? 'column-reverse' : 'row'}
                                             alignItems="center"
                                             justifyContent="center"
                                         >
@@ -81,41 +66,23 @@ const Register = () => {
                                                 <Stack
                                                     alignItems="center"
                                                     justifyContent="center"
-                                                    spacing={
-                                                        1
-                                                    }
+                                                    spacing={1}
                                                 >
                                                     <Typography
-                                                        color={
-                                                            theme
-                                                                .palette
-                                                                .secondary
-                                                                .main
-                                                        }
+                                                        color={theme.palette.secondary.main}
                                                         gutterBottom
-                                                        variant={
-                                                            matchDownSM
-                                                                ? 'h3'
-                                                                : 'h2'
-                                                        }
+                                                        variant={matchDownSM ? 'h3' : 'h2'}
                                                     >
-                                                        Sign
-                                                        up
+                                                        Sign up
                                                     </Typography>
                                                     <Typography
                                                         variant="caption"
                                                         fontSize="16px"
                                                         textAlign={
-                                                            matchDownSM
-                                                                ? 'center'
-                                                                : 'inherit'
+                                                            matchDownSM ? 'center' : 'inherit'
                                                         }
                                                     >
-                                                        Enter
-                                                        your
-                                                        credentials
-                                                        to
-                                                        continue
+                                                        Enter your credentials to continue
                                                     </Typography>
                                                 </Stack>
                                             </Grid>
@@ -136,18 +103,14 @@ const Register = () => {
                                             xs={12}
                                         >
                                             <Typography
-                                                component={
-                                                    Link
-                                                }
+                                                component={Link}
                                                 to="/pages/login/login3"
                                                 variant="subtitle1"
                                                 sx={{
-                                                    textDecoration:
-                                                        'none'
+                                                    textDecoration: 'none'
                                                 }}
                                             >
-                                                Already have
-                                                an account?
+                                                Already have an account?
                                             </Typography>
                                         </Grid>
                                     </Grid>

@@ -17,29 +17,12 @@ const NavGroup = ({ item }) => {
     const items = item.children?.map((menu) => {
         switch (menu.type) {
             case 'collapse':
-                return (
-                    <NavCollapse
-                        key={menu.id}
-                        menu={menu}
-                        level={1}
-                    />
-                );
+                return <NavCollapse key={menu.id} menu={menu} level={1} />;
             case 'item':
-                return (
-                    <NavItem
-                        key={menu.id}
-                        item={menu}
-                        level={1}
-                    />
-                );
+                return <NavItem key={menu.id} item={menu} level={1} />;
             default:
                 return (
-                    <Typography
-                        key={menu.id}
-                        variant="h6"
-                        color="error"
-                        align="center"
-                    >
+                    <Typography key={menu.id} variant="h6" color="error" align="center">
                         Menu Items Error
                     </Typography>
                 );
@@ -54,8 +37,7 @@ const NavGroup = ({ item }) => {
                         <Typography
                             variant="caption"
                             sx={{
-                                ...theme.typography
-                                    .menuCaption
+                                ...theme.typography.menuCaption
                             }}
                             display="block"
                             gutterBottom
@@ -65,8 +47,7 @@ const NavGroup = ({ item }) => {
                                 <Typography
                                     variant="caption"
                                     sx={{
-                                        ...theme.typography
-                                            .subMenuCaption
+                                        ...theme.typography.subMenuCaption
                                     }}
                                     display="block"
                                     gutterBottom

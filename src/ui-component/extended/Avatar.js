@@ -6,13 +6,7 @@ import MuiAvatar from '@mui/material/Avatar';
 
 // ==============================|| AVATAR ||============================== //
 
-const Avatar = ({
-    color,
-    outline,
-    size,
-    sx,
-    ...others
-}) => {
+const Avatar = ({ color, outline, size, sx, ...others }) => {
     const theme = useTheme();
 
     const colorSX = color &&
@@ -24,9 +18,7 @@ const Avatar = ({
         color: color ? `${color}.main` : `primary.main`,
         bgcolor: theme.palette.background.paper,
         border: '2px solid',
-        borderColor: color
-            ? `${color}.main`
-            : `primary.main`
+        borderColor: color ? `${color}.main` : `primary.main`
     };
     let sizeSX = {};
     switch (size) {
