@@ -11,13 +11,20 @@ import {
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-const ManageUserForm = ({ user = {}, buttonText = 'Lưu', onSubmit = (values) => values }) => {
+const ManageUserForm = ({
+    user = {},
+    buttonText = 'Lưu',
+    requiredPassword = false,
+    onSubmit = (values) => values
+}) => {
     return (
         <Formik
             initialValues={{ ten: user.ten, mk: '', cfmk: '', laAdmin: user.laAdmin }}
             validationSchema={Yup.object().shape({
                 ten: Yup.string().required('Vui lòng nhập tên'),
-                mk: Yup.string(),
+                mk: requiredPassword
+                    ? Yup.string().required('Vui lòng nhập mật khẩu')
+                    : Yup.string(),
                 cfmk: Yup.string().oneOf([Yup.ref('mk'), null], 'Mật khẩu nhập lại không khớp'),
                 laAdmin: Yup.boolean()
             })}
@@ -80,7 +87,7 @@ const ManageUserForm = ({ user = {}, buttonText = 'Lưu', onSubmit = (values) =>
 
                     <Divider />
 
-                    <Button style={{ marginTop: 10 }} type="submit" variant="contained">
+                    <Button style={{ marginTop: 10 }} type="submit" variant="outlined">
                         {buttonText}
                     </Button>
                 </form>

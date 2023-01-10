@@ -2,6 +2,7 @@
 
 // project imports
 import {
+    AppBar,
     Button,
     Dialog,
     DialogActions,
@@ -16,9 +17,11 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    Tooltip
+    Toolbar,
+    Tooltip,
+    Typography
 } from '@mui/material';
-import { IconPencil, IconShield, IconTrash, IconUser } from '@tabler/icons';
+import { IconPencil, IconShield, IconTrash, IconUser, IconUserPlus, IconX } from '@tabler/icons';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 
@@ -74,10 +77,30 @@ const EditAccountModal = ({ open, user, onClose, onSubmit }) => {
     );
 };
 
+const CreateAccountModal = ({ open, onClose, onSubmit }) => {
+    return (
+        <Dialog open={open} onClose={onClose} fullScreen>
+            <AppBar sx={{ position: 'relative' }} color="inherit">
+                <Toolbar>
+                    <IconButton edge="start" onClick={onClose}>
+                        <IconX />
+                    </IconButton>
+                    <Typography sx={{ flex: 1 }}>Tạo tài khoản</Typography>
+                </Toolbar>
+            </AppBar>
+            <DialogTitle>Tạo tài khoản</DialogTitle>
+            <DialogContent>
+                {open && <ManageUserForm requiredPassword onSubmit={onSubmit} buttonText="Tạo" />}
+            </DialogContent>
+        </Dialog>
+    );
+};
+
 const Accounts = () => {
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [deleteAccountIndex, setDeleteAccountIndex] = useState(0);
     const [editAccount, setEditAccount] = useState(null);
+    const [showCreateAccount, setShowCreateAccount] = useState(false);
     const [refetchCount, setRefetchCount] = useState(0);
 
     const { data: accounts, isLoading } = useQuery(
@@ -108,16 +131,39 @@ const Accounts = () => {
 
     const handleSubmitEditForm = async (values) => {
         try {
+            Object.keys(values).forEach((key) => {
+                if (values[key] === null) delete values[key];
+            });
             await usernamangeService.updateAccount(editAccount.ma, values);
             setRefetchCount(refetchCount + 1);
-            setEditAccount(null);
+            handleCloseEditAccount();
+        } catch (error) {}
+    };
+
+    const handleCloseCreateModal = () => setShowCreateAccount(false);
+    const handleOpenCreateModal = () => setShowCreateAccount(true);
+
+    const handleCreateAccount = async (values) => {
+        try {
+            values.matkhau = values.mk;
+            await usernamangeService.createAccount(values);
+            setRefetchCount(refetchCount + 1);
+            handleCloseCreateModal();
         } catch (error) {}
     };
 
     return (
         <MainCard title="Tài khoản">
-            <TableContainer>
-                <Table>
+            <div>
+                <Tooltip title="Tạo tài khoản" onClick={handleOpenCreateModal}>
+                    <IconButton color="primary">
+                        <IconUserPlus />
+                    </IconButton>
+                </Tooltip>
+            </div>
+
+            <TableContainer sx={{ maxHeight: '70vh' }}>
+                <Table stickyHeader>
                     <TableHead>
                         <TableRow>
                             <TableCell>Mã số</TableCell>
@@ -147,10 +193,10 @@ const Accounts = () => {
                                     <TableCell>
                                         <Tooltip title="Chỉnh sửa">
                                             <IconButton
-                                                aria-label="edit"
+                                                color="primary"
                                                 onClick={() => setEditAccount(user)}
                                             >
-                                                <IconPencil color="blue" />
+                                                <IconPencil />
                                             </IconButton>
                                         </Tooltip>
                                     </TableCell>
@@ -159,8 +205,8 @@ const Accounts = () => {
                                             title="Xóa tài khoản"
                                             onClick={() => handleOpenDeleteDialog(index)}
                                         >
-                                            <IconButton aria-label="edit">
-                                                <IconTrash color="red" />
+                                            <IconButton color="error">
+                                                <IconTrash />
                                             </IconButton>
                                         </Tooltip>
                                     </TableCell>
@@ -182,6 +228,12 @@ const Accounts = () => {
                 user={editAccount}
                 onClose={handleCloseEditAccount}
                 onSubmit={handleSubmitEditForm}
+            />
+
+            <CreateAccountModal
+                open={showCreateAccount}
+                onClose={handleCloseCreateModal}
+                onSubmit={handleCreateAccount}
             />
         </MainCard>
     );

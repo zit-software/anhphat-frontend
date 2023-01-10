@@ -17,6 +17,10 @@ const usernamangeService = {
         return await (
             await request.put(`quantri/taikhoan/${ma}`, payload)
         ).data;
+    },
+
+    async createAccount(payload) {
+        return await request.post('quantri/taikhoan', payload);
     }
 };
 
