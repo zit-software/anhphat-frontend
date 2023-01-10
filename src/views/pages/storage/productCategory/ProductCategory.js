@@ -21,7 +21,7 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { IconPencil, IconTrash } from '@tabler/icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import productcategoryservice from 'services/productcategory.service';
 import time from 'utils/time';
