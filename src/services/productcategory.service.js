@@ -7,6 +7,12 @@ const productcategoryservice = {
     },
     async deleteCategory(ma) {
         await request.delete(`/loaihang/${ma}`);
+    },
+    async addCategory(newCategory) {
+        await request.post('/loaihang', newCategory);
+    },
+    async updateCategory(newCategory, ma) {
+        await request.put(`/loaihang/${ma}`, newCategory);
     }
 };
 
