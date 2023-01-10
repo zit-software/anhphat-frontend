@@ -1,20 +1,242 @@
 // material-ui
-import { Typography } from '@mui/material';
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
+import {
+    AppBar,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    IconButton,
+    Skeleton,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Toolbar,
+    Tooltip,
+    Typography
+} from '@mui/material';
+import { IconPencil, IconShield, IconTrash, IconUser, IconUserPlus, IconX } from '@tabler/icons';
+import { useState } from 'react';
+import { useQuery } from 'react-query';
 
-const Accounts = () => (
-    <MainCard title="Sample Card">
-        <Typography variant="body2">
-            Lorem ipsum dolor sit amen, consenter nipissing eli, sed do elusion tempos incident ut
-            laborers et doolie magna alissa. Ut enif ad minim venice, quin nostrum exercitation
-            illampu laborings nisi ut liquid ex ea commons construal. Duos aube grue dolor in
-            reprehended in voltage veil esse colum doolie eu fujian bulla parian. Exceptive sin
-            ocean cuspidate non president, sunk in culpa qui officiate descent molls anim id est
-            labours.
-        </Typography>
-    </MainCard>
+import usernamangeService from 'services/usermanage.service';
+import MainCard from 'ui-component/cards/MainCard';
+import ManageUserForm from '../manage-forms/ManageUserForm';
+
+const RowSkeletion = () => (
+    <TableRow>
+        <TableCell>
+            <Skeleton />
+        </TableCell>
+        <TableCell>
+            <Skeleton />
+        </TableCell>
+        <TableCell>
+            <Skeleton />
+        </TableCell>
+        <TableCell>
+            <Skeleton />
+        </TableCell>
+        <TableCell>
+            <Skeleton />
+        </TableCell>
+    </TableRow>
 );
+
+const DeleteAccountModal = ({ open, onClose, accountName, onSubmit }) => (
+    <Dialog open={open} onClose={onClose}>
+        <DialogTitle>Xóa tài khoản</DialogTitle>
+        <DialogContent>
+            <DialogContentText>
+                Bạn muốn xóa tài khoản <strong>{accountName}</strong>?
+            </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+            <Button onClick={onClose}>Hủy</Button>
+            <Button color="error" onClick={onSubmit}>
+                Xóa
+            </Button>
+        </DialogActions>
+    </Dialog>
+);
+
+const EditAccountModal = ({ open, user, onClose, onSubmit }) => {
+    return (
+        <Dialog open={open} onClose={onClose}>
+            <DialogTitle>Chỉnh sửa tài khoản</DialogTitle>
+            <DialogContent>
+                {open ? <ManageUserForm user={user} onSubmit={onSubmit} /> : <ManageUserForm />}
+            </DialogContent>
+        </Dialog>
+    );
+};
+
+const CreateAccountModal = ({ open, onClose, onSubmit }) => {
+    return (
+        <Dialog open={open} onClose={onClose} fullScreen>
+            <AppBar sx={{ position: 'relative' }} color="inherit">
+                <Toolbar>
+                    <IconButton edge="start" onClick={onClose}>
+                        <IconX />
+                    </IconButton>
+                    <Typography sx={{ flex: 1 }}>Tạo tài khoản</Typography>
+                </Toolbar>
+            </AppBar>
+            <DialogTitle>Tạo tài khoản</DialogTitle>
+            <DialogContent>
+                {open && <ManageUserForm requiredPassword onSubmit={onSubmit} buttonText="Tạo" />}
+            </DialogContent>
+        </Dialog>
+    );
+};
+
+const Accounts = () => {
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const [deleteAccountIndex, setDeleteAccountIndex] = useState(0);
+    const [editAccount, setEditAccount] = useState(null);
+    const [showCreateAccount, setShowCreateAccount] = useState(false);
+    const [refetchCount, setRefetchCount] = useState(0);
+
+    const { data: accounts, isLoading } = useQuery(
+        [refetchCount],
+        () => usernamangeService.getAllUsers(),
+        { initialData: [] }
+    );
+
+    const handleOpenDeleteDialog = (index) => {
+        setShowDeleteDialog(true);
+        setDeleteAccountIndex(index);
+    };
+
+    const handleCloseDeleteDialog = () => setShowDeleteDialog(false);
+
+    const handleDeleteAccount = async () => {
+        try {
+            await usernamangeService.deleteAccount(accounts[deleteAccountIndex].ma);
+
+            setRefetchCount(refetchCount + 1);
+            handleCloseDeleteDialog();
+        } catch (error) {
+            alert(error.response.data.message);
+        }
+    };
+
+    const handleCloseEditAccount = () => setEditAccount(null);
+
+    const handleSubmitEditForm = async (values) => {
+        try {
+            Object.keys(values).forEach((key) => {
+                if (values[key] === null) delete values[key];
+            });
+            await usernamangeService.updateAccount(editAccount.ma, values);
+            setRefetchCount(refetchCount + 1);
+            handleCloseEditAccount();
+        } catch (error) {}
+    };
+
+    const handleCloseCreateModal = () => setShowCreateAccount(false);
+    const handleOpenCreateModal = () => setShowCreateAccount(true);
+
+    const handleCreateAccount = async (values) => {
+        try {
+            values.matkhau = values.mk;
+            await usernamangeService.createAccount(values);
+            setRefetchCount(refetchCount + 1);
+            handleCloseCreateModal();
+        } catch (error) {}
+    };
+
+    return (
+        <MainCard title="Tài khoản">
+            <div>
+                <Tooltip title="Tạo tài khoản" onClick={handleOpenCreateModal}>
+                    <IconButton color="primary">
+                        <IconUserPlus />
+                    </IconButton>
+                </Tooltip>
+            </div>
+
+            <TableContainer sx={{ maxHeight: '70vh' }}>
+                <Table stickyHeader>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Mã số</TableCell>
+                            <TableCell>Tên tài khoản</TableCell>
+                            <TableCell>Quyền</TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {isLoading ? (
+                            <>
+                                <RowSkeletion />
+                                <RowSkeletion />
+                                <RowSkeletion />
+                                <RowSkeletion />
+                                <RowSkeletion />
+                            </>
+                        ) : (
+                            accounts.map((user, index) => (
+                                <TableRow key={user.ma} hover>
+                                    <TableCell>{user.ma}</TableCell>
+                                    <TableCell>{user.ten}</TableCell>
+                                    <TableCell>
+                                        {user.laAdmin ? <IconShield /> : <IconUser />}
+                                    </TableCell>
+                                    <TableCell>
+                                        <Tooltip title="Chỉnh sửa">
+                                            <IconButton
+                                                color="primary"
+                                                onClick={() => setEditAccount(user)}
+                                            >
+                                                <IconPencil />
+                                            </IconButton>
+                                        </Tooltip>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Tooltip
+                                            title="Xóa tài khoản"
+                                            onClick={() => handleOpenDeleteDialog(index)}
+                                        >
+                                            <IconButton color="error">
+                                                <IconTrash />
+                                            </IconButton>
+                                        </Tooltip>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        )}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            <DeleteAccountModal
+                open={showDeleteDialog}
+                onClose={handleCloseDeleteDialog}
+                accountName={accounts[deleteAccountIndex]?.name}
+                onSubmit={handleDeleteAccount}
+            />
+
+            <EditAccountModal
+                open={!!editAccount}
+                user={editAccount}
+                onClose={handleCloseEditAccount}
+                onSubmit={handleSubmitEditForm}
+            />
+
+            <CreateAccountModal
+                open={showCreateAccount}
+                onClose={handleCloseCreateModal}
+                onSubmit={handleCreateAccount}
+            />
+        </MainCard>
+    );
+};
 
 export default Accounts;
