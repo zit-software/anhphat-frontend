@@ -19,7 +19,7 @@ import { setUser } from 'store/actions';
 
 import { QueryClientProvider, QueryClient } from 'react-query';
 
-const queryClient = QueryClient();
+const queryClient = new QueryClient();
 
 // ==============================|| APP ||============================== //
 
