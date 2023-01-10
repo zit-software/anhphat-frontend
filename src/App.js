@@ -17,6 +17,10 @@ import AuthService from 'services/auth.service';
 import { store } from 'store';
 import { setUser } from 'store/actions';
 
+import { QueryClientProvider, QueryClient } from 'react-query';
+
+const queryClient = QueryClient();
+
 // ==============================|| APP ||============================== //
 
 const App = () => {
@@ -41,10 +45,12 @@ const App = () => {
     return (
         <StyledEngineProvider injectFirst>
             <ThemeProvider theme={themes(customization)}>
-                <CssBaseline />
-                <NavigationScroll>
-                    <Routes />
-                </NavigationScroll>
+                <QueryClientProvider client={queryClient}>
+                    <CssBaseline />
+                    <NavigationScroll>
+                        <Routes />
+                    </NavigationScroll>
+                </QueryClientProvider>
             </ThemeProvider>
         </StyledEngineProvider>
     );
