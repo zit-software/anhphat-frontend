@@ -24,6 +24,7 @@ import { useQuery } from 'react-query';
 
 import usernamangeService from 'services/usermanage.service';
 import MainCard from 'ui-component/cards/MainCard';
+import ManageUserForm from '../manage-forms/ManageUserForm';
 
 const RowSkeletion = () => (
     <TableRow>
@@ -62,9 +63,21 @@ const DeleteAccountModal = ({ open, onClose, accountName, onSubmit }) => (
     </Dialog>
 );
 
+const EditAccountModal = ({ open, user, onClose, onSubmit }) => {
+    return (
+        <Dialog open={open} onClose={onClose}>
+            <DialogTitle>Chỉnh sửa tài khoản</DialogTitle>
+            <DialogContent>
+                {open ? <ManageUserForm user={user} onSubmit={onSubmit} /> : <ManageUserForm />}
+            </DialogContent>
+        </Dialog>
+    );
+};
+
 const Accounts = () => {
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [deleteAccountIndex, setDeleteAccountIndex] = useState(0);
+    const [editAccount, setEditAccount] = useState(null);
     const [refetchCount, setRefetchCount] = useState(0);
 
     const { data: accounts, isLoading } = useQuery(
@@ -77,6 +90,7 @@ const Accounts = () => {
         setShowDeleteDialog(true);
         setDeleteAccountIndex(index);
     };
+
     const handleCloseDeleteDialog = () => setShowDeleteDialog(false);
 
     const handleDeleteAccount = async () => {
@@ -88,6 +102,16 @@ const Accounts = () => {
         } catch (error) {
             alert(error.response.data.message);
         }
+    };
+
+    const handleCloseEditAccount = () => setEditAccount(null);
+
+    const handleSubmitEditForm = async (values) => {
+        try {
+            await usernamangeService.updateAccount(editAccount.ma, values);
+            setRefetchCount(refetchCount + 1);
+            setEditAccount(null);
+        } catch (error) {}
     };
 
     return (
@@ -122,7 +146,10 @@ const Accounts = () => {
                                     </TableCell>
                                     <TableCell>
                                         <Tooltip title="Chỉnh sửa">
-                                            <IconButton aria-label="edit">
+                                            <IconButton
+                                                aria-label="edit"
+                                                onClick={() => setEditAccount(user)}
+                                            >
                                                 <IconPencil color="blue" />
                                             </IconButton>
                                         </Tooltip>
@@ -148,6 +175,13 @@ const Accounts = () => {
                 onClose={handleCloseDeleteDialog}
                 accountName={accounts[deleteAccountIndex]?.name}
                 onSubmit={handleDeleteAccount}
+            />
+
+            <EditAccountModal
+                open={!!editAccount}
+                user={editAccount}
+                onClose={handleCloseEditAccount}
+                onSubmit={handleSubmitEditForm}
             />
         </MainCard>
     );

@@ -11,6 +11,12 @@ const usernamangeService = {
         return await (
             await request.delete(`quantri/taikhoan/${ma}`)
         ).data;
+    },
+
+    async updateAccount(ma, payload) {
+        return await (
+            await request.put(`quantri/taikhoan/${ma}`, payload)
+        ).data;
     }
 };
 
