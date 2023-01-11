@@ -1,5 +1,6 @@
 import {
     Button,
+    Chip,
     CircularProgress,
     Dialog,
     DialogActions,
@@ -19,12 +20,13 @@ import {
     Tooltip,
     Typography
 } from '@mui/material';
-import { Box } from '@mui/system';
+import { Box, Stack } from '@mui/system';
 import { IconPencil, IconTrash } from '@tabler/icons';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import productcategoryservice from 'services/productcategory.service';
 import time from 'utils/time';
+import ChipsArray from './ChipsArray';
 
 const { default: MainCard } = require('ui-component/cards/MainCard');
 
@@ -98,6 +100,16 @@ const InputLoaiHangModal = ({ index, categories, onClose, onSubmit, refetch }) =
         gianhap: isUpdating && categories[index].gianhap,
         giaban: isUpdating && categories[index].giaban
     });
+    const [donvi, setDonVi] = useState(
+        isUpdating
+            ? categories[index].donvi.map((donvi) => {
+                  return { ten: donvi.ten, inDB: true };
+              })
+            : []
+    );
+    useEffect(() => {
+        console.log(donvi);
+    });
     const [loading, setLoading] = useState(false);
     const isValid = loaiHang.ten && loaiHang.giaban > 0 && loaiHang.gianhap > 0;
     return (
@@ -161,6 +173,7 @@ const InputLoaiHangModal = ({ index, categories, onClose, onSubmit, refetch }) =
                                     });
                                 }}
                             />
+                            <ChipsArray setDonVi={setDonVi} values={donvi} />
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                             <Button
@@ -168,7 +181,12 @@ const InputLoaiHangModal = ({ index, categories, onClose, onSubmit, refetch }) =
                                 onClick={async () => {
                                     if (isValid) {
                                         setLoading(true);
-                                        await onSubmit(isUpdating, loaiHang, categories[index]?.ma);
+                                        await onSubmit(
+                                            isUpdating,
+                                            loaiHang,
+                                            categories[index]?.ma,
+                                            donvi
+                                        );
                                         setLoading(false);
                                         refetch();
                                     }
@@ -226,12 +244,22 @@ const ProductCategory = () => {
     const handleCloseInputModal = () => {
         setOpenInputModal(null);
     };
-    const handleSubmitInputModal = async (isUpdating, value, ma) => {
+    const handleSubmitInputModal = async (isUpdating, value, ma, donvis) => {
         try {
+            let maLHCanXuly = ma;
             if (isUpdating) {
                 await productcategoryservice.updateCategory(value, ma);
             } else {
-                await productcategoryservice.addCategory(value);
+                const newLH = await productcategoryservice.addCategory(value);
+                maLHCanXuly = newLH.ma;
+            }
+            for (let donvi of donvis) {
+                if (!donvi.inDB) {
+                    await productcategoryservice.addDonvi({
+                        ten: donvi.ten,
+                        malh: maLHCanXuly
+                    });
+                }
             }
             handleCloseInputModal();
         } catch (error) {
@@ -250,6 +278,7 @@ const ProductCategory = () => {
                             <TableCell>Giá Nhập</TableCell>
                             <TableCell>Giá Bán</TableCell>
                             <TableCell>Sửa Lần Cuối</TableCell>
+                            <TableCell>Đơn Vị</TableCell>
                             <TableCell></TableCell>
                             <TableCell></TableCell>
                         </TableRow>
@@ -265,6 +294,17 @@ const ProductCategory = () => {
                                     <TableCell>{category.gianhap}</TableCell>
                                     <TableCell>{category.giaban}</TableCell>
                                     <TableCell>{time.toDateandTime(category.updatedAt)}</TableCell>
+                                    <TableCell>
+                                        <Stack direction="row" spacing={1}>
+                                            {category.donvi.map((donvi) => (
+                                                <Chip
+                                                    key={donvi.ma}
+                                                    label={donvi.ten}
+                                                    variant="outlined"
+                                                />
+                                            ))}
+                                        </Stack>
+                                    </TableCell>
                                     <TableCell>
                                         <Tooltip
                                             onClick={() => {
@@ -294,7 +334,7 @@ const ProductCategory = () => {
                         )}
                     </TableBody>
                 </Table>
-                {Number.isInteger(openDeleteModal) && (
+                {openDeleteModal && (
                     <DeleteModal
                         open={openDeleteModal}
                         onClose={handleCloseDeleteModal}
