@@ -23,7 +23,7 @@ import {
     Typography
 } from '@mui/material';
 import { Stack } from '@mui/system';
-import { DatePicker, DesktopDatePicker } from '@mui/x-date-pickers';
+import { DatePicker } from '@mui/x-date-pickers';
 import { IconDeviceFloppy, IconFile, IconPencil, IconPlus, IconTrash } from '@tabler/icons';
 import { Formik } from 'formik';
 import { useState } from 'react';
@@ -123,7 +123,13 @@ const HangHoaRow = ({ index, value, onChange, onRemove, onSave }) => {
                             value={values.hsd}
                             inputFormat="DD/MM/YYYY"
                             renderInput={(params) => (
-                                <TextField name="hsd" size="small" {...params} error={errors.hsd} />
+                                <TextField
+                                    fullWidth
+                                    name="hsd"
+                                    size="small"
+                                    {...params}
+                                    error={errors.hsd}
+                                />
                             )}
                             onChange={(value) =>
                                 handleChange({
@@ -218,7 +224,16 @@ function ChinhSuaHoaDon() {
         <MainCard
             title={
                 <Badge>
-                    <Typography variant="h2">Hóa đơn nhập #{phieunhap.ma}</Typography>
+                    <Typography variant="h2">
+                        Hóa đơn nhập{' '}
+                        <span
+                            style={{
+                                color: '#aaa'
+                            }}
+                        >
+                            #{phieunhap?.ma}
+                        </span>
+                    </Typography>
                 </Badge>
             }
         >
@@ -301,10 +316,11 @@ function ChinhSuaHoaDon() {
                                         <FormHelperText error>{errors.nguoigiao}</FormHelperText>
                                     </Grid>
                                     <Grid xs={12} md={4} item>
-                                        <DesktopDatePicker
+                                        <DatePicker
                                             inputFormat="DD/MM/YY"
                                             renderInput={(params) => (
                                                 <TextField
+                                                    fullWidth
                                                     size="small"
                                                     {...params}
                                                     error={!!errors.ngaynhap}
