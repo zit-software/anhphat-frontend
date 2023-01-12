@@ -5,14 +5,53 @@ const productcategoryservice = {
         const res = await request.get('/loaihang');
         return res.data;
     },
+    async getAllCategoriesAndDonvi() {
+        const res = await request.get('/loaihang');
+        // get DonVi
+        const result = [];
+        for (let loaihang of res.data) {
+            const allDonViRes = await request.get(`/donvi?loaihang=${loaihang.ma}`);
+            result.push({
+                ...loaihang,
+                donvi: allDonViRes.data
+            });
+        }
+        return result;
+    },
     async deleteCategory(ma) {
         await request.delete(`/loaihang/${ma}`);
     },
     async addCategory(newCategory) {
-        await request.post('/loaihang', newCategory);
+        const res = await request.post('/loaihang', newCategory);
+        return res.data;
     },
     async updateCategory(newCategory, ma) {
         await request.put(`/loaihang/${ma}`, newCategory);
+    },
+    async updateDonVi(ma, newDonvi) {
+        await request.put(`/donvi/${ma}`, newDonvi);
+    },
+    async getAllDonVis() {
+        const res = await request.get(`/donvi`);
+        return res.data;
+    },
+    async getAllDonVisByLoaiHang({ queryKey: [_, malh] }) {
+        if (!malh) return;
+        const res = await request.get(`/donvi?loaihang=${malh}`);
+        return res.data;
+    },
+    async addDonvi(newDonvi) {
+        await request.post('/donvi', newDonvi);
+    },
+    async getAllQuyCachs() {
+        const res = await request.get('/quycach');
+        return res.data;
+    },
+    async addQuyCach(newQuyCach) {
+        await request.post('/quycach', newQuyCach);
+    },
+    async updateQuyCach(ma, newQuyCach) {
+        await request.put(`/quycach/${ma}`, newQuyCach);
     }
 };
 
