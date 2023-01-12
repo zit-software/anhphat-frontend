@@ -20,7 +20,7 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { IconPencil } from '@tabler/icons';
-import { memo, useEffect, useState } from 'react';
+import { memo, useState } from 'react';
 import { useQuery } from 'react-query';
 import productcategoryservice from 'services/productcategory.service';
 import { titleCase } from 'utils/commonutils';

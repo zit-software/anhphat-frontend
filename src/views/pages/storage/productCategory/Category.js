@@ -22,13 +22,11 @@ import {
 } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import { IconPencil, IconTrash } from '@tabler/icons';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from 'react-query';
 import productcategoryservice from 'services/productcategory.service';
 import time from 'utils/time';
 import ChipsArray from './ChipsArray';
-
-const { default: MainCard } = require('ui-component/cards/MainCard');
 
 // Styling
 const modalStyle = {

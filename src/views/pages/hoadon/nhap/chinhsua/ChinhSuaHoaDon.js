@@ -2,10 +2,15 @@ import {
     Badge,
     Button,
     Divider,
+    FormControl,
     FormHelperText,
     Grid,
+    IconButton,
+    InputAdornment,
+    InputLabel,
     LinearProgress,
     MenuItem,
+    OutlinedInput,
     Select,
     Table,
     TableBody,
@@ -18,8 +23,8 @@ import {
     Typography
 } from '@mui/material';
 import { Stack } from '@mui/system';
-import { DesktopDatePicker } from '@mui/x-date-pickers';
-import { IconFile, IconPlus } from '@tabler/icons';
+import { DatePicker, DesktopDatePicker } from '@mui/x-date-pickers';
+import { IconDeviceFloppy, IconFile, IconPencil, IconPlus, IconTrash } from '@tabler/icons';
 import { Formik } from 'formik';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
@@ -30,33 +35,57 @@ import MainCard from 'ui-component/cards/MainCard';
 import * as Yup from 'yup';
 
 import productcategoryservice from 'services/productcategory.service';
+import dayjs from 'utils/dayjs';
+import formatter from 'views/utilities/formatter';
 
-const HangHoaRow = ({ index, value, onChange }) => {
+const HangHoaRow = ({ index, value, onChange, onRemove, onSave }) => {
     const { data: products, isLoading } = useQuery(
         ['products'],
-        productcategoryservice.getAllCategories,
+        productcategoryservice.getAllCategoriesAndDonvi,
         {
             initialData: []
         }
     );
+    const [edit, setEdit] = useState(true);
+
+    const product = products.find((e) => e.ma === value.malh);
+    const donvi = product?.donvi?.find((e) => e.ma === value.madv);
+
+    const handleSave = () => {
+        setEdit(false);
+        onSave();
+    };
 
     if (isLoading) return null;
-    return (
+    return edit ? (
         <Formik
             initialValues={{
-                madv: null,
-                malh: null,
-                soluong: 1,
-                hsd: null,
-                gianhap: 0
+                madv: value.madv || '',
+                malh: value.malh || '',
+                soluong: value.soluong || 1,
+                hsd: value.hsd || '',
+                gianhap: value.gianhap || 0
             }}
+            validationSchema={Yup.object().shape({
+                malh: Yup.string().required('Vui lòng chọn sản phẩm'),
+                madv: Yup.string().required('Vui lòng chọn đơn vị'),
+                soluong: Yup.number()
+                    .required('Vui lòng nhập số lượng')
+                    .min(1, 'Số lượng phải từ 1'),
+                hsd: Yup.date().required('Vui lòng chọn hạn sử dụng'),
+                gianhap: Yup.number().required('Vui lòng nhập giá nhập').min(0, 'Giá phải từ 0')
+            })}
+            validateOnChange
+            validate={onChange}
+            onSubmit={handleSave}
         >
-            {({ values, handleSubmit, handleChange }) => (
+            {({ values, handleSubmit, errors, handleChange }) => (
                 <TableRow>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>
                         <Select
-                            value={values.malh || products[0]?.ma}
+                            error={!!errors.malh}
+                            value={values.malh || ''}
                             name="malh"
                             fullWidth
                             size="small"
@@ -68,14 +97,110 @@ const HangHoaRow = ({ index, value, onChange }) => {
                                 </MenuItem>
                             ))}
                         </Select>
+                        <FormHelperText error>{errors.malh}</FormHelperText>
                     </TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
+                    <TableCell>
+                        {product && (
+                            <Select
+                                error={!!errors.madv}
+                                size="small"
+                                fullWidth
+                                value={values.madv || ''}
+                                name="madv"
+                                onChange={handleChange}
+                            >
+                                {product.donvi.map((donvi) => (
+                                    <MenuItem key={donvi.ma} value={donvi.ma}>
+                                        {donvi.ten}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        )}
+                        <FormHelperText error>{errors.madv}</FormHelperText>
+                    </TableCell>
+                    <TableCell>
+                        <DatePicker
+                            value={values.hsd}
+                            inputFormat="DD/MM/YYYY"
+                            renderInput={(params) => (
+                                <TextField name="hsd" size="small" {...params} error={errors.hsd} />
+                            )}
+                            onChange={(value) =>
+                                handleChange({
+                                    target: {
+                                        name: 'hsd',
+                                        value: value.$d
+                                    }
+                                })
+                            }
+                        />
+                        <FormHelperText error>{errors.hsd}</FormHelperText>
+                    </TableCell>
+                    <TableCell>
+                        <TextField
+                            error={!!errors.soluong}
+                            placeholder="Số lượng"
+                            type="number"
+                            label="Số lượng"
+                            fullWidth
+                            size="small"
+                            value={values.soluong}
+                            name="soluong"
+                            onChange={handleChange}
+                        />
+                        <FormHelperText error>{errors.soluong}</FormHelperText>
+                    </TableCell>
+
+                    <TableCell>
+                        <FormControl variant="outlined" size="small">
+                            <InputLabel>Đơn giá</InputLabel>
+                            <OutlinedInput
+                                error={!!errors.gianhap}
+                                placeholder="Đơn giá"
+                                type="number"
+                                label="Đơn giá"
+                                value={values.gianhap}
+                                name="gianhap"
+                                endAdornment={<InputAdornment position="end">vnđ</InputAdornment>}
+                                onChange={handleChange}
+                            />
+                            <FormHelperText error>{errors.gianhap}</FormHelperText>
+                        </FormControl>
+                    </TableCell>
+                    <TableCell>
+                        <Typography variant="subtitle2">
+                            {formatter.format(values.gianhap * values.soluong)}
+                        </Typography>
+                    </TableCell>
+                    <TableCell>
+                        <IconButton color="primary" onClick={handleSubmit}>
+                            <IconDeviceFloppy />
+                        </IconButton>
+                    </TableCell>
+                    <TableCell>
+                        <IconButton color="error" onClick={onRemove}>
+                            <IconTrash />
+                        </IconButton>
+                    </TableCell>
                 </TableRow>
             )}
         </Formik>
+    ) : (
+        <TableRow hover>
+            <TableCell>{index + 1}</TableCell>
+            <TableCell>{product.ten}</TableCell>
+            <TableCell>{donvi.ten}</TableCell>
+            <TableCell>{dayjs(value.hsd).format('DD/MM/YYYY')}</TableCell>
+            <TableCell>{value.soluong}</TableCell>
+            <TableCell>{formatter.format(value.gianhap)}</TableCell>
+            <TableCell>{formatter.format(value.soluong * value.gianhap)}</TableCell>
+            <TableCell>
+                <IconButton color="secondary" onClick={() => setEdit(true)}>
+                    <IconPencil />
+                </IconButton>
+            </TableCell>
+            <TableCell></TableCell>
+        </TableRow>
     );
 };
 
@@ -87,13 +212,13 @@ function ChinhSuaHoaDon() {
 
     const { data: phieunhap, isLoading } = useQuery([params.ma], HoaDonNhapService.layPhieuNhap);
 
-    const addRow = () => setRows((prev) => [...prev, {}]);
+    const addRow = () => setRows((prev) => [...prev, { ma: prev.length, gianhap: 0, soluong: 0 }]);
 
     return (
         <MainCard
             title={
                 <Badge>
-                    <Typography variant="h2">Hóa đơn nhập</Typography>
+                    <Typography variant="h2">Hóa đơn nhập #{phieunhap.ma}</Typography>
                 </Badge>
             }
         >
@@ -212,26 +337,51 @@ function ChinhSuaHoaDon() {
                                                 <TableCell>STT</TableCell>
                                                 <TableCell>Tên hàng hóa</TableCell>
                                                 <TableCell>Đơn vị tính</TableCell>
+                                                <TableCell>Hạn sử dụng</TableCell>
                                                 <TableCell>Số lượng</TableCell>
                                                 <TableCell>Đơn giá</TableCell>
                                                 <TableCell>Thành tiền</TableCell>
+
+                                                <TableCell></TableCell>
+                                                <TableCell></TableCell>
                                             </TableRow>
-                                            <TableRow>
+                                            <TableRow selected>
                                                 <TableCell>1</TableCell>
                                                 <TableCell>2</TableCell>
                                                 <TableCell>3</TableCell>
                                                 <TableCell>4</TableCell>
                                                 <TableCell>5</TableCell>
-                                                <TableCell>6 = 4 x 5</TableCell>
+                                                <TableCell>6</TableCell>
+                                                <TableCell>7 = 5 x 6</TableCell>
+                                                <TableCell></TableCell>
+                                                <TableCell></TableCell>
                                             </TableRow>
                                         </TableHead>
 
                                         <TableBody>
                                             {rows.map((row, index) => (
-                                                <HangHoaRow index={index} key={index} value={row} />
+                                                <HangHoaRow
+                                                    index={index}
+                                                    key={row.ma}
+                                                    value={row}
+                                                    onChange={(values) => {
+                                                        setRows((prev) =>
+                                                            prev.map((v, i) => {
+                                                                if (index === i) v = values;
+                                                                return v;
+                                                            })
+                                                        );
+                                                    }}
+                                                    onRemove={() => {
+                                                        setRows((prev) =>
+                                                            prev.filter((e, i) => i !== index)
+                                                        );
+                                                    }}
+                                                    onSave={() => {}}
+                                                />
                                             ))}
                                             <TableRow>
-                                                <TableCell colSpan={6}>
+                                                <TableCell colSpan={9}>
                                                     <Button fullWidth onClick={addRow}>
                                                         <IconPlus />
                                                     </Button>
@@ -239,7 +389,24 @@ function ChinhSuaHoaDon() {
                                             </TableRow>
                                         </TableBody>
 
-                                        <TableFooter></TableFooter>
+                                        <TableFooter>
+                                            <TableRow>
+                                                <TableCell colSpan={6}>
+                                                    <Typography>Tổng cộng</Typography>
+                                                </TableCell>
+
+                                                <TableCell colSpan={3}>
+                                                    {formatter.format(
+                                                        rows.reduce(
+                                                            (prev, curent) =>
+                                                                curent.gianhap * curent.soluong +
+                                                                prev,
+                                                            0
+                                                        )
+                                                    )}
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableFooter>
                                     </Table>
                                 </TableContainer>
 
