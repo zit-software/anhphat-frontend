@@ -25,7 +25,11 @@ const ManageUserForm = ({
                 mk: requiredPassword
                     ? Yup.string().required('Vui lòng nhập mật khẩu')
                     : Yup.string(),
-                cfmk: Yup.string().oneOf([Yup.ref('mk'), null], 'Mật khẩu nhập lại không khớp'),
+                cfmk: requiredPassword
+                    ? Yup.string()
+                          .required('Vui lòng nhập lại mật khẩu')
+                          .equals([Yup.ref('mk')], 'Mật khẩu nhập lại không khớp')
+                    : Yup.string().equals([Yup.ref('mk')], 'Mật khẩu nhập lại không khớp'),
                 laAdmin: Yup.boolean()
             })}
             onSubmit={onSubmit}
