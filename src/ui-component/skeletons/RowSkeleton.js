@@ -5,7 +5,7 @@ const RowSkeletion = ({ cols }) => {
 
     for (let i = 0; i < cols; i++) {
         columns.push(
-            <TableCell>
+            <TableCell key={i}>
                 <Skeleton />
             </TableCell>
         );

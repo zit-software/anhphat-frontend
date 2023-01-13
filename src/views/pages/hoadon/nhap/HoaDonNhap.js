@@ -12,6 +12,7 @@ import {
     TableCell,
     TableContainer,
     TableHead,
+    TablePagination,
     TableRow,
     TextField,
     Tooltip
@@ -29,8 +30,8 @@ import HoaDonNhapService from 'services/hoadonnhap.service';
 import MainCard from 'ui-component/cards/MainCard';
 import RowSkeletion from 'ui-component/skeletons/RowSkeleton';
 
-import dayjs from 'utils/dayjs';
 import { Link } from 'react-router-dom';
+import dayjs from 'utils/dayjs';
 
 const TaoHoaDonModal = ({ open, onClose }) => {
     const navigate = useNavigate();
@@ -134,9 +135,16 @@ const TaoHoaDonModal = ({ open, onClose }) => {
 
 const HoaDonNhap = () => {
     const [open, setOpen] = useState(false);
-    const { data: phieunhap, isLoading } = useQuery(['phieunhap'], HoaDonNhapService.getAll, {
-        initialData: []
-    });
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowPerPage] = useState(10);
+
+    const { data: phieunhap, isLoading } = useQuery(
+        ['phieunhap', page, rowsPerPage],
+        () => HoaDonNhapService.getAll({ page, limit: rowsPerPage }),
+        {
+            initialData: { data: [], total: 0 }
+        }
+    );
 
     const handleOpen = () => setOpen(true);
 
@@ -177,8 +185,8 @@ const HoaDonNhap = () => {
                                 <RowSkeletion cols={9} />
                             </>
                         ) : (
-                            phieunhap.map((phieu) => (
-                                <TableRow>
+                            phieunhap.data.map((phieu) => (
+                                <TableRow key={phieu.ma}>
                                     <TableCell>{phieu.ma}</TableCell>
                                     <TableCell>{phieu.nguoinhap.ten}</TableCell>
                                     <TableCell>{phieu.nguon}</TableCell>
@@ -210,6 +218,20 @@ const HoaDonNhap = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <TablePagination
+                rowsPerPage={rowsPerPage}
+                count={phieunhap.total}
+                page={page}
+                labelRowsPerPage="Dòng trên trang"
+                onPageChange={(_, value) => setPage(value)}
+                onRowsPerPageChange={({ target: { value } }) => {
+                    setRowPerPage(value);
+                    setPage(0);
+                }}
+                labelDisplayedRows={({ from, to, count }) =>
+                    `${from}–${to} của ${count !== -1 ? count : `nhiều hơn ${to}`}`
+                }
+            />
 
             <TaoHoaDonModal open={open} onClose={handleClose} />
         </MainCard>
