@@ -17,7 +17,10 @@ import AuthService from 'services/auth.service';
 import { store } from 'store';
 import { setUser } from 'store/actions';
 
-import { QueryClientProvider, QueryClient } from 'react-query';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 const queryClient = new QueryClient();
 
@@ -45,12 +48,14 @@ const App = () => {
     return (
         <StyledEngineProvider injectFirst>
             <ThemeProvider theme={themes(customization)}>
-                <QueryClientProvider client={queryClient}>
-                    <CssBaseline />
-                    <NavigationScroll>
-                        <Routes />
-                    </NavigationScroll>
-                </QueryClientProvider>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <QueryClientProvider client={queryClient}>
+                        <CssBaseline />
+                        <NavigationScroll>
+                            <Routes />
+                        </NavigationScroll>
+                    </QueryClientProvider>
+                </LocalizationProvider>
             </ThemeProvider>
         </StyledEngineProvider>
     );
