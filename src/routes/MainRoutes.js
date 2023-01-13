@@ -4,6 +4,7 @@ import { lazy } from 'react';
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 import ProductCategory from 'views/pages/storage/productCategory/ProductCategory';
+import Product from 'views/pages/storage/product/Product';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -43,6 +44,10 @@ const MainRoutes = {
                 {
                     path: 'loaihang',
                     element: <ProductCategory />
+                },
+                {
+                    path: 'mathang',
+                    element: <Product />
                 }
             ]
         }
