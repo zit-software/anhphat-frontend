@@ -10,6 +10,12 @@ class HoaDonNhapService {
             await request.get(`nhaphang/phieunhap/${ma}`)
         ).data;
     }
+
+    static async getAll() {
+        return await (
+            await request.get('nhaphang/phieunhap')
+        ).data;
+    }
 }
 
 export default HoaDonNhapService;
