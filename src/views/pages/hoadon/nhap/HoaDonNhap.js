@@ -7,23 +7,33 @@ import {
     FormHelperText,
     Grid,
     IconButton,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
     TextField,
     Tooltip
 } from '@mui/material';
-import { IconFilePlus } from '@tabler/icons';
+import { IconFilePlus, IconPencil, IconX } from '@tabler/icons';
 import { Formik } from 'formik';
 import { useState } from 'react';
 import * as Yup from 'yup';
 
 import { DatePicker } from '@mui/x-date-pickers';
+import { useQuery } from 'react-query';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import HoaDonNhapService from 'services/hoadonnhap.service';
 import MainCard from 'ui-component/cards/MainCard';
-import { useSelector } from 'react-redux';
+import RowSkeletion from 'ui-component/skeletons/RowSkeleton';
+
+import dayjs from 'utils/dayjs';
+import { Link } from 'react-router-dom';
 
 const TaoHoaDonModal = ({ open, onClose }) => {
     const navigate = useNavigate();
-
     const currentUser = useSelector((state) => state.auth.user);
 
     return (
@@ -124,6 +134,9 @@ const TaoHoaDonModal = ({ open, onClose }) => {
 
 const HoaDonNhap = () => {
     const [open, setOpen] = useState(false);
+    const { data: phieunhap, isLoading } = useQuery(['phieunhap'], HoaDonNhapService.getAll, {
+        initialData: []
+    });
 
     const handleOpen = () => setOpen(true);
 
@@ -138,6 +151,65 @@ const HoaDonNhap = () => {
                     </IconButton>
                 </Tooltip>
             </div>
+
+            <TableContainer sx={{ maxHeight: '70vh' }}>
+                <Table stickyHeader size="small">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Mã số</TableCell>
+                            <TableCell>Người tạo</TableCell>
+                            <TableCell>Nguồn</TableCell>
+                            <TableCell>Người giao</TableCell>
+                            <TableCell>Ngày nhập</TableCell>
+                            <TableCell>Ngày tạo</TableCell>
+                            <TableCell>Chỉnh sửa lần cuối</TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {isLoading ? (
+                            <>
+                                <RowSkeletion cols={9} />
+                                <RowSkeletion cols={9} />
+                                <RowSkeletion cols={9} />
+                                <RowSkeletion cols={9} />
+                                <RowSkeletion cols={9} />
+                            </>
+                        ) : (
+                            phieunhap.map((phieu) => (
+                                <TableRow>
+                                    <TableCell>{phieu.ma}</TableCell>
+                                    <TableCell>{phieu.nguoinhap.ten}</TableCell>
+                                    <TableCell>{phieu.nguon}</TableCell>
+                                    <TableCell>{phieu.nguoigiao}</TableCell>
+                                    <TableCell>
+                                        {dayjs(phieu.ngaynhap).format('DD/MM/YYYY')}
+                                    </TableCell>
+                                    <TableCell>
+                                        {dayjs(phieu.createdAt).format('DD/MM/YYYY')}
+                                    </TableCell>
+                                    <TableCell>
+                                        {dayjs(phieu.updatedAt).format('DD/MM/YYYY')}
+                                    </TableCell>
+                                    <TableCell>
+                                        <Link to={{ pathname: '/hoadon/nhap/' + phieu.ma }}>
+                                            <IconButton>
+                                                <IconPencil />
+                                            </IconButton>
+                                        </Link>
+                                    </TableCell>
+                                    <TableCell>
+                                        <IconButton color="error">
+                                            <IconX />
+                                        </IconButton>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        )}
+                    </TableBody>
+                </Table>
+            </TableContainer>
 
             <TaoHoaDonModal open={open} onClose={handleClose} />
         </MainCard>
