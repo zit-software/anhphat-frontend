@@ -20,7 +20,14 @@ import {
     TextField,
     Tooltip
 } from '@mui/material';
-import { IconEye, IconFilePlus, IconPencil, IconX } from '@tabler/icons';
+import {
+    IconEye,
+    IconFilePlus,
+    IconGitPullRequestClosed,
+    IconGitPullRequestDraft,
+    IconPencil,
+    IconX
+} from '@tabler/icons';
 import { Formik } from 'formik';
 import { useState } from 'react';
 import * as Yup from 'yup';
@@ -167,8 +174,18 @@ const HoaDonNhap = () => {
             }
         >
             <Tabs value={daluu} onChange={(_, v) => setDaLuu(v)}>
-                <Tab value="false" label="Chưa lưu" />
-                <Tab value="true" label="Đã lưu" />
+                <Tab
+                    value="false"
+                    label="Chưa lưu"
+                    icon={<IconGitPullRequestDraft />}
+                    iconPosition="start"
+                />
+                <Tab
+                    value="true"
+                    label="Đã lưu"
+                    icon={<IconGitPullRequestClosed />}
+                    iconPosition="start"
+                />
             </Tabs>
             <TableContainer sx={{ maxHeight: '70vh' }}>
                 <Table stickyHeader size="small">
