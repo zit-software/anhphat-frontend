@@ -139,12 +139,12 @@ const TaoHoaDonModal = ({ open, onClose }) => {
 const HoaDonNhap = () => {
     const [open, setOpen] = useState(false);
     const [page, setPage] = useState(0);
-    const [daluu, setDaLuu] = useState(false);
+    const [daluu, setDaLuu] = useState('false');
     const [rowsPerPage, setRowPerPage] = useState(10);
 
     const { data: phieunhap, isLoading } = useQuery(
         ['phieunhap', page, rowsPerPage, daluu],
-        () => HoaDonNhapService.getAll({ page, limit: rowsPerPage, daluu }),
+        () => HoaDonNhapService.getAll({ page, limit: rowsPerPage, daluu: JSON.parse(daluu) }),
         {
             initialData: { data: [], total: 0 }
         }
@@ -167,8 +167,8 @@ const HoaDonNhap = () => {
             }
         >
             <Tabs value={daluu} onChange={(_, v) => setDaLuu(v)}>
-                <Tab value={false} label="Chưa lưu" />
-                <Tab value={true} label="Đã lưu" />
+                <Tab value="false" label="Chưa lưu" />
+                <Tab value="true" label="Đã lưu" />
             </Tabs>
             <TableContainer sx={{ maxHeight: '70vh' }}>
                 <Table stickyHeader size="small">

@@ -2,7 +2,6 @@ import {
     Button,
     FormControl,
     FormControlLabel,
-    FormLabel,
     Grid,
     InputLabel,
     MenuItem,
@@ -17,11 +16,11 @@ import {
     TablePagination,
     TableRow
 } from '@mui/material';
-import MainCard from 'ui-component/cards/MainCard';
+import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import productcategoryservice from 'services/productcategory.service';
-import dayjs from 'dayjs';
+import MainCard from 'ui-component/cards/MainCard';
 
 const Product = () => {
     const [selected, setSelected] = useState({
@@ -45,6 +44,7 @@ const Product = () => {
 
     useEffect(() => {
         refetchAllMH();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPage]);
     const handleSearch = () => {
         setCurrentPage(1);
