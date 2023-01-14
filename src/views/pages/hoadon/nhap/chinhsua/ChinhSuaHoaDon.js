@@ -1,6 +1,11 @@
 import {
     Badge,
     Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
     FormControl,
     FormHelperText,
     Grid,
@@ -35,6 +40,7 @@ import * as Yup from 'yup';
 import productcategoryservice from 'services/productcategory.service';
 import dayjs from 'utils/dayjs';
 import formatter from 'views/utilities/formatter';
+import RowSkeleton from 'ui-component/skeletons/RowSkeleton';
 
 const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
     const { data: products, isLoading } = useQuery(
@@ -46,15 +52,14 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
     );
     const [edit, setEdit] = useState(true && !disabled);
 
-    const product = products.find((e) => e.ma === value.malh);
-    const donvi = product?.donvi?.find((e) => e.ma === value.madv);
+    const product = products.find((e) => e.ma === value.malh) || { donvi: [] };
+    const donvi = product?.donvi?.find((e) => e.ma === value.madv) || {};
 
     const handleSave = () => {
         setEdit(false);
-        onSave();
     };
 
-    if (isLoading || !product) return null;
+    if (isLoading) return <RowSkeleton cols={9} />;
 
     return edit ? (
         <Formik
@@ -128,7 +133,7 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
                                     name="hsd"
                                     size="small"
                                     {...params}
-                                    error={errors.hsd}
+                                    error={!!errors.hsd}
                                 />
                             )}
                             onChange={(value) =>
@@ -224,23 +229,27 @@ function ChinhSuaHoaDon() {
         isError,
         refetch
     } = useQuery(['phieunhap', params.ma], () => HoaDonNhapService.layPhieuNhap(params.ma));
+    const [saveModal, setSaveModal] = useState(null);
 
     const [rows, setRows] = useState([]);
 
     const addRow = () =>
         setRows((prev) => [...prev, { ma: Math.random(), gianhap: 0, soluong: 0 }]);
 
-    const handleSave = async (values) => {
+    const handleSave = async () => {
         try {
-            await HoaDonNhapService.capNhat(phieunhap.ma, values);
+            await HoaDonNhapService.capNhat(phieunhap.ma, saveModal);
             await HoaDonNhapService.themSanPham(phieunhap.ma, rows);
             await HoaDonNhapService.luu(phieunhap.ma);
             await refetch();
-        } catch (error) {}
+        } catch (error) {
+        } finally {
+            setSaveModal(null);
+        }
     };
 
     useEffect(() => {
-        if (isLoading) return;
+        if (isLoading || !phieunhap.daluu) return;
 
         setRows(
             phieunhap.chitiet.map((row) => ({
@@ -280,10 +289,12 @@ function ChinhSuaHoaDon() {
                 }}
                 validationSchema={Yup.object().shape({
                     nguon: Yup.string().required('Vui lòng nhập nguồn nhập hàng'),
-                    ngaynhap: Yup.date().required('Vui lòng chọn ngày nhập'),
+                    ngaynhap: Yup.date('Vui lòng nhập đúng định dạng DD/MM/YYYY').required(
+                        'Vui lòng chọn ngày nhập'
+                    ),
                     nguoigiao: Yup.string().required('Vui lòng nhập tên người giao')
                 })}
-                onSubmit={handleSave}
+                onSubmit={setSaveModal}
             >
                 {({ values, errors, handleChange, handleSubmit }) => (
                     <form onSubmit={handleSubmit}>
@@ -460,13 +471,16 @@ function ChinhSuaHoaDon() {
                                                         prev.filter((e, i) => i !== index)
                                                     );
                                                 }}
-                                                onSave={() => {}}
                                             />
                                         ))}
                                         {!phieunhap.daluu && (
                                             <TableRow>
                                                 <TableCell colSpan={9}>
-                                                    <Button fullWidth onClick={addRow}>
+                                                    <Button
+                                                        type="button"
+                                                        fullWidth
+                                                        onClick={addRow}
+                                                    >
                                                         <IconPlus />
                                                     </Button>
                                                 </TableCell>
@@ -509,6 +523,22 @@ function ChinhSuaHoaDon() {
                     </form>
                 )}
             </Formik>
+
+            <Dialog open={!!saveModal} onClick={() => setSaveModal(null)}>
+                <DialogTitle>Lưu hóa đơn</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Lưu ý: Bạn không thể chỉnh sửa hóa đơn sau khi lưu
+                    </DialogContentText>
+                </DialogContent>
+
+                <DialogActions>
+                    <Button onClick={handleSave} variant="contained">
+                        Lưu
+                    </Button>
+                    <Button onClick={() => setSaveModal(null)}>Hủy</Button>
+                </DialogActions>
+            </Dialog>
         </MainCard>
     );
 }
