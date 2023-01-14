@@ -59,8 +59,9 @@ const productcategoryservice = {
             const dv = params.madv || '';
             const ngaynhap = params.ngaynhap || '';
             const order = params.order || '';
+            const page = params.page || '';
             const res = await request.get(
-                `/mathang?loaihang=${lh}&donvi=${dv}&ngaynhap=${ngaynhap}&order=${order}`
+                `/mathang?loaihang=${lh}&donvi=${dv}&ngaynhap=${ngaynhap}&order=${order}&page=${page}`
             );
             return res.data;
         } catch (error) {

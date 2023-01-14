@@ -14,6 +14,7 @@ import {
     TableCell,
     TableContainer,
     TableHead,
+    TablePagination,
     TableRow
 } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
@@ -29,18 +30,24 @@ const Product = () => {
     });
     const [donViToChoose, setDonViToChoose] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+
     const { data: allcategories } = useQuery(
         ['allProductsCategory'],
         productcategoryservice.getAllCategoriesAndDonvi,
         { initialData: [] }
     );
     const { data: allMatHang, refetch: refetchAllMH } = useQuery(
-        ['allMH', { ...selected, order: selectedOrder }],
+        ['allMH', { ...selected, order: selectedOrder, page: currentPage }],
         productcategoryservice.getAllMatHang,
-        { enabled: false, initialData: [] }
+        { enabled: false, initialData: { data: [], total: 0 } }
     );
 
+    useEffect(() => {
+        refetchAllMH();
+    }, [currentPage]);
     const handleSearch = () => {
+        setCurrentPage(1);
         refetchAllMH();
     };
     const handleReset = () => {
@@ -49,6 +56,10 @@ const Product = () => {
             madv: ''
         });
         setSelectedOrder('');
+        setCurrentPage(1);
+    };
+    const handleChangePage = (event, page) => {
+        setCurrentPage(page + 1);
     };
     return (
         <MainCard title="Mặt Hàng Tồn Kho">
@@ -78,6 +89,7 @@ const Product = () => {
                                         (loaihang) => loaihang.ma === malh
                                     )?.donvi;
                                     setDonViToChoose(donvis);
+                                    setCurrentPage(1);
                                 }}
                             >
                                 {allcategories.map((category) => {
@@ -96,6 +108,7 @@ const Product = () => {
                             <Select
                                 onChange={(e) => {
                                     setSelected({ ...selected, madv: e.target.value });
+                                    setCurrentPage(1);
                                 }}
                                 value={selected.madv}
                                 fullWidth
@@ -179,19 +192,32 @@ const Product = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {allMatHang.map((mh) => (
-                            <TableRow key={mh.ma}>
-                                <TableCell>{mh.loaihang.ten}</TableCell>
-                                <TableCell>{mh.donvi.ten}</TableCell>
-                                <TableCell>{mh.soluong}</TableCell>
-                                <TableCell>{dayjs(mh.ngaynhap).format('DD-MM-YYYY')}</TableCell>
-                                <TableCell>{dayjs(mh.hsd).format('DD-MM-YYYY')}</TableCell>
-                                <TableCell>{mh.gianhap}</TableCell>
-                            </TableRow>
-                        ))}
+                        {allMatHang.data.map((mh, index) => {
+                            return (
+                                <TableRow key={index}>
+                                    <TableCell>{mh.loaihang.ten}</TableCell>
+                                    <TableCell>{mh.donvi.ten}</TableCell>
+                                    <TableCell>{mh.soluong}</TableCell>
+                                    <TableCell>{dayjs(mh.ngaynhap).format('DD-MM-YYYY')}</TableCell>
+                                    <TableCell>{dayjs(mh.hsd).format('DD-MM-YYYY')}</TableCell>
+                                    <TableCell>{mh.gianhap}</TableCell>
+                                </TableRow>
+                            );
+                        })}
                     </TableBody>
                 </Table>
             </TableContainer>
+            <TablePagination
+                count={allMatHang.total}
+                rowsPerPageOptions={[15]}
+                rowsPerPage={10}
+                component="div"
+                page={currentPage - 1}
+                onPageChange={handleChangePage}
+                showLastButton
+                showFirstButton
+                labelDisplayedRows={({ from, to, count, page }) => `Trang ${page + 1}`}
+            />
         </MainCard>
     );
 };
