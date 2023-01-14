@@ -27,6 +27,8 @@ import { useQuery } from 'react-query';
 
 import usernamangeService from 'services/usermanage.service';
 import MainCard from 'ui-component/cards/MainCard';
+
+import dayjs from 'utils/dayjs';
 import ManageUserForm from '../manage-forms/ManageUserForm';
 
 const RowSkeletion = () => (
@@ -101,13 +103,12 @@ const Accounts = () => {
     const [deleteAccountIndex, setDeleteAccountIndex] = useState(0);
     const [editAccount, setEditAccount] = useState(null);
     const [showCreateAccount, setShowCreateAccount] = useState(false);
-    const [refetchCount, setRefetchCount] = useState(0);
 
-    const { data: accounts, isLoading } = useQuery(
-        [refetchCount],
-        () => usernamangeService.getAllUsers(),
-        { initialData: [] }
-    );
+    const {
+        data: accounts,
+        isLoading,
+        refetch
+    } = useQuery(['userList'], () => usernamangeService.getAllUsers(), { initialData: [] });
 
     const handleOpenDeleteDialog = (index) => {
         setShowDeleteDialog(true);
@@ -120,7 +121,8 @@ const Accounts = () => {
         try {
             await usernamangeService.deleteAccount(accounts[deleteAccountIndex].ma);
 
-            setRefetchCount(refetchCount + 1);
+            await refetch();
+
             handleCloseDeleteDialog();
         } catch (error) {
             alert(error.response.data.message);
@@ -135,7 +137,7 @@ const Accounts = () => {
                 if (values[key] === null) delete values[key];
             });
             await usernamangeService.updateAccount(editAccount.ma, values);
-            setRefetchCount(refetchCount + 1);
+            await refetch();
             handleCloseEditAccount();
         } catch (error) {}
     };
@@ -147,28 +149,32 @@ const Accounts = () => {
         try {
             values.matkhau = values.mk;
             await usernamangeService.createAccount(values);
-            setRefetchCount(refetchCount + 1);
+            await refetch();
             handleCloseCreateModal();
         } catch (error) {}
     };
 
     return (
-        <MainCard title="Tài khoản">
-            <div>
-                <Tooltip title="Tạo tài khoản" onClick={handleOpenCreateModal}>
-                    <IconButton color="primary">
+        <MainCard
+            title="Tài khoản"
+            showBreadcrumbs
+            secondary={
+                <Tooltip title="Tạo tài khoản">
+                    <IconButton onClick={handleOpenCreateModal}>
                         <IconUserPlus />
                     </IconButton>
                 </Tooltip>
-            </div>
-
+            }
+        >
             <TableContainer sx={{ maxHeight: '70vh' }}>
-                <Table stickyHeader>
+                <Table stickyHeader size="small">
                     <TableHead>
                         <TableRow>
                             <TableCell>Mã số</TableCell>
                             <TableCell>Tên tài khoản</TableCell>
                             <TableCell>Quyền</TableCell>
+                            <TableCell>Ngày tạo</TableCell>
+                            <TableCell>Chỉnh sửa lần cuối</TableCell>
                             <TableCell></TableCell>
                             <TableCell></TableCell>
                         </TableRow>
@@ -189,6 +195,12 @@ const Accounts = () => {
                                     <TableCell>{user.ten}</TableCell>
                                     <TableCell>
                                         {user.laAdmin ? <IconShield /> : <IconUser />}
+                                    </TableCell>
+                                    <TableCell>
+                                        {dayjs(user.createdAt).format('DD/MM/YYYY')}
+                                    </TableCell>
+                                    <TableCell>
+                                        {dayjs(user.updatedAt).format('DD/MM/YYYY')}
                                     </TableCell>
                                     <TableCell>
                                         <Tooltip title="Chỉnh sửa">

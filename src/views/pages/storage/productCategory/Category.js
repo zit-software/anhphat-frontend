@@ -7,8 +7,13 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
+    FormControl,
+    Grid,
     IconButton,
+    InputAdornment,
+    InputLabel,
     Modal,
+    OutlinedInput,
     Skeleton,
     Table,
     TableBody,
@@ -22,13 +27,11 @@ import {
 } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import { IconPencil, IconTrash } from '@tabler/icons';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from 'react-query';
 import productcategoryservice from 'services/productcategory.service';
 import time from 'utils/time';
 import ChipsArray from './ChipsArray';
-
-const { default: MainCard } = require('ui-component/cards/MainCard');
 
 // Styling
 const modalStyle = {
@@ -142,36 +145,48 @@ const InputLoaiHangModal = ({ index, categories, onClose, onSubmit, refetch }) =
                                     });
                                 }}
                             />
-                            <div style={{ display: 'flex' }}>
-                                <TextField
-                                    sx={{ marginTop: '12px' }}
-                                    fullWidth
-                                    type="number"
-                                    placeholder="Giá Nhập"
-                                    defaultValue={loaiHang.gianhap}
-                                    label="Giá Nhập"
-                                    onChange={(e) => {
-                                        setLoaiHang({
-                                            ...loaiHang,
-                                            gianhap: +e.target.value
-                                        });
-                                    }}
-                                />
-                                <TextField
-                                    sx={{ marginTop: '12px' }}
-                                    fullWidth
-                                    type="number"
-                                    placeholder="Giá Bán"
-                                    defaultValue={loaiHang.giaban}
-                                    label="Giá Bán"
-                                    onChange={(e) => {
-                                        setLoaiHang({
-                                            ...loaiHang,
-                                            giaban: +e.target.value
-                                        });
-                                    }}
-                                />
-                            </div>
+                            <Grid container spacing={2} mt={1}>
+                                <Grid item xs={6}>
+                                    <FormControl fullWidth>
+                                        <InputLabel>Giá Nhập</InputLabel>
+                                        <OutlinedInput
+                                            type="number"
+                                            placeholder="Giá Nhập"
+                                            defaultValue={loaiHang.gianhap}
+                                            label="Giá Nhập"
+                                            endAdornment={
+                                                <InputAdornment position="end">vnđ</InputAdornment>
+                                            }
+                                            onChange={(e) => {
+                                                setLoaiHang({
+                                                    ...loaiHang,
+                                                    gianhap: +e.target.value
+                                                });
+                                            }}
+                                        />
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <FormControl fullWidth>
+                                        <InputLabel>Giá Nhập</InputLabel>
+                                        <OutlinedInput
+                                            type="number"
+                                            placeholder="Giá Bán"
+                                            defaultValue={loaiHang.giaban}
+                                            label="Giá Bán"
+                                            onChange={(e) => {
+                                                setLoaiHang({
+                                                    ...loaiHang,
+                                                    giaban: +e.target.value
+                                                });
+                                            }}
+                                            endAdornment={
+                                                <InputAdornment position="end">vnđ</InputAdornment>
+                                            }
+                                        />
+                                    </FormControl>
+                                </Grid>
+                            </Grid>
                             <ChipsArray setDonVi={setDonVi} values={donvi} />
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -272,17 +287,17 @@ const Category = () => {
                 Các Loại Hàng
             </Typography>
             <TableContainer>
-                <Table>
+                <Table size="small">
                     <TableHead>
                         <TableRow>
-                            <TableCell size="small">Mã</TableCell>
+                            <TableCell>Mã</TableCell>
                             <TableCell>Tên</TableCell>
                             <TableCell>Giá Nhập</TableCell>
                             <TableCell>Giá Bán</TableCell>
                             <TableCell>Sửa Lần Cuối</TableCell>
                             <TableCell>Đơn Vị</TableCell>
-                            <TableCell size="small"></TableCell>
-                            <TableCell size="small"></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
