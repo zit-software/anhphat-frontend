@@ -63,7 +63,7 @@ const Product = () => {
         setCurrentPage(page + 1);
     };
     return (
-        <MainCard title="Mặt Hàng Tồn Kho">
+        <MainCard title="Mặt Hàng Tồn Kho" showBreadcrumbs>
             <Grid container spacing={2}>
                 <Grid item md={4} alignItems="center" gap={[2, 2]} container>
                     <Typography variant="subtitle1">Tìm kiếm</Typography>

@@ -4,7 +4,7 @@ const { default: MainCard } = require('ui-component/cards/MainCard');
 
 const ProductCategory = () => {
     return (
-        <MainCard title="Quản Lý Loại Hàng">
+        <MainCard title="Quản Lý Loại Hàng" showBreadcrumbs>
             <Category />
             <QuyCach />
         </MainCard>
