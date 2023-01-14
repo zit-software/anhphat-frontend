@@ -45,35 +45,37 @@ import RowSkeleton from 'ui-component/skeletons/RowSkeleton';
 const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
     const { data: products, isLoading } = useQuery(
         ['products'],
-        productcategoryservice.getAllCategoriesAndDonvi,
-        {
-            initialData: []
-        }
+        productcategoryservice.getAllCategoriesAndDonvi
     );
     const [edit, setEdit] = useState(true && !disabled);
 
-    const product = products.find((e) => e.ma === value.malh) || { donvi: [] };
+    const product = products?.find((e) => e.ma === value.malh) ||
+        (products && products[0]) || { donvi: [] };
     const donvi = product?.donvi?.find((e) => e.ma === value.madv) || {};
 
     const handleSave = () => {
         setEdit(false);
     };
-
     if (isLoading) return <RowSkeleton cols={9} />;
 
     return edit ? (
         <Formik
             initialValues={{
-                ma: value.ma,
-                madv: value.madv || '',
-                malh: value.malh || '',
+                ma: value.ma || '',
+                madv: value.madv || products[0]?.donvi[0]?.ma,
+                malh: value.malh || products[0]?.ma,
                 soluong: value.soluong || 1,
-                hsd: value.hsd || '',
-                gianhap: value.gianhap || product?.gianhap || 0
+                hsd: value.hsd || new Date(),
+                gianhap: value.gianhap || 0
             }}
             validationSchema={Yup.object().shape({
                 malh: Yup.string().required('Vui lòng chọn sản phẩm'),
-                madv: Yup.string().required('Vui lòng chọn đơn vị'),
+                madv: Yup.string()
+                    .required('Vui lòng chọn đơn vị')
+                    .oneOf(
+                        product.donvi.map((e) => e.ma.toString()),
+                        'Vui lòng chọn đơn vị'
+                    ),
                 soluong: Yup.number()
                     .required('Vui lòng nhập số lượng')
                     .min(1, 'Số lượng phải từ 1'),
@@ -84,7 +86,7 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
             validate={onChange}
             onSubmit={handleSave}
         >
-            {({ values, handleSubmit, errors, handleChange }) => (
+            {({ values, handleSubmit, errors, handleChange, setFieldValue }) => (
                 <TableRow hover>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>
@@ -176,6 +178,16 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
                                 onChange={handleChange}
                             />
                             <FormHelperText error>{errors.gianhap}</FormHelperText>
+                            {product.gianhap && values.gianhap !== product.gianhap && (
+                                <Button
+                                    size="small"
+                                    onClick={() => {
+                                        setFieldValue('gianhap', product.gianhap);
+                                    }}
+                                >
+                                    {formatter.format(product.gianhap)}
+                                </Button>
+                            )}
                         </FormControl>
                     </TableCell>
                     <TableCell>

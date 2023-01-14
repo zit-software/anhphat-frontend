@@ -108,7 +108,7 @@ const Accounts = () => {
         data: accounts,
         isLoading,
         refetch
-    } = useQuery(['userList'], () => usernamangeService.getAllUsers(), { initialData: [] });
+    } = useQuery(['userList'], () => usernamangeService.getAllUsers());
 
     const handleOpenDeleteDialog = (index) => {
         setShowDeleteDialog(true);
@@ -154,6 +154,8 @@ const Accounts = () => {
         } catch (error) {}
     };
 
+    const fixedAccounts = accounts || [];
+
     return (
         <MainCard
             title="Tài khoản"
@@ -189,7 +191,7 @@ const Accounts = () => {
                                 <RowSkeleton />
                             </>
                         ) : (
-                            accounts.map((user, index) => (
+                            fixedAccounts.map((user, index) => (
                                 <TableRow key={user.ma} hover>
                                     <TableCell>{user.ma}</TableCell>
                                     <TableCell>{user.ten}</TableCell>
@@ -231,7 +233,7 @@ const Accounts = () => {
             <DeleteAccountModal
                 open={showDeleteDialog}
                 onClose={handleCloseDeleteDialog}
-                accountName={accounts[deleteAccountIndex]?.name}
+                accountName={fixedAccounts[deleteAccountIndex]?.name}
                 onSubmit={handleDeleteAccount}
             />
 

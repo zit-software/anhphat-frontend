@@ -158,12 +158,8 @@ const HoaDonNhap = () => {
         data: phieunhap,
         isLoading,
         refetch
-    } = useQuery(
-        ['phieunhap', page, rowsPerPage, daluu],
-        () => HoaDonNhapService.getAll({ page, limit: rowsPerPage, daluu: JSON.parse(daluu) }),
-        {
-            initialData: { data: [], total: 0 }
-        }
+    } = useQuery(['phieunhap', page, rowsPerPage, daluu], () =>
+        HoaDonNhapService.getAll({ page, limit: rowsPerPage, daluu: JSON.parse(daluu) })
     );
 
     const handleOpen = () => setOpen(true);
@@ -174,6 +170,11 @@ const HoaDonNhap = () => {
         await HoaDonNhapService.xoa(selectedDelete);
         refetch();
         setSelectedDelete(null);
+    };
+
+    const fixedPhieuNhap = phieunhap || {
+        data: [],
+        total: 0
     };
 
     return (
@@ -227,7 +228,7 @@ const HoaDonNhap = () => {
                                 <RowSkeleton cols={9} />
                             </>
                         ) : (
-                            phieunhap.data.map((phieu) => (
+                            fixedPhieuNhap.data.map((phieu) => (
                                 <TableRow key={phieu.ma}>
                                     <TableCell>{phieu.ma}</TableCell>
                                     <TableCell>{phieu.nguoinhap.ten}</TableCell>
@@ -270,7 +271,7 @@ const HoaDonNhap = () => {
                         <TableRow>
                             <TablePagination
                                 rowsPerPage={rowsPerPage}
-                                count={phieunhap.total}
+                                count={fixedPhieuNhap.total}
                                 page={page}
                                 labelRowsPerPage="Dòng trên trang"
                                 onPageChange={(_, value) => setPage(value)}
