@@ -1,9 +1,13 @@
 import {
     Button,
+    Checkbox,
     Dialog,
+    DialogActions,
     DialogContent,
+    DialogContentText,
     DialogTitle,
     Divider,
+    FormControlLabel,
     FormHelperText,
     Grid,
     IconButton,
@@ -148,8 +152,13 @@ const HoaDonNhap = () => {
     const [page, setPage] = useState(0);
     const [daluu, setDaLuu] = useState('false');
     const [rowsPerPage, setRowPerPage] = useState(10);
+    const [selectedDelete, setSelectedDelete] = useState(null);
 
-    const { data: phieunhap, isLoading } = useQuery(
+    const {
+        data: phieunhap,
+        isLoading,
+        refetch
+    } = useQuery(
         ['phieunhap', page, rowsPerPage, daluu],
         () => HoaDonNhapService.getAll({ page, limit: rowsPerPage, daluu: JSON.parse(daluu) }),
         {
@@ -160,6 +169,12 @@ const HoaDonNhap = () => {
     const handleOpen = () => setOpen(true);
 
     const handleClose = () => setOpen(false);
+
+    const handleDelete = async () => {
+        await HoaDonNhapService.xoa(selectedDelete);
+        refetch();
+        setSelectedDelete(null);
+    };
 
     return (
         <MainCard
@@ -239,7 +254,10 @@ const HoaDonNhap = () => {
                                         </Link>
                                     </TableCell>
                                     <TableCell>
-                                        <IconButton color="error">
+                                        <IconButton
+                                            color="error"
+                                            onClick={() => setSelectedDelete(phieu.ma)}
+                                        >
                                             <IconX />
                                         </IconButton>
                                     </TableCell>
@@ -270,6 +288,45 @@ const HoaDonNhap = () => {
             </TableContainer>
 
             <TaoHoaDonModal open={open} onClose={handleClose} />
+
+            <Dialog open={!!selectedDelete} onClose={() => setSelectedDelete(null)}>
+                <Formik
+                    initialValues={{ accept: false }}
+                    validationSchema={Yup.object().shape({
+                        accept: Yup.bool().equals([true], 'Vui lòng xác nhận để xóa hóa đơn')
+                    })}
+                    onSubmit={handleDelete}
+                >
+                    {({ values, handleChange, errors, handleSubmit }) => (
+                        <form onSubmit={handleSubmit}>
+                            <DialogTitle>Xóa hóa đơn</DialogTitle>
+                            <DialogContent sx={{ maxWidth: 360 }}>
+                                <DialogContentText>
+                                    Bạn chắc chắn muốn xóa hóa đơn này?
+                                </DialogContentText>
+                                <DialogContentText>
+                                    Điều này có thể ảnh hưởng tới các mặt hàng cũng như dữ liệu
+                                    thống kê của cửa hàng.
+                                </DialogContentText>
+
+                                <FormControlLabel
+                                    label="Xác nhận xóa hóa đơn này"
+                                    name="accept"
+                                    value={values.accept}
+                                    control={<Checkbox />}
+                                    onChange={handleChange}
+                                />
+
+                                <FormHelperText error>{errors.accept}</FormHelperText>
+                            </DialogContent>
+
+                            <DialogActions>
+                                <Button type="submit">Xóa</Button>
+                            </DialogActions>
+                        </form>
+                    )}
+                </Formik>
+            </Dialog>
         </MainCard>
     );
 };

@@ -283,7 +283,7 @@ const QuyCach = () => {
                 Quy Cách Loại Hàng
             </Typography>
             <TableContainer>
-                <Table>
+                <Table size="small">
                     <TableHead>
                         <TableRow>
                             <TableCell>Loại Hàng</TableCell>
