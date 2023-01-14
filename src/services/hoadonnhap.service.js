@@ -33,6 +33,10 @@ class HoaDonNhapService {
     static async luu(ma) {
         return await request.put(`nhaphang/phieunhap/${ma}/luu`);
     }
+
+    static async xoa(ma) {
+        return await request.delete(`nhaphang/phieunhap/${ma}`);
+    }
 }
 
 export default HoaDonNhapService;

@@ -28,7 +28,10 @@ const breadcrumbNameMap = {
     '/hoadon/xuat': 'Hóa đơn xuất',
     '/mathang': 'Mặt hàng',
     '/quantri': 'Quản trị',
-    '/quantri/taikhoan': 'Quản trị tài khoản'
+    '/quantri/taikhoan': 'Quản trị tài khoản',
+    '/hanghoa': 'Hàng hóa',
+    '/hanghoa/loaihang': 'Loại hàng',
+    '/hanghoa/mathang': 'Mặt hàng'
 };
 
 const MainCard = forwardRef(
