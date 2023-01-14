@@ -1,7 +1,6 @@
 import {
     Badge,
     Button,
-    Divider,
     FormControl,
     FormHelperText,
     Grid,
@@ -26,10 +25,9 @@ import { Stack } from '@mui/system';
 import { DatePicker } from '@mui/x-date-pickers';
 import { IconDeviceFloppy, IconFile, IconPencil, IconPlus, IconTrash } from '@tabler/icons';
 import { Formik } from 'formik';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import HoaDonNhapService from 'services/hoadonnhap.service';
 import MainCard from 'ui-component/cards/MainCard';
 import * as Yup from 'yup';
@@ -38,7 +36,7 @@ import productcategoryservice from 'services/productcategory.service';
 import dayjs from 'utils/dayjs';
 import formatter from 'views/utilities/formatter';
 
-const HangHoaRow = ({ index, value, onChange, onRemove, onSave }) => {
+const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
     const { data: products, isLoading } = useQuery(
         ['products'],
         productcategoryservice.getAllCategoriesAndDonvi,
@@ -46,7 +44,7 @@ const HangHoaRow = ({ index, value, onChange, onRemove, onSave }) => {
             initialData: []
         }
     );
-    const [edit, setEdit] = useState(true);
+    const [edit, setEdit] = useState(true && !disabled);
 
     const product = products.find((e) => e.ma === value.malh);
     const donvi = product?.donvi?.find((e) => e.ma === value.madv);
@@ -56,15 +54,17 @@ const HangHoaRow = ({ index, value, onChange, onRemove, onSave }) => {
         onSave();
     };
 
-    if (isLoading) return null;
+    if (isLoading || !product) return null;
+
     return edit ? (
         <Formik
             initialValues={{
+                ma: value.ma,
                 madv: value.madv || '',
                 malh: value.malh || '',
                 soluong: value.soluong || 1,
                 hsd: value.hsd || '',
-                gianhap: value.gianhap || 0
+                gianhap: value.gianhap || product?.gianhap || 0
             }}
             validationSchema={Yup.object().shape({
                 malh: Yup.string().required('Vui lòng chọn sản phẩm'),
@@ -80,7 +80,7 @@ const HangHoaRow = ({ index, value, onChange, onRemove, onSave }) => {
             onSubmit={handleSave}
         >
             {({ values, handleSubmit, errors, handleChange }) => (
-                <TableRow>
+                <TableRow hover>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>
                         <Select
@@ -200,28 +200,65 @@ const HangHoaRow = ({ index, value, onChange, onRemove, onSave }) => {
             <TableCell>{value.soluong}</TableCell>
             <TableCell>{formatter.format(value.gianhap)}</TableCell>
             <TableCell>{formatter.format(value.soluong * value.gianhap)}</TableCell>
-            <TableCell>
-                <IconButton color="secondary" onClick={() => setEdit(true)}>
-                    <IconPencil />
-                </IconButton>
-            </TableCell>
-            <TableCell></TableCell>
+            {!disabled && (
+                <>
+                    <TableCell>
+                        <IconButton color="secondary" onClick={() => setEdit(true)}>
+                            <IconPencil />
+                        </IconButton>
+                    </TableCell>
+                    <TableCell></TableCell>
+                </>
+            )}
         </TableRow>
     );
 };
 
 function ChinhSuaHoaDon() {
+    const params = useParams();
+    const navigate = useNavigate();
+
+    const {
+        data: phieunhap,
+        isLoading,
+        isError,
+        refetch
+    } = useQuery(['phieunhap', params.ma], () => HoaDonNhapService.layPhieuNhap(params.ma));
+
     const [rows, setRows] = useState([]);
 
-    const currentUser = useSelector((state) => state.auth.user);
-    const params = useParams();
+    const addRow = () =>
+        setRows((prev) => [...prev, { ma: Math.random(), gianhap: 0, soluong: 0 }]);
 
-    const { data: phieunhap, isLoading } = useQuery([params.ma], HoaDonNhapService.layPhieuNhap);
+    const handleSave = async (values) => {
+        try {
+            await HoaDonNhapService.capNhat(phieunhap.ma, values);
+            await HoaDonNhapService.themSanPham(phieunhap.ma, rows);
+            await HoaDonNhapService.luu(phieunhap.ma);
+            await refetch();
+        } catch (error) {}
+    };
 
-    const addRow = () => setRows((prev) => [...prev, { ma: prev.length, gianhap: 0, soluong: 0 }]);
+    useEffect(() => {
+        if (isLoading) return;
+
+        setRows(
+            phieunhap.chitiet.map((row) => ({
+                ...row,
+                malh: row.mathang.malh,
+                madv: row.mathang.madv,
+                hsd: row.mathang.hsd,
+                gianhap: row.mathang.gianhap
+            }))
+        );
+    }, [phieunhap, isLoading]);
+
+    if (isError) return navigate('/');
+    if (isLoading) return <LinearProgress />;
 
     return (
         <MainCard
+            showBreadcrumbs
             title={
                 <Badge>
                     <Typography variant="h2">
@@ -231,60 +268,78 @@ function ChinhSuaHoaDon() {
                                 color: '#aaa'
                             }}
                         >
-                            #{phieunhap?.ma}
+                            #{phieunhap.ma}
                         </span>
                     </Typography>
                 </Badge>
             }
         >
-            {isLoading ? (
-                <LinearProgress />
-            ) : (
-                <Formik
-                    initialValues={{
-                        nguon: phieunhap.nguon,
-                        ngaynhap: phieunhap.ngaynhap,
-                        nguoigiao: phieunhap.nguoigiao
-                    }}
-                    validationSchema={Yup.object().shape({
-                        nguon: Yup.string().required('Vui lòng nhập nguồn nhập hàng'),
-                        ngaynhap: Yup.date().required('Vui lòng chọn ngày nhập'),
-                        nguoigiao: Yup.string().required('Vui lòng nhập tên người giao')
-                    })}
-                >
-                    {({ values, errors, handleChange, handleSubmit }) => (
-                        <form onSubmit={handleSubmit}>
-                            <Stack spacing={2}>
-                                <Typography variant="subtitle1">Người nhập</Typography>
+            <Formik
+                initialValues={{
+                    ...phieunhap
+                }}
+                validationSchema={Yup.object().shape({
+                    nguon: Yup.string().required('Vui lòng nhập nguồn nhập hàng'),
+                    ngaynhap: Yup.date().required('Vui lòng chọn ngày nhập'),
+                    nguoigiao: Yup.string().required('Vui lòng nhập tên người giao')
+                })}
+                onSubmit={handleSave}
+            >
+                {({ values, errors, handleChange, handleSubmit }) => (
+                    <form onSubmit={handleSubmit}>
+                        <Stack spacing={2} direction="column" sx={{ ml: -2, p: 2 }}>
+                            <Typography variant="subtitle2">Thông tin hóa đơn</Typography>
 
-                                <Grid container spacing={2} sx={{ mb: 2, mt: 2 }}>
-                                    <Grid xs={12} md={4} item>
-                                        <TextField
-                                            size="small"
-                                            fullWidth
-                                            label="Mã nhân viên"
-                                            placeholder="Mã nhân viên"
-                                            value={currentUser.ma}
-                                            disabled
-                                        />
-                                    </Grid>
+                            <Table size="small">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell rowSpan={2}>Mã số</TableCell>
+                                        <TableCell rowSpan={2}>Tên hóa đơn</TableCell>
+                                        <TableCell rowSpan={2}>Ngày tạo</TableCell>
+                                        <TableCell colSpan={2}>Người tạo</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell>Mã nhân viên</TableCell>
+                                        <TableCell>Tên nhân viên</TableCell>
+                                    </TableRow>
+                                </TableHead>
 
-                                    <Grid xs={12} md={4} item>
-                                        <TextField
-                                            size="small"
-                                            fullWidth
-                                            label="Tên"
-                                            placeholder="Tên"
-                                            value={currentUser.ten}
-                                            disabled
-                                        />
-                                    </Grid>
-                                </Grid>
+                                <TableBody>
+                                    <TableRow>
+                                        <TableCell>{values.ma}</TableCell>
+                                        <TableCell>Hóa đơn nhập</TableCell>
+                                        <TableCell>
+                                            {dayjs(values.createdAt).format('DD/MM/YYYY')}
+                                        </TableCell>
+                                        <TableCell>{values.nguoinhap.ma}</TableCell>
+                                        <TableCell>{values.nguoinhap.ten}</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
 
-                                <Divider />
+                            <Typography variant="subtitle2">Nguồn nhập</Typography>
 
-                                <Typography variant="subtitle1">Nguồn nhập</Typography>
+                            {phieunhap.daluu ? (
+                                <Table size="small">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>Nguồn</TableCell>
+                                            <TableCell>Người giao</TableCell>
+                                            <TableCell>Ngày nhập</TableCell>
+                                        </TableRow>
+                                    </TableHead>
 
+                                    <TableBody>
+                                        <TableRow>
+                                            <TableCell>{values.nguon}</TableCell>
+                                            <TableCell>{values.nguoigiao}</TableCell>
+                                            <TableCell>
+                                                {dayjs(values.ngaynhap).format('DD/MM/YYYY')}
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableBody>
+                                </Table>
+                            ) : (
                                 <Grid container spacing={2} sx={{ mb: 2, mt: 2 }}>
                                     <Grid xs={12} md={4} item>
                                         <TextField
@@ -294,6 +349,7 @@ function ChinhSuaHoaDon() {
                                             placeholder="Nguồn"
                                             name="nguon"
                                             value={values.nguon}
+                                            disabled={phieunhap.daluu}
                                             error={!!errors.nguon}
                                             onChange={handleChange}
                                         />
@@ -309,6 +365,7 @@ function ChinhSuaHoaDon() {
                                             placeholder="Người giao"
                                             name="nguoigiao"
                                             value={values.nguoigiao}
+                                            disabled={phieunhap.daluu}
                                             error={!!errors.nguoigiao}
                                             onChange={handleChange}
                                         />
@@ -323,12 +380,14 @@ function ChinhSuaHoaDon() {
                                                     fullWidth
                                                     size="small"
                                                     {...params}
+                                                    disabled={phieunhap.daluu}
                                                     error={!!errors.ngaynhap}
                                                 />
                                             )}
                                             value={values.ngaynhap}
                                             name="ngaynhap"
                                             label="Ngày nhập"
+                                            disabled={phieunhap.daluu}
                                             onChange={(value) => {
                                                 handleChange({
                                                     target: {
@@ -341,61 +400,70 @@ function ChinhSuaHoaDon() {
                                         <FormHelperText error>{errors.ngaynhap}</FormHelperText>
                                     </Grid>
                                 </Grid>
+                            )}
 
-                                <Divider />
+                            <Typography variant="subtitle2">Thông tin chi tiết</Typography>
 
-                                <Typography variant="subtitle1">Thông tin chi tiết</Typography>
+                            <TableContainer>
+                                <Table size="small">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>STT</TableCell>
+                                            <TableCell>Tên hàng hóa</TableCell>
+                                            <TableCell>Đơn vị tính</TableCell>
+                                            <TableCell>Hạn sử dụng</TableCell>
+                                            <TableCell>Số lượng</TableCell>
+                                            <TableCell>Đơn giá</TableCell>
+                                            <TableCell>Thành tiền</TableCell>
 
-                                <TableContainer>
-                                    <Table size="small">
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell>STT</TableCell>
-                                                <TableCell>Tên hàng hóa</TableCell>
-                                                <TableCell>Đơn vị tính</TableCell>
-                                                <TableCell>Hạn sử dụng</TableCell>
-                                                <TableCell>Số lượng</TableCell>
-                                                <TableCell>Đơn giá</TableCell>
-                                                <TableCell>Thành tiền</TableCell>
+                                            {!phieunhap.daluu && (
+                                                <>
+                                                    <TableCell></TableCell>
+                                                    <TableCell></TableCell>
+                                                </>
+                                            )}
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableCell>1</TableCell>
+                                            <TableCell>2</TableCell>
+                                            <TableCell>3</TableCell>
+                                            <TableCell>4</TableCell>
+                                            <TableCell>5</TableCell>
+                                            <TableCell>6</TableCell>
+                                            <TableCell>7 = 5 x 6</TableCell>
+                                            {!phieunhap.daluu && (
+                                                <>
+                                                    <TableCell></TableCell>
+                                                    <TableCell></TableCell>
+                                                </>
+                                            )}
+                                        </TableRow>
+                                    </TableHead>
 
-                                                <TableCell></TableCell>
-                                                <TableCell></TableCell>
-                                            </TableRow>
-                                            <TableRow selected>
-                                                <TableCell>1</TableCell>
-                                                <TableCell>2</TableCell>
-                                                <TableCell>3</TableCell>
-                                                <TableCell>4</TableCell>
-                                                <TableCell>5</TableCell>
-                                                <TableCell>6</TableCell>
-                                                <TableCell>7 = 5 x 6</TableCell>
-                                                <TableCell></TableCell>
-                                                <TableCell></TableCell>
-                                            </TableRow>
-                                        </TableHead>
-
-                                        <TableBody>
-                                            {rows.map((row, index) => (
-                                                <HangHoaRow
-                                                    index={index}
-                                                    key={row.ma}
-                                                    value={row}
-                                                    onChange={(values) => {
-                                                        setRows((prev) =>
-                                                            prev.map((v, i) => {
-                                                                if (index === i) v = values;
-                                                                return v;
-                                                            })
-                                                        );
-                                                    }}
-                                                    onRemove={() => {
-                                                        setRows((prev) =>
-                                                            prev.filter((e, i) => i !== index)
-                                                        );
-                                                    }}
-                                                    onSave={() => {}}
-                                                />
-                                            ))}
+                                    <TableBody>
+                                        {rows.map((row, index) => (
+                                            <HangHoaRow
+                                                index={index}
+                                                key={row.ma || row.id || Math.random()}
+                                                value={row}
+                                                onChange={(values) => {
+                                                    setRows((prev) =>
+                                                        prev.map((v, i) => {
+                                                            if (index === i) v = values;
+                                                            return v;
+                                                        })
+                                                    );
+                                                }}
+                                                disabled={phieunhap.daluu}
+                                                onRemove={() => {
+                                                    setRows((prev) =>
+                                                        prev.filter((e, i) => i !== index)
+                                                    );
+                                                }}
+                                                onSave={() => {}}
+                                            />
+                                        ))}
+                                        {!phieunhap.daluu && (
                                             <TableRow>
                                                 <TableCell colSpan={9}>
                                                     <Button fullWidth onClick={addRow}>
@@ -403,47 +471,44 @@ function ChinhSuaHoaDon() {
                                                     </Button>
                                                 </TableCell>
                                             </TableRow>
-                                        </TableBody>
+                                        )}
+                                    </TableBody>
 
-                                        <TableFooter>
-                                            <TableRow>
-                                                <TableCell colSpan={6}>
-                                                    <Typography>Tổng cộng</Typography>
-                                                </TableCell>
+                                    <TableFooter>
+                                        <TableRow>
+                                            <TableCell colSpan={6}>
+                                                <Typography>Tổng cộng</Typography>
+                                            </TableCell>
 
-                                                <TableCell colSpan={3}>
-                                                    {formatter.format(
-                                                        rows.reduce(
-                                                            (prev, curent) =>
-                                                                curent.gianhap * curent.soluong +
-                                                                prev,
-                                                            0
-                                                        )
-                                                    )}
-                                                </TableCell>
-                                            </TableRow>
-                                        </TableFooter>
-                                    </Table>
-                                </TableContainer>
+                                            <TableCell colSpan={3}>
+                                                {formatter.format(
+                                                    rows.reduce(
+                                                        (prev, curent) =>
+                                                            curent.gianhap * curent.soluong + prev,
+                                                        0
+                                                    )
+                                                )}
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableFooter>
+                                </Table>
+                            </TableContainer>
 
-                                <Divider />
-
-                                <Stack direction="row" spacing={2}>
-                                    <Button type="submit">Lưu bản nháp</Button>
-
-                                    <Button
-                                        variant="contained"
-                                        type="submit"
-                                        startIcon={<IconFile />}
-                                    >
-                                        Lưu
-                                    </Button>
-                                </Stack>
+                            <Stack direction="row" spacing={2}>
+                                <Button
+                                    variant="contained"
+                                    type="submit"
+                                    startIcon={<IconFile />}
+                                    disabled={phieunhap.daluu}
+                                    onClick={handleSubmit}
+                                >
+                                    Lưu
+                                </Button>
                             </Stack>
-                        </form>
-                    )}
-                </Formik>
-            )}
+                        </Stack>
+                    </form>
+                )}
+            </Formik>
         </MainCard>
     );
 }

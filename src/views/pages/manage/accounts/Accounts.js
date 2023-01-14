@@ -155,15 +155,17 @@ const Accounts = () => {
     };
 
     return (
-        <MainCard title="Tài khoản">
-            <div>
-                <Tooltip title="Tạo tài khoản" onClick={handleOpenCreateModal}>
-                    <IconButton color="primary" size="small">
+        <MainCard
+            title="Tài khoản"
+            showBreadcrumbs
+            secondary={
+                <Tooltip title="Tạo tài khoản">
+                    <IconButton onClick={handleOpenCreateModal}>
                         <IconUserPlus />
                     </IconButton>
                 </Tooltip>
-            </div>
-
+            }
+        >
             <TableContainer sx={{ maxHeight: '70vh' }}>
                 <Table stickyHeader size="small">
                     <TableHead>

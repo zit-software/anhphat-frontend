@@ -7,17 +7,20 @@ import {
     FormHelperText,
     Grid,
     IconButton,
+    Tab,
     Table,
     TableBody,
     TableCell,
     TableContainer,
+    TableFooter,
     TableHead,
     TablePagination,
     TableRow,
+    Tabs,
     TextField,
     Tooltip
 } from '@mui/material';
-import { IconFilePlus, IconPencil, IconX } from '@tabler/icons';
+import { IconEye, IconFilePlus, IconPencil, IconX } from '@tabler/icons';
 import { Formik } from 'formik';
 import { useState } from 'react';
 import * as Yup from 'yup';
@@ -136,11 +139,12 @@ const TaoHoaDonModal = ({ open, onClose }) => {
 const HoaDonNhap = () => {
     const [open, setOpen] = useState(false);
     const [page, setPage] = useState(0);
+    const [daluu, setDaLuu] = useState(false);
     const [rowsPerPage, setRowPerPage] = useState(10);
 
     const { data: phieunhap, isLoading } = useQuery(
-        ['phieunhap', page, rowsPerPage],
-        () => HoaDonNhapService.getAll({ page, limit: rowsPerPage }),
+        ['phieunhap', page, rowsPerPage, daluu],
+        () => HoaDonNhapService.getAll({ page, limit: rowsPerPage, daluu }),
         {
             initialData: { data: [], total: 0 }
         }
@@ -151,15 +155,21 @@ const HoaDonNhap = () => {
     const handleClose = () => setOpen(false);
 
     return (
-        <MainCard title="Hóa đơn nhập">
-            <div>
-                <Tooltip>
+        <MainCard
+            showBreadcrumbs
+            title="Hóa đơn nhập"
+            secondary={
+                <Tooltip title="Tạo hóa đơn">
                     <IconButton onClick={handleOpen}>
                         <IconFilePlus />
                     </IconButton>
                 </Tooltip>
-            </div>
-
+            }
+        >
+            <Tabs value={daluu} onChange={(_, v) => setDaLuu(v)}>
+                <Tab value={false} label="Chưa lưu" />
+                <Tab value={true} label="Đã lưu" />
+            </Tabs>
             <TableContainer sx={{ maxHeight: '70vh' }}>
                 <Table stickyHeader size="small">
                     <TableHead>
@@ -202,9 +212,13 @@ const HoaDonNhap = () => {
                                     </TableCell>
                                     <TableCell>
                                         <Link to={{ pathname: '/hoadon/nhap/' + phieu.ma }}>
-                                            <IconButton>
-                                                <IconPencil />
-                                            </IconButton>
+                                            {phieu.daluu ? (
+                                                <IconEye />
+                                            ) : (
+                                                <IconButton>
+                                                    <IconPencil />
+                                                </IconButton>
+                                            )}
                                         </Link>
                                     </TableCell>
                                     <TableCell>
@@ -216,22 +230,27 @@ const HoaDonNhap = () => {
                             ))
                         )}
                     </TableBody>
+
+                    <TableFooter>
+                        <TableRow>
+                            <TablePagination
+                                rowsPerPage={rowsPerPage}
+                                count={phieunhap.total}
+                                page={page}
+                                labelRowsPerPage="Dòng trên trang"
+                                onPageChange={(_, value) => setPage(value)}
+                                onRowsPerPageChange={({ target: { value } }) => {
+                                    setRowPerPage(value);
+                                    setPage(0);
+                                }}
+                                labelDisplayedRows={({ from, to, count }) =>
+                                    `${from}–${to} của ${count !== -1 ? count : `nhiều hơn ${to}`}`
+                                }
+                            />
+                        </TableRow>
+                    </TableFooter>
                 </Table>
             </TableContainer>
-            <TablePagination
-                rowsPerPage={rowsPerPage}
-                count={phieunhap.total}
-                page={page}
-                labelRowsPerPage="Dòng trên trang"
-                onPageChange={(_, value) => setPage(value)}
-                onRowsPerPageChange={({ target: { value } }) => {
-                    setRowPerPage(value);
-                    setPage(0);
-                }}
-                labelDisplayedRows={({ from, to, count }) =>
-                    `${from}–${to} của ${count !== -1 ? count : `nhiều hơn ${to}`}`
-                }
-            />
 
             <TaoHoaDonModal open={open} onClose={handleClose} />
         </MainCard>
