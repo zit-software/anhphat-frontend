@@ -52,6 +52,20 @@ const productcategoryservice = {
     },
     async updateQuyCach(ma, newQuyCach) {
         await request.put(`/quycach/${ma}`, newQuyCach);
+    },
+    async getAllMatHang({ queryKey: [_, params] }) {
+        try {
+            const lh = params.malh || '';
+            const dv = params.madv || '';
+            const ngaynhap = params.ngaynhap || '';
+            const order = params.order || '';
+            const res = await request.get(
+                `/mathang?loaihang=${lh}&donvi=${dv}&ngaynhap=${ngaynhap}&order=${order}`
+            );
+            return res.data;
+        } catch (error) {
+            console.log(error);
+        }
     }
 };
 
