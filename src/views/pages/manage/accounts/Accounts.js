@@ -31,7 +31,7 @@ import MainCard from 'ui-component/cards/MainCard';
 import dayjs from 'utils/dayjs';
 import ManageUserForm from '../manage-forms/ManageUserForm';
 
-const RowSkeletion = () => (
+const RowSkeleton = () => (
     <TableRow>
         <TableCell>
             <Skeleton />
@@ -182,11 +182,11 @@ const Accounts = () => {
                     <TableBody>
                         {isLoading ? (
                             <>
-                                <RowSkeletion />
-                                <RowSkeletion />
-                                <RowSkeletion />
-                                <RowSkeletion />
-                                <RowSkeletion />
+                                <RowSkeleton />
+                                <RowSkeleton />
+                                <RowSkeleton />
+                                <RowSkeleton />
+                                <RowSkeleton />
                             </>
                         ) : (
                             accounts.map((user, index) => (

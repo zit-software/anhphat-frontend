@@ -42,7 +42,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import HoaDonNhapService from 'services/hoadonnhap.service';
 import MainCard from 'ui-component/cards/MainCard';
-import RowSkeletion from 'ui-component/skeletons/RowSkeleton';
+import RowSkeleton from 'ui-component/skeletons/RowSkeleton';
 
 import { Link } from 'react-router-dom';
 import dayjs from 'utils/dayjs';
@@ -220,11 +220,11 @@ const HoaDonNhap = () => {
                     <TableBody>
                         {isLoading ? (
                             <>
-                                <RowSkeletion cols={9} />
-                                <RowSkeletion cols={9} />
-                                <RowSkeletion cols={9} />
-                                <RowSkeletion cols={9} />
-                                <RowSkeletion cols={9} />
+                                <RowSkeleton cols={9} />
+                                <RowSkeleton cols={9} />
+                                <RowSkeleton cols={9} />
+                                <RowSkeleton cols={9} />
+                                <RowSkeleton cols={9} />
                             </>
                         ) : (
                             phieunhap.data.map((phieu) => (

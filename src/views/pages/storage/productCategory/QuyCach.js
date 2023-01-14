@@ -47,7 +47,7 @@ const inputContainerStyle = {
     borderRadius: '10px',
     marginTop: '8px'
 };
-const RowSkeletion = () => (
+const RowSkeleton = () => (
     <TableRow>
         <TableCell>
             <Skeleton />
@@ -279,9 +279,8 @@ const QuyCach = () => {
 
     return (
         <>
-            <Typography sx={{ margin: '12px 0' }} variant="h3" textAlign="center">
-                Quy Cách Loại Hàng
-            </Typography>
+            <Typography variant="subtitle1">Quy cách</Typography>
+
             <TableContainer>
                 <Table size="small">
                     <TableHead>
@@ -297,9 +296,9 @@ const QuyCach = () => {
                     <TableBody>
                         {isLoading ? (
                             <>
-                                <RowSkeletion />
-                                <RowSkeletion />
-                                <RowSkeletion />
+                                <RowSkeleton />
+                                <RowSkeleton />
+                                <RowSkeleton />
                             </>
                         ) : (
                             quycachs.map((quycach, index) => {

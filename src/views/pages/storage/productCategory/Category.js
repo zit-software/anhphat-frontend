@@ -56,7 +56,7 @@ const inputContainerStyle = {
     marginTop: '8px'
 };
 
-const RowSkeletion = () => (
+const RowSkeleton = () => (
     <TableRow>
         <TableCell>
             <Skeleton />
@@ -283,9 +283,7 @@ const Category = () => {
 
     return (
         <>
-            <Typography sx={{ margin: '12px 0' }} variant="h3" textAlign="center">
-                Các Loại Hàng
-            </Typography>
+            <Typography variant="subtitle1">Các Loại Hàng</Typography>
             <TableContainer>
                 <Table size="small">
                     <TableHead>
@@ -302,7 +300,7 @@ const Category = () => {
                     </TableHead>
                     <TableBody>
                         {isLoading ? (
-                            <RowSkeletion />
+                            <RowSkeleton />
                         ) : (
                             categories.map((category, index) => (
                                 <TableRow key={category.ma}>

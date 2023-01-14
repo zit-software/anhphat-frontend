@@ -1,6 +1,6 @@
 import { Skeleton, TableCell, TableRow } from '@mui/material';
 
-const RowSkeletion = ({ cols }) => {
+const RowSkeleton = ({ cols }) => {
     const columns = [];
 
     for (let i = 0; i < cols; i++) {
@@ -14,4 +14,4 @@ const RowSkeletion = ({ cols }) => {
     return <TableRow>{columns}</TableRow>;
 };
 
-export default RowSkeletion;
+export default RowSkeleton;
