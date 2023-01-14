@@ -79,6 +79,29 @@ const MainRoutes = {
                     ]
                 }
             ]
+        },
+        {
+            path: 'hoadon',
+            children: [
+                {
+                    path: 'nhap',
+                    element: <HoaDonNhap />
+                }
+            ]
+        },
+        {
+            path: 'hoadon',
+            children: [
+                {
+                    path: 'nhap',
+                    children: [
+                        {
+                            path: ':ma',
+                            element: <ChinhSuaHoaDon />
+                        }
+                    ]
+                }
+            ]
         }
     ]
 };
