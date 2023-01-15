@@ -268,7 +268,10 @@ const HoaDonNhap = () => {
                                         {dayjs(phieu.updatedAt).format('DD/MM/YYYY')}
                                     </TableCell>
                                     <TableCell>
-                                        <Link to={{ pathname: '/hoadon/nhap/' + phieu.ma }}>
+                                        <Link
+                                            target="_blank"
+                                            to={{ pathname: '/hoadon/nhap/' + phieu.ma }}
+                                        >
                                             {phieu.daluu ? (
                                                 <IconEye />
                                             ) : (
