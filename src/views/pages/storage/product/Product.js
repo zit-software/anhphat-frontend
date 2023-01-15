@@ -197,7 +197,7 @@ const Product = () => {
                     </TableContainer>
                     <TablePagination
                         count={allMatHang.total}
-                        rowsPerPageOptions={[15]}
+                        rowsPerPageOptions={[10]}
                         rowsPerPage={10}
                         component="div"
                         page={currentPage - 1}

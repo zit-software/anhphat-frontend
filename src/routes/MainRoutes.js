@@ -4,6 +4,8 @@ import { lazy } from 'react';
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 import Product from 'views/pages/storage/product/Product';
+import NhaPhanPhoi from 'views/pages/npp/NPP';
+import Points from 'views/pages/npp/Points';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -100,6 +102,19 @@ const MainRoutes = {
                             element: <ChinhSuaHoaDon />
                         }
                     ]
+                }
+            ]
+        },
+        {
+            path: 'npp',
+            children: [
+                {
+                    path: 'thongtin',
+                    element: <NhaPhanPhoi />
+                },
+                {
+                    path: 'diem',
+                    element: <Points />
                 }
             ]
         }
