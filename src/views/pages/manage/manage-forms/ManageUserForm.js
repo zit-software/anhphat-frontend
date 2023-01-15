@@ -6,7 +6,7 @@ import {
     FormControlLabel,
     FormHelperText,
     InputLabel,
-    OutlinedInput
+    OutlinedInput,
 } from '@mui/material';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -15,7 +15,7 @@ const ManageUserForm = ({
     user = {},
     buttonText = 'Lưu',
     requiredPassword = false,
-    onSubmit = (values) => values
+    onSubmit = (values) => values,
 }) => {
     return (
         <Formik
@@ -24,7 +24,7 @@ const ManageUserForm = ({
                 mk: '',
                 cfmk: '',
                 laAdmin: user.laAdmin,
-                sdt: user.sdt || ''
+                sdt: user.sdt || '',
             }}
             validationSchema={Yup.object().shape({
                 ten: Yup.string().required('Vui lòng nhập tên'),
@@ -43,7 +43,7 @@ const ManageUserForm = ({
                         'len',
                         'Số điện thoại có độ dài trong 6 đến 11 số',
                         (v) => !v || (v.length >= 6 && v.length <= 11)
-                    )
+                    ),
             })}
             onSubmit={onSubmit}
         >

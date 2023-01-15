@@ -8,7 +8,7 @@ import customizationReducer from './customizationReducer';
 
 const reducer = combineReducers({
     customization: customizationReducer,
-    auth: authReducer
+    auth: authReducer,
 });
 
 export default reducer;

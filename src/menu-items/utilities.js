@@ -6,7 +6,7 @@ import {
     IconWindmill,
     IconPackage,
     IconBox,
-    IconFileInvoice
+    IconFileInvoice,
 } from '@tabler/icons';
 
 // constant
@@ -17,7 +17,7 @@ const icons = {
     IconWindmill,
     IconPackage,
     IconBox,
-    IconFileInvoice
+    IconFileInvoice,
 };
 
 // ==============================|| UTILITIES MENU ITEMS ||============================== //
@@ -33,7 +33,7 @@ const utilities = {
             type: 'item',
             url: '/hanghoa/loaihang',
             icon: icons.IconPackage,
-            breadcrumbs: true
+            breadcrumbs: true,
         },
         {
             id: 'hanghoa-mathang',
@@ -41,31 +41,32 @@ const utilities = {
             type: 'item',
             url: '/hanghoa/mathang',
             icon: icons.IconBox,
-            breadcrumbs: true
+            breadcrumbs: true,
         },
         {
             id: 'hoadon',
             title: 'Hóa đơn',
             type: 'collapse',
             icon: icons.IconFileInvoice,
+            breadcrumbs: true,
             children: [
                 {
                     id: 'hoadon-nhap',
                     title: 'Hóa đơn nhập',
                     type: 'item',
                     url: '/hoadon/nhap',
-                    breadcrumbs: true
+                    breadcrumbs: true,
                 },
                 {
                     id: 'hoadon-xuat',
                     title: 'Hóa đơn xuất',
                     type: 'item',
                     url: '/hoadon/xuat',
-                    breadcrumbs: true
-                }
-            ]
-        }
-    ]
+                    breadcrumbs: true,
+                },
+            ],
+        },
+    ],
 };
 
 export default utilities;

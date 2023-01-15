@@ -19,7 +19,7 @@ import {
     TableRow,
     Toolbar,
     Tooltip,
-    Typography
+    Typography,
 } from '@mui/material';
 import { IconPencil, IconShield, IconTrash, IconUser, IconUserPlus, IconX } from '@tabler/icons';
 import { useState } from 'react';
@@ -107,7 +107,7 @@ const Accounts = () => {
     const {
         data: accounts,
         isLoading,
-        refetch
+        refetch,
     } = useQuery(['userList'], () => usernamangeService.getAllUsers());
 
     const handleOpenDeleteDialog = (index) => {

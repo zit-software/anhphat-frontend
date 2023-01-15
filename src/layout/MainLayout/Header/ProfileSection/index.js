@@ -17,7 +17,7 @@ import {
     Paper,
     Popper,
     Stack,
-    Typography
+    Typography,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
@@ -94,12 +94,12 @@ const ProfileSection = () => {
                         background: `${theme.palette.primary.main}!important`,
                         color: theme.palette.primary.light,
                         '& svg': {
-                            stroke: theme.palette.primary.light
-                        }
+                            stroke: theme.palette.primary.light,
+                        },
                     },
                     '& .MuiChip-label': {
-                        lineHeight: 0
-                    }
+                        lineHeight: 0,
+                    },
                 }}
                 icon={
                     <Avatar
@@ -107,7 +107,7 @@ const ProfileSection = () => {
                         sx={{
                             ...theme.typography.mediumAvatar,
                             margin: '8px 0 8px 8px !important',
-                            cursor: 'pointer'
+                            cursor: 'pointer',
                         }}
                         ref={anchorRef}
                         aria-controls={open ? 'menu-list-grow' : undefined}
@@ -137,10 +137,10 @@ const ProfileSection = () => {
                         {
                             name: 'offset',
                             options: {
-                                offset: [0, 14]
-                            }
-                        }
-                    ]
+                                offset: [0, 14],
+                            },
+                        },
+                    ],
                 }}
             >
                 {({ TransitionProps }) => (
@@ -166,7 +166,7 @@ const ProfileSection = () => {
                                                     component="span"
                                                     variant="h4"
                                                     sx={{
-                                                        fontWeight: 400
+                                                        fontWeight: 400,
                                                     }}
                                                 >
                                                     {user.ten}
@@ -182,7 +182,7 @@ const ProfileSection = () => {
                                         style={{
                                             height: '100%',
                                             maxHeight: 'calc(100vh - 250px)',
-                                            overflowX: 'hidden'
+                                            overflowX: 'hidden',
                                         }}
                                     >
                                         <Box sx={{ p: 2 }}>
@@ -195,16 +195,16 @@ const ProfileSection = () => {
                                                     backgroundColor: theme.palette.background.paper,
                                                     borderRadius: '10px',
                                                     [theme.breakpoints.down('md')]: {
-                                                        minWidth: '100%'
+                                                        minWidth: '100%',
                                                     },
                                                     '& .MuiListItemButton-root': {
-                                                        mt: 0.5
-                                                    }
+                                                        mt: 0.5,
+                                                    },
                                                 }}
                                             >
                                                 <ListItemButton
                                                     sx={{
-                                                        borderRadius: `${customization.borderRadius}px`
+                                                        borderRadius: `${customization.borderRadius}px`,
                                                     }}
                                                     selected={selectedIndex === 0}
                                                     onClick={(event) =>
@@ -228,7 +228,7 @@ const ProfileSection = () => {
                                                 </ListItemButton>
                                                 <ListItemButton
                                                     sx={{
-                                                        borderRadius: `${customization.borderRadius}px`
+                                                        borderRadius: `${customization.borderRadius}px`,
                                                     }}
                                                     selected={selectedIndex === 4}
                                                     onClick={handleLogout}

@@ -33,14 +33,14 @@ const Login = () => {
                         justifyContent="center"
                         alignItems="center"
                         sx={{
-                            minHeight: 'calc(100vh - 68px)'
+                            minHeight: 'calc(100vh - 68px)',
                         }}
                     >
                         <Grid
                             item
                             sx={{
                                 m: { xs: 1, sm: 3 },
-                                mb: 0
+                                mb: 0,
                             }}
                         >
                             <AuthCardWrapper>

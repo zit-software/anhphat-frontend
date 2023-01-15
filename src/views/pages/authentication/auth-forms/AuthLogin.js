@@ -10,7 +10,7 @@ import {
     IconButton,
     InputAdornment,
     InputLabel,
-    OutlinedInput
+    OutlinedInput,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
@@ -51,11 +51,11 @@ const FirebaseLogin = ({ ...others }) => {
                 initialValues={{
                     ma: '',
                     matkhau: '',
-                    submit: null
+                    submit: null,
                 }}
                 validationSchema={Yup.object().shape({
                     ma: Yup.string().max(255).required('Mã số là bắt buộc'),
-                    matkhau: Yup.string().max(255).required('Mật khẩu là bắt buộc')
+                    matkhau: Yup.string().max(255).required('Mật khẩu là bắt buộc'),
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
@@ -66,7 +66,7 @@ const FirebaseLogin = ({ ...others }) => {
                         window.location = config.defaultPath;
                     } catch (err) {
                         setErrors({
-                            submit: 'Tên đăng nhập hoặc mật khẩu không chính xác'
+                            submit: 'Tên đăng nhập hoặc mật khẩu không chính xác',
                         });
                     } finally {
                         setSubmitting(false);
@@ -80,14 +80,14 @@ const FirebaseLogin = ({ ...others }) => {
                     handleSubmit,
                     isSubmitting,
                     touched,
-                    values
+                    values,
                 }) => (
                     <form noValidate onSubmit={handleSubmit} {...others}>
                         <FormControl
                             fullWidth
                             error={Boolean(touched.email && errors.email)}
                             sx={{
-                                ...theme.typography.customInput
+                                ...theme.typography.customInput,
                             }}
                         >
                             <InputLabel htmlFor="outlined-adornment-email-login">
@@ -114,7 +114,7 @@ const FirebaseLogin = ({ ...others }) => {
                             fullWidth
                             error={Boolean(touched.password && errors.password)}
                             sx={{
-                                ...theme.typography.customInput
+                                ...theme.typography.customInput,
                             }}
                         >
                             <InputLabel htmlFor="outlined-adornment-password-login">

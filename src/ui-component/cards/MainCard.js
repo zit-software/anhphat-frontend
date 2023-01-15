@@ -7,7 +7,7 @@ import { useTheme } from '@mui/material/styles';
 
 // constant
 const headerSX = {
-    '& .MuiCardHeader-action': { mr: 0 }
+    '& .MuiCardHeader-action': { mr: 0 },
 };
 
 // ==============================|| CUSTOM MAIN CARD ||============================== //
@@ -42,9 +42,9 @@ const MainCard = forwardRef(
                     ':hover': {
                         boxShadow: boxShadow
                             ? shadow || '0 2px 14px 0 rgb(32 40 45 / 8%)'
-                            : 'inherit'
+                            : 'inherit',
                     },
-                    ...sx
+                    ...sx,
                 }}
             >
                 {/* card header and action */}
@@ -85,7 +85,7 @@ MainCard.propTypes = {
     secondary: PropTypes.oneOfType([PropTypes.node, PropTypes.string, PropTypes.object]),
     shadow: PropTypes.string,
     sx: PropTypes.object,
-    title: PropTypes.oneOfType([PropTypes.node, PropTypes.string, PropTypes.object])
+    title: PropTypes.oneOfType([PropTypes.node, PropTypes.string, PropTypes.object]),
 };
 
 export default MainCard;

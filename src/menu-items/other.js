@@ -1,5 +1,5 @@
 // assets
-import { IconBrandChrome, IconHelp, IconUser, IconBuildingStore } from '@tabler/icons';
+import { IconBrandChrome, IconBuildingStore, IconHelp, IconUser } from '@tabler/icons';
 
 // constant
 const icons = { IconBrandChrome, IconHelp, IconUser, IconBuildingStore };
@@ -17,7 +17,7 @@ const other = {
             type: 'item',
             url: 'quantri/taikhoan',
             icon: icons.IconUser,
-            breadcrumbs: true
+            breadcrumbs: true,
         },
         {
             id: 'quantri-npp',
@@ -25,9 +25,9 @@ const other = {
             type: 'item',
             url: 'quantri/npp',
             icon: icons.IconBuildingStore,
-            breadcrumbs: true
-        }
-    ]
+            breadcrumbs: true,
+        },
+    ],
 };
 
 export default other;

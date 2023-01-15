@@ -17,9 +17,9 @@ const dashboard = {
             type: 'item',
             url: '/dashboard/default',
             icon: icons.IconDashboard,
-            breadcrumbs: false
-        }
-    ]
+            breadcrumbs: true,
+        },
+    ],
 };
 
 export default dashboard;

@@ -26,7 +26,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
     position: 'relative',
     '&>div': {
         position: 'relative',
-        zIndex: 5
+        zIndex: 5,
     },
     '&:after': {
         content: '""',
@@ -40,8 +40,8 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
         right: -95,
         [theme.breakpoints.down('sm')]: {
             top: -105,
-            right: -140
-        }
+            right: -140,
+        },
     },
     '&:before': {
         content: '""',
@@ -56,9 +56,9 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
         opacity: 0.5,
         [theme.breakpoints.down('sm')]: {
             top: -155,
-            right: -70
-        }
-    }
+            right: -70,
+        },
+    },
 }));
 
 // ==============================|| DASHBOARD - TOTAL ORDER LINE CHART CARD ||============================== //
@@ -89,7 +89,7 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                                                 ...theme.typography.largeAvatar,
                                                 backgroundColor: theme.palette.primary[800],
                                                 color: '#fff',
-                                                mt: 1
+                                                mt: 1,
                                             }}
                                         >
                                             <LocalMallOutlinedIcon fontSize="inherit" />
@@ -101,7 +101,7 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                                             variant={timeValue ? 'contained' : 'text'}
                                             size="small"
                                             sx={{
-                                                color: 'inherit'
+                                                color: 'inherit',
                                             }}
                                             onClick={(e) => handleChangeTime(e, true)}
                                         >
@@ -112,7 +112,7 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                                             variant={!timeValue ? 'contained' : 'text'}
                                             size="small"
                                             sx={{
-                                                color: 'inherit'
+                                                color: 'inherit',
                                             }}
                                             onClick={(e) => handleChangeTime(e, false)}
                                         >
@@ -133,7 +133,7 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                                                             fontWeight: 500,
                                                             mr: 1,
                                                             mt: 1.75,
-                                                            mb: 0.75
+                                                            mb: 0.75,
                                                         }}
                                                     >
                                                         $108
@@ -145,7 +145,7 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                                                             fontWeight: 500,
                                                             mr: 1,
                                                             mt: 1.75,
-                                                            mb: 0.75
+                                                            mb: 0.75,
                                                         }}
                                                     >
                                                         $961
@@ -158,13 +158,13 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                                                         ...theme.typography.smallAvatar,
                                                         cursor: 'pointer',
                                                         backgroundColor: theme.palette.primary[200],
-                                                        color: theme.palette.primary.dark
+                                                        color: theme.palette.primary.dark,
                                                     }}
                                                 >
                                                     <ArrowDownwardIcon
                                                         fontSize="inherit"
                                                         sx={{
-                                                            transform: 'rotate3d(1, 1, 1, 45deg)'
+                                                            transform: 'rotate3d(1, 1, 1, 45deg)',
                                                         }}
                                                     />
                                                 </Avatar>
@@ -174,7 +174,7 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                                                     sx={{
                                                         fontSize: '1rem',
                                                         fontWeight: 500,
-                                                        color: theme.palette.primary[200]
+                                                        color: theme.palette.primary[200],
                                                     }}
                                                 >
                                                     Total Order
@@ -200,7 +200,7 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
 };
 
 TotalOrderLineChartCard.propTypes = {
-    isLoading: PropTypes.bool
+    isLoading: PropTypes.bool,
 };
 
 export default TotalOrderLineChartCard;

@@ -21,7 +21,7 @@ const CardStyle = styled(Card)(({ theme }) => ({
         borderColor: theme.palette.warning.main,
         borderRadius: '50%',
         top: '65px',
-        right: '-150px'
+        right: '-150px',
     },
     '&:before': {
         content: '""',
@@ -32,8 +32,8 @@ const CardStyle = styled(Card)(({ theme }) => ({
         borderColor: theme.palette.warning.main,
         borderRadius: '50%',
         top: '145px',
-        right: '-70px'
-    }
+        right: '-70px',
+    },
 }));
 
 // ==============================|| PROFILE MENU - UPGRADE PLAN CARD ||============================== //

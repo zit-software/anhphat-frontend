@@ -33,14 +33,14 @@ const Register = () => {
                         justifyContent="center"
                         alignItems="center"
                         sx={{
-                            minHeight: 'calc(100vh - 68px)'
+                            minHeight: 'calc(100vh - 68px)',
                         }}
                     >
                         <Grid
                             item
                             sx={{
                                 m: { xs: 1, sm: 3 },
-                                mb: 0
+                                mb: 0,
                             }}
                         >
                             <AuthCardWrapper>
@@ -107,7 +107,7 @@ const Register = () => {
                                                 to="/pages/login/login3"
                                                 variant="subtitle1"
                                                 sx={{
-                                                    textDecoration: 'none'
+                                                    textDecoration: 'none',
                                                 }}
                                             >
                                                 Already have an account?

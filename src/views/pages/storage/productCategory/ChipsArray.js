@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import * as React from 'react';
 
 const ListItem = styled('li')(({ theme }) => ({
-    margin: theme.spacing(0.5)
+    margin: theme.spacing(0.5),
 }));
 
 export default function ChipsArray({ values, setDonVi }) {
@@ -38,7 +38,7 @@ export default function ChipsArray({ values, setDonVi }) {
                     display: 'flex',
                     flexDirection: 'row',
                     columnGap: '4px',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
                 }}
             >
                 <TextField inputRef={donViRef} fullWidth label="Đơn Vị Cần Thêm" />
@@ -58,7 +58,7 @@ export default function ChipsArray({ values, setDonVi }) {
                     flexWrap: 'wrap',
                     listStyle: 'none',
                     p: 0.5,
-                    m: 0
+                    m: 0,
                 }}
                 component="ul"
             >

@@ -24,16 +24,16 @@ const MainRoutes = {
     children: [
         {
             path: '/',
-            element: <DashboardDefault />
+            element: <DashboardDefault />,
         },
         {
             path: 'dashboard',
             children: [
                 {
                     path: 'default',
-                    element: <DashboardDefault />
-                }
-            ]
+                    element: <DashboardDefault />,
+                },
+            ],
         },
 
         {
@@ -41,45 +41,22 @@ const MainRoutes = {
             children: [
                 {
                     path: 'loaihang',
-                    element: <ProductCategory />
+                    element: <ProductCategory />,
                 },
                 {
                     path: 'mathang',
-                    element: <Product />
-                }
-            ]
+                    element: <Product />,
+                },
+            ],
         },
         {
             path: 'hoadon',
             children: [
                 {
                     path: 'nhap',
-                    element: <HoaDonNhap />
-                }
-            ]
-        },
-        {
-            path: 'hoadon',
-            children: [
-                {
-                    path: 'nhap',
-                    children: [
-                        {
-                            path: ':ma',
-                            element: <ChinhSuaHoaDon />
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            path: 'hoadon',
-            children: [
-                {
-                    path: 'nhap',
-                    element: <HoaDonNhap />
-                }
-            ]
+                    element: <HoaDonNhap />,
+                },
+            ],
         },
         {
             path: 'hoadon',
@@ -89,22 +66,49 @@ const MainRoutes = {
                     children: [
                         {
                             path: ':ma',
-                            element: <ChinhSuaHoaDon />
-                        }
-                    ]
-                }
-            ]
+                            element: <ChinhSuaHoaDon />,
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            path: 'hoadon',
+            children: [
+                {
+                    path: 'nhap',
+                    element: <HoaDonNhap />,
+                },
+            ],
+        },
+        {
+            path: 'hoadon',
+            children: [
+                {
+                    path: 'nhap',
+                    children: [
+                        {
+                            path: ':ma',
+                            element: <ChinhSuaHoaDon />,
+                        },
+                    ],
+                },
+            ],
         },
         {
             path: 'quantri',
             children: [
                 {
                     path: 'taikhoan',
-                    element: <Accounts />
-                }
-            ]
-        }
-    ]
+                    element: <Accounts />,
+                },
+                {
+                    path: 'npp',
+                    element: <></>,
+                },
+            ],
+        },
+    ],
 };
 
 export default MainRoutes;

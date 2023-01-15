@@ -26,8 +26,8 @@ const BajajAreaChartCard = () => {
             ...chartData.options,
             colors: [orangeDark],
             tooltip: {
-                theme: 'light'
-            }
+                theme: 'light',
+            },
         };
         ApexCharts.exec(`support-chart`, 'updateOptions', newSupportChart);
     }, [navType, orangeDark]);
@@ -41,7 +41,7 @@ const BajajAreaChartCard = () => {
                             <Typography
                                 variant="subtitle1"
                                 sx={{
-                                    color: theme.palette.secondary.dark
+                                    color: theme.palette.secondary.dark,
                                 }}
                             >
                                 Bajaj Finery
@@ -51,7 +51,7 @@ const BajajAreaChartCard = () => {
                             <Typography
                                 variant="h4"
                                 sx={{
-                                    color: theme.palette.grey[800]
+                                    color: theme.palette.grey[800],
                                 }}
                             >
                                 $1839.00
@@ -63,7 +63,7 @@ const BajajAreaChartCard = () => {
                     <Typography
                         variant="subtitle2"
                         sx={{
-                            color: theme.palette.grey[800]
+                            color: theme.palette.grey[800],
                         }}
                     >
                         10% Profit

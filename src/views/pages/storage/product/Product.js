@@ -16,7 +16,7 @@ import {
     TableHead,
     TablePagination,
     TableRow,
-    Typography
+    Typography,
 } from '@mui/material';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
@@ -27,7 +27,7 @@ import MainCard from 'ui-component/cards/MainCard';
 const Product = () => {
     const [selected, setSelected] = useState({
         malh: '',
-        madv: ''
+        madv: '',
     });
     const [donViToChoose, setDonViToChoose] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState('');
@@ -55,7 +55,7 @@ const Product = () => {
     const handleReset = () => {
         setSelected({
             malh: '',
-            madv: ''
+            madv: '',
         });
         setSelectedOrder('');
         setCurrentPage(0);

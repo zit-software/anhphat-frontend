@@ -34,8 +34,8 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
         right: -95,
         [theme.breakpoints.down('sm')]: {
             top: -105,
-            right: -140
-        }
+            right: -140,
+        },
     },
     '&:before': {
         content: '""',
@@ -49,9 +49,9 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
         opacity: 0.5,
         [theme.breakpoints.down('sm')]: {
             top: -155,
-            right: -70
-        }
-    }
+            right: -70,
+        },
+    },
 }));
 
 // ===========================|| DASHBOARD DEFAULT - EARNING CARD ||=========================== //
@@ -86,7 +86,7 @@ const EarningCard = ({ isLoading }) => {
                                                 ...theme.typography.commonAvatar,
                                                 ...theme.typography.largeAvatar,
                                                 backgroundColor: theme.palette.secondary[800],
-                                                mt: 1
+                                                mt: 1,
                                             }}
                                         >
                                             <img src={EarningIcon} alt="Notification" />
@@ -100,7 +100,7 @@ const EarningCard = ({ isLoading }) => {
                                                 ...theme.typography.mediumAvatar,
                                                 backgroundColor: theme.palette.secondary.dark,
                                                 color: theme.palette.secondary[200],
-                                                zIndex: 1
+                                                zIndex: 1,
                                             }}
                                             aria-controls="menu-earning-card"
                                             aria-haspopup="true"
@@ -117,17 +117,17 @@ const EarningCard = ({ isLoading }) => {
                                             variant="selectedMenu"
                                             anchorOrigin={{
                                                 vertical: 'bottom',
-                                                horizontal: 'right'
+                                                horizontal: 'right',
                                             }}
                                             transformOrigin={{
                                                 vertical: 'top',
-                                                horizontal: 'right'
+                                                horizontal: 'right',
                                             }}
                                         >
                                             <MenuItem onClick={handleClose}>
                                                 <GetAppTwoToneIcon
                                                     sx={{
-                                                        mr: 1.75
+                                                        mr: 1.75,
                                                     }}
                                                 />{' '}
                                                 Import Card
@@ -135,7 +135,7 @@ const EarningCard = ({ isLoading }) => {
                                             <MenuItem onClick={handleClose}>
                                                 <FileCopyTwoToneIcon
                                                     sx={{
-                                                        mr: 1.75
+                                                        mr: 1.75,
                                                     }}
                                                 />{' '}
                                                 Copy Data
@@ -143,7 +143,7 @@ const EarningCard = ({ isLoading }) => {
                                             <MenuItem onClick={handleClose}>
                                                 <PictureAsPdfTwoToneIcon
                                                     sx={{
-                                                        mr: 1.75
+                                                        mr: 1.75,
                                                     }}
                                                 />{' '}
                                                 Export
@@ -151,7 +151,7 @@ const EarningCard = ({ isLoading }) => {
                                             <MenuItem onClick={handleClose}>
                                                 <ArchiveTwoToneIcon
                                                     sx={{
-                                                        mr: 1.75
+                                                        mr: 1.75,
                                                     }}
                                                 />{' '}
                                                 Archive File
@@ -169,7 +169,7 @@ const EarningCard = ({ isLoading }) => {
                                                 fontWeight: 500,
                                                 mr: 1,
                                                 mt: 1.75,
-                                                mb: 0.75
+                                                mb: 0.75,
                                             }}
                                         >
                                             $500.00
@@ -181,13 +181,13 @@ const EarningCard = ({ isLoading }) => {
                                                 cursor: 'pointer',
                                                 ...theme.typography.smallAvatar,
                                                 backgroundColor: theme.palette.secondary[200],
-                                                color: theme.palette.secondary.dark
+                                                color: theme.palette.secondary.dark,
                                             }}
                                         >
                                             <ArrowUpwardIcon
                                                 fontSize="inherit"
                                                 sx={{
-                                                    transform: 'rotate3d(1, 1, 1, 45deg)'
+                                                    transform: 'rotate3d(1, 1, 1, 45deg)',
                                                 }}
                                             />
                                         </Avatar>
@@ -199,7 +199,7 @@ const EarningCard = ({ isLoading }) => {
                                     sx={{
                                         fontSize: '1rem',
                                         fontWeight: 500,
-                                        color: theme.palette.secondary[200]
+                                        color: theme.palette.secondary[200],
                                     }}
                                 >
                                     Total Earning
@@ -214,7 +214,7 @@ const EarningCard = ({ isLoading }) => {
 };
 
 EarningCard.propTypes = {
-    isLoading: PropTypes.bool
+    isLoading: PropTypes.bool,
 };
 
 export default EarningCard;

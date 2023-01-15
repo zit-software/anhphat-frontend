@@ -12,7 +12,7 @@ import LinkIcon from '@mui/icons-material/Link';
 const IFrameWrapper = styled('iframe')(({ theme }) => ({
     height: 'calc(100vh - 210px)',
     border: '1px solid',
-    borderColor: theme.palette.primary.light
+    borderColor: theme.palette.primary.light,
 }));
 
 // =============================|| TABLER ICONS ||============================= //

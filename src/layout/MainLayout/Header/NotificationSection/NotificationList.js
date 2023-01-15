@@ -14,7 +14,7 @@ import {
     ListItemSecondaryAction,
     ListItemText,
     Stack,
-    Typography
+    Typography,
 } from '@mui/material';
 
 // assets
@@ -26,11 +26,11 @@ const ListItemWrapper = styled('div')(({ theme }) => ({
     cursor: 'pointer',
     padding: 16,
     '&:hover': {
-        background: theme.palette.primary.light
+        background: theme.palette.primary.light,
     },
     '& .MuiListItem-root': {
-        padding: 0
-    }
+        padding: 0,
+    },
 }));
 
 // ==============================|| NOTIFICATION LIST ITEM ||============================== //
@@ -40,26 +40,26 @@ const NotificationList = () => {
 
     const chipSX = {
         height: 24,
-        padding: '0 6px'
+        padding: '0 6px',
     };
     const chipErrorSX = {
         ...chipSX,
         color: theme.palette.orange.dark,
         backgroundColor: theme.palette.orange.light,
-        marginRight: '5px'
+        marginRight: '5px',
     };
 
     const chipWarningSX = {
         ...chipSX,
         color: theme.palette.warning.dark,
-        backgroundColor: theme.palette.warning.light
+        backgroundColor: theme.palette.warning.light,
     };
 
     const chipSuccessSX = {
         ...chipSX,
         color: theme.palette.success.dark,
         backgroundColor: theme.palette.success.light,
-        height: 28
+        height: 28,
     };
 
     return (
@@ -70,17 +70,17 @@ const NotificationList = () => {
                 py: 0,
                 borderRadius: '10px',
                 [theme.breakpoints.down('md')]: {
-                    maxWidth: 300
+                    maxWidth: 300,
                 },
                 '& .MuiListItemSecondaryAction-root': {
-                    top: 22
+                    top: 22,
                 },
                 '& .MuiDivider-root': {
-                    my: 0
+                    my: 0,
                 },
                 '& .list-container': {
-                    pl: 7
-                }
+                    pl: 7,
+                },
             }}
         >
             <ListItemWrapper>
@@ -126,7 +126,7 @@ const NotificationList = () => {
                                 color: theme.palette.success.dark,
                                 backgroundColor: theme.palette.success.light,
                                 border: 'none',
-                                borderColor: theme.palette.success.main
+                                borderColor: theme.palette.success.main,
                             }}
                         >
                             <IconBuildingStore stroke={1.5} size="1.3rem" />
@@ -171,7 +171,7 @@ const NotificationList = () => {
                                 color: theme.palette.primary.dark,
                                 backgroundColor: theme.palette.primary.light,
                                 border: 'none',
-                                borderColor: theme.palette.primary.main
+                                borderColor: theme.palette.primary.main,
                             }}
                         >
                             <IconMailbox stroke={1.5} size="1.3rem" />
@@ -242,7 +242,7 @@ const NotificationList = () => {
                             <Grid item xs={12}>
                                 <Card
                                     sx={{
-                                        backgroundColor: theme.palette.secondary.light
+                                        backgroundColor: theme.palette.secondary.light,
                                     }}
                                 >
                                     <CardContent>

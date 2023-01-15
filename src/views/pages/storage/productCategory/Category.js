@@ -23,7 +23,7 @@ import {
     TableRow,
     TextField,
     Tooltip,
-    Typography
+    Typography,
 } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import { IconPencil, IconTrash } from '@tabler/icons';
@@ -48,12 +48,12 @@ const modalStyle = {
     px: 4,
     pb: 3,
     borderRadius: '12px',
-    padding: '16px'
+    padding: '16px',
 };
 const inputContainerStyle = {
     padding: '16px',
     borderRadius: '10px',
-    marginTop: '8px'
+    marginTop: '8px',
 };
 
 const RowSkeleton = () => (
@@ -101,7 +101,7 @@ const InputLoaiHangModal = ({ index, categories, onClose, onSubmit, refetch }) =
     const [loaiHang, setLoaiHang] = useState({
         ten: isUpdating ? categories[index].ten : '',
         gianhap: isUpdating && categories[index].gianhap,
-        giaban: isUpdating && categories[index].giaban
+        giaban: isUpdating && categories[index].giaban,
     });
     const [donvi, setDonVi] = useState(
         isUpdating
@@ -124,7 +124,7 @@ const InputLoaiHangModal = ({ index, categories, onClose, onSubmit, refetch }) =
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            margin: '10px 0'
+                            margin: '10px 0',
                         }}
                     >
                         <CircularProgress />
@@ -141,7 +141,7 @@ const InputLoaiHangModal = ({ index, categories, onClose, onSubmit, refetch }) =
                                 onChange={(e) => {
                                     setLoaiHang({
                                         ...loaiHang,
-                                        ten: e.target.value
+                                        ten: e.target.value,
                                     });
                                 }}
                             />
@@ -160,7 +160,7 @@ const InputLoaiHangModal = ({ index, categories, onClose, onSubmit, refetch }) =
                                             onChange={(e) => {
                                                 setLoaiHang({
                                                     ...loaiHang,
-                                                    gianhap: +e.target.value
+                                                    gianhap: +e.target.value,
                                                 });
                                             }}
                                         />
@@ -177,7 +177,7 @@ const InputLoaiHangModal = ({ index, categories, onClose, onSubmit, refetch }) =
                                             onChange={(e) => {
                                                 setLoaiHang({
                                                     ...loaiHang,
-                                                    giaban: +e.target.value
+                                                    giaban: +e.target.value,
                                                 });
                                             }}
                                             endAdornment={
@@ -221,9 +221,9 @@ const Category = () => {
     const {
         data: categories,
         isLoading,
-        refetch: refetchAllCategories
+        refetch: refetchAllCategories,
     } = useQuery('allProductsCategory', productcategoryservice.getAllCategoriesAndDonvi, {
-        initialData: []
+        initialData: [],
     });
 
     // DELTE MODAL
@@ -271,7 +271,7 @@ const Category = () => {
                 if (!donvi.inDB) {
                     await productcategoryservice.addDonvi({
                         ten: donvi.ten,
-                        malh: maLHCanXuly
+                        malh: maLHCanXuly,
                     });
                 }
             }

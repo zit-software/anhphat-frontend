@@ -17,9 +17,9 @@ const AuthenticationRoutes = {
     children: [
         {
             path: '/auth/login',
-            element: <AuthLogin3 />
-        }
-    ]
+            element: <AuthLogin3 />,
+        },
+    ],
 };
 
 export default AuthenticationRoutes;

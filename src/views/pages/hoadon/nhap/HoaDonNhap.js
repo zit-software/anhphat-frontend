@@ -22,7 +22,7 @@ import {
     TableRow,
     Tabs,
     TextField,
-    Tooltip
+    Tooltip,
 } from '@mui/material';
 import {
     IconEye,
@@ -30,7 +30,7 @@ import {
     IconGitPullRequestClosed,
     IconGitPullRequestDraft,
     IconPencil,
-    IconX
+    IconX,
 } from '@tabler/icons';
 import { Formik } from 'formik';
 import { useState } from 'react';
@@ -59,19 +59,19 @@ const TaoHoaDonModal = ({ open, onClose }) => {
                     initialValues={{
                         nguon: 'Công ty',
                         nguoigiao: '',
-                        ngaynhap: new Date()
+                        ngaynhap: new Date(),
                     }}
                     validationSchema={Yup.object().shape({
                         nguon: Yup.string().required('Vui lòng nhập nguồn nhập hàng'),
                         ngaynhap: Yup.date().required('Vui lòng chọn ngày nhập'),
-                        nguoigiao: Yup.string().required('Vui lòng nhập tên người giao')
+                        nguoigiao: Yup.string().required('Vui lòng nhập tên người giao'),
                     })}
                     onSubmit={async (values) => {
                         try {
                             const data = await (
                                 await HoaDonNhapService.taoHoaDon({
                                     ...values,
-                                    mauser: currentUser.ma
+                                    mauser: currentUser.ma,
                                 })
                             ).data;
                             navigate(`/hoadon/nhap/${data.ma}`);
@@ -127,8 +127,8 @@ const TaoHoaDonModal = ({ open, onClose }) => {
                                             handleChange({
                                                 target: {
                                                     name: 'ngaynhap',
-                                                    value: value?.$d
-                                                }
+                                                    value: value?.$d,
+                                                },
                                             });
                                         }}
                                     />
@@ -157,7 +157,7 @@ const HoaDonNhap = () => {
     const {
         data: phieunhap,
         isLoading,
-        refetch
+        refetch,
     } = useQuery(['phieunhap', page, rowsPerPage, daluu], () =>
         HoaDonNhapService.getAll({ page, limit: rowsPerPage, daluu: JSON.parse(daluu) })
     );
@@ -174,7 +174,7 @@ const HoaDonNhap = () => {
 
     const fixedPhieuNhap = phieunhap || {
         data: [],
-        total: 0
+        total: 0,
     };
 
     return (
@@ -293,7 +293,7 @@ const HoaDonNhap = () => {
                 <Formik
                     initialValues={{ accept: false }}
                     validationSchema={Yup.object().shape({
-                        accept: Yup.bool().equals([true], 'Vui lòng xác nhận để xóa hóa đơn')
+                        accept: Yup.bool().equals([true], 'Vui lòng xác nhận để xóa hóa đơn'),
                     })}
                     onSubmit={handleDelete}
                 >

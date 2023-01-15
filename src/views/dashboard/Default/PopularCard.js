@@ -12,7 +12,7 @@ import {
     Grid,
     Menu,
     MenuItem,
-    Typography
+    Typography,
 } from '@mui/material';
 
 // project imports
@@ -64,7 +64,7 @@ const PopularCard = ({ isLoading }) => {
                                             fontSize="small"
                                             sx={{
                                                 color: theme.palette.primary[200],
-                                                cursor: 'pointer'
+                                                cursor: 'pointer',
                                             }}
                                             aria-controls="menu-popular-card"
                                             aria-haspopup="true"
@@ -79,11 +79,11 @@ const PopularCard = ({ isLoading }) => {
                                             variant="selectedMenu"
                                             anchorOrigin={{
                                                 vertical: 'bottom',
-                                                horizontal: 'right'
+                                                horizontal: 'right',
                                             }}
                                             transformOrigin={{
                                                 vertical: 'top',
-                                                horizontal: 'right'
+                                                horizontal: 'right',
                                             }}
                                         >
                                             <MenuItem onClick={handleClose}> Today</MenuItem>
@@ -97,7 +97,7 @@ const PopularCard = ({ isLoading }) => {
                                 item
                                 xs={12}
                                 sx={{
-                                    pt: '16px !important'
+                                    pt: '16px !important',
                                 }}
                             >
                                 <BajajAreaChartCard />
@@ -139,7 +139,7 @@ const PopularCard = ({ isLoading }) => {
                                                                 backgroundColor:
                                                                     theme.palette.success.light,
                                                                 color: theme.palette.success.dark,
-                                                                ml: 2
+                                                                ml: 2,
                                                             }}
                                                         >
                                                             <KeyboardArrowUpOutlinedIcon
@@ -156,7 +156,7 @@ const PopularCard = ({ isLoading }) => {
                                         <Typography
                                             variant="subtitle2"
                                             sx={{
-                                                color: 'success.dark'
+                                                color: 'success.dark',
                                             }}
                                         >
                                             10% Profit
@@ -200,7 +200,7 @@ const PopularCard = ({ isLoading }) => {
                                                                 backgroundColor:
                                                                     theme.palette.orange.light,
                                                                 color: theme.palette.orange.dark,
-                                                                marginLeft: 1.875
+                                                                marginLeft: 1.875,
                                                             }}
                                                         >
                                                             <KeyboardArrowDownOutlinedIcon
@@ -217,7 +217,7 @@ const PopularCard = ({ isLoading }) => {
                                         <Typography
                                             variant="subtitle2"
                                             sx={{
-                                                color: theme.palette.orange.dark
+                                                color: theme.palette.orange.dark,
                                             }}
                                         >
                                             10% loss
@@ -261,7 +261,7 @@ const PopularCard = ({ isLoading }) => {
                                                                 backgroundColor:
                                                                     theme.palette.success.light,
                                                                 color: theme.palette.success.dark,
-                                                                ml: 2
+                                                                ml: 2,
                                                             }}
                                                         >
                                                             <KeyboardArrowUpOutlinedIcon
@@ -278,7 +278,7 @@ const PopularCard = ({ isLoading }) => {
                                         <Typography
                                             variant="subtitle2"
                                             sx={{
-                                                color: theme.palette.success.dark
+                                                color: theme.palette.success.dark,
                                             }}
                                         >
                                             10% Profit
@@ -322,7 +322,7 @@ const PopularCard = ({ isLoading }) => {
                                                                 backgroundColor:
                                                                     theme.palette.orange.light,
                                                                 color: theme.palette.orange.dark,
-                                                                ml: 2
+                                                                ml: 2,
                                                             }}
                                                         >
                                                             <KeyboardArrowDownOutlinedIcon
@@ -339,7 +339,7 @@ const PopularCard = ({ isLoading }) => {
                                         <Typography
                                             variant="subtitle2"
                                             sx={{
-                                                color: theme.palette.orange.dark
+                                                color: theme.palette.orange.dark,
                                             }}
                                         >
                                             10% loss
@@ -383,7 +383,7 @@ const PopularCard = ({ isLoading }) => {
                                                                 backgroundColor:
                                                                     theme.palette.orange.light,
                                                                 color: theme.palette.orange.dark,
-                                                                ml: 2
+                                                                ml: 2,
                                                             }}
                                                         >
                                                             <KeyboardArrowDownOutlinedIcon
@@ -400,7 +400,7 @@ const PopularCard = ({ isLoading }) => {
                                         <Typography
                                             variant="subtitle2"
                                             sx={{
-                                                color: theme.palette.orange.dark
+                                                color: theme.palette.orange.dark,
                                             }}
                                         >
                                             10% loss
@@ -414,7 +414,7 @@ const PopularCard = ({ isLoading }) => {
                         sx={{
                             p: 1.25,
                             pt: 0,
-                            justifyContent: 'center'
+                            justifyContent: 'center',
                         }}
                     >
                         <Button size="small" disableElevation>
@@ -429,7 +429,7 @@ const PopularCard = ({ isLoading }) => {
 };
 
 PopularCard.propTypes = {
-    isLoading: PropTypes.bool
+    isLoading: PropTypes.bool,
 };
 
 export default PopularCard;

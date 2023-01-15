@@ -21,7 +21,7 @@ const usernamangeService = {
 
     async createAccount(payload) {
         return await request.post('quantri/taikhoan', payload);
-    }
+    },
 };
 
 export default usernamangeService;
