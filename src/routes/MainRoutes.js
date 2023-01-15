@@ -4,6 +4,7 @@ import { lazy } from 'react';
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 import Product from 'views/pages/storage/product/Product';
+import NhaPhanPhoi from 'views/pages/manage/npp/NhaPhanphoi';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -104,7 +105,7 @@ const MainRoutes = {
                 },
                 {
                     path: 'npp',
-                    element: <></>,
+                    element: <NhaPhanPhoi />,
                 },
             ],
         },

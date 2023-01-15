@@ -28,7 +28,7 @@ import {
 } from '@mui/material';
 import { Stack } from '@mui/system';
 import { DatePicker } from '@mui/x-date-pickers';
-import { IconDeviceFloppy, IconFile, IconPencil, IconPlus, IconTrash } from '@tabler/icons';
+import { IconDeviceFloppy, IconFile, IconPencil, IconPlus, IconTrash, IconX } from '@tabler/icons';
 import { Formik } from 'formik';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
@@ -528,6 +528,15 @@ function ChinhSuaHoaDon() {
                                     onClick={handleSubmit}
                                 >
                                     Lưu
+                                </Button>
+
+                                <Button
+                                    type="button"
+                                    color="error"
+                                    startIcon={<IconX />}
+                                    onClick={() => navigate(-1)}
+                                >
+                                    Đóng
                                 </Button>
                             </Stack>
                         </Stack>
