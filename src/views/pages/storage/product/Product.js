@@ -12,6 +12,7 @@ import {
     TableBody,
     TableCell,
     TableContainer,
+    TableFooter,
     TableHead,
     TablePagination,
     TableRow,
@@ -30,7 +31,7 @@ const Product = () => {
     });
     const [donViToChoose, setDonViToChoose] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState('');
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(0);
 
     const { data: allcategories } = useQuery(
         ['allProductsCategory'],
@@ -48,7 +49,7 @@ const Product = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPage]);
     const handleSearch = () => {
-        setCurrentPage(1);
+        setCurrentPage(0);
         refetchAllMH();
     };
     const handleReset = () => {
@@ -57,13 +58,14 @@ const Product = () => {
             madv: ''
         });
         setSelectedOrder('');
-        setCurrentPage(1);
+        setCurrentPage(0);
     };
     const handleChangePage = (event, page) => {
-        setCurrentPage(page + 1);
+        setCurrentPage(page);
     };
+
     return (
-        <MainCard title="Mặt Hàng Tồn Kho" showBreadcrumbs>
+        <MainCard title="Mặt Hàng Tồn Kho">
             <Grid container spacing={2}>
                 <Grid item md={4} alignItems="center" gap={[2, 2]} container>
                     <Typography variant="subtitle1">Tìm kiếm</Typography>
@@ -193,19 +195,27 @@ const Product = () => {
                                     );
                                 })}
                             </TableBody>
+                            <TableFooter>
+                                <TableRow>
+                                    <TablePagination
+                                        colSpan={6}
+                                        count={allMatHang.total}
+                                        rowsPerPageOptions={[10]}
+                                        rowsPerPage={10}
+                                        page={Math.min(currentPage, allMatHang.total)}
+                                        onPageChange={handleChangePage}
+                                        showLastButton
+                                        showFirstButton
+                                        labelDisplayedRows={({ from, to, count }) =>
+                                            `${from}–${to} của ${
+                                                count !== -1 ? count : `nhiều hơn ${to}`
+                                            }`
+                                        }
+                                    />
+                                </TableRow>
+                            </TableFooter>
                         </Table>
                     </TableContainer>
-                    <TablePagination
-                        count={allMatHang.total}
-                        rowsPerPageOptions={[15]}
-                        rowsPerPage={10}
-                        component="div"
-                        page={currentPage - 1}
-                        onPageChange={handleChangePage}
-                        showLastButton
-                        showFirstButton
-                        labelDisplayedRows={({ from, to, count, page }) => `Trang ${page + 1}`}
-                    />
                 </Grid>
             </Grid>
         </MainCard>

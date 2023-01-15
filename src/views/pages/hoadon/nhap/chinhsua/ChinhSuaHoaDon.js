@@ -279,7 +279,6 @@ function ChinhSuaHoaDon() {
 
     return (
         <MainCard
-            showBreadcrumbs
             title={
                 <Badge>
                     <Typography variant="h2">

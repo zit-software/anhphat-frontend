@@ -1,8 +1,8 @@
 // assets
-import { IconBrandChrome, IconHelp, IconUser } from '@tabler/icons';
+import { IconBrandChrome, IconHelp, IconUser, IconBuildingStore } from '@tabler/icons';
 
 // constant
-const icons = { IconBrandChrome, IconHelp, IconUser };
+const icons = { IconBrandChrome, IconHelp, IconUser, IconBuildingStore };
 
 // ==============================|| SAMPLE PAGE & DOCUMENTATION MENU ITEMS ||============================== //
 
@@ -15,8 +15,16 @@ const other = {
             id: 'quantri-taikhoan',
             title: 'Tài khoản',
             type: 'item',
-            url: '/quantri/taikhoan',
+            url: 'quantri/taikhoan',
             icon: icons.IconUser,
+            breadcrumbs: true
+        },
+        {
+            id: 'quantri-npp',
+            title: 'Nhà phân phối',
+            type: 'item',
+            url: 'quantri/npp',
+            icon: icons.IconBuildingStore,
             breadcrumbs: true
         }
     ]

@@ -35,15 +35,7 @@ const MainRoutes = {
                 }
             ]
         },
-        {
-            path: 'quantri',
-            children: [
-                {
-                    path: 'taikhoan',
-                    element: <Accounts />
-                }
-            ]
-        },
+
         {
             path: 'hanghoa',
             children: [
@@ -100,6 +92,15 @@ const MainRoutes = {
                             element: <ChinhSuaHoaDon />
                         }
                     ]
+                }
+            ]
+        },
+        {
+            path: 'quantri',
+            children: [
+                {
+                    path: 'taikhoan',
+                    element: <Accounts />
                 }
             ]
         }

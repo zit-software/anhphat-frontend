@@ -179,7 +179,6 @@ const HoaDonNhap = () => {
 
     return (
         <MainCard
-            showBreadcrumbs
             title="Hóa đơn nhập"
             secondary={
                 <Tooltip title="Tạo hóa đơn">
@@ -272,7 +271,7 @@ const HoaDonNhap = () => {
                             <TablePagination
                                 rowsPerPage={rowsPerPage}
                                 count={fixedPhieuNhap.total}
-                                page={page}
+                                page={Math.min(page, fixedPhieuNhap.total)}
                                 labelRowsPerPage="Dòng trên trang"
                                 onPageChange={(_, value) => setPage(value)}
                                 onRowsPerPageChange={({ target: { value } }) => {

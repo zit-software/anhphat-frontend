@@ -33,7 +33,7 @@ const utilities = {
             type: 'item',
             url: '/hanghoa/loaihang',
             icon: icons.IconPackage,
-            breadcrumbs: false
+            breadcrumbs: true
         },
         {
             id: 'hanghoa-mathang',
@@ -41,7 +41,7 @@ const utilities = {
             type: 'item',
             url: '/hanghoa/mathang',
             icon: icons.IconBox,
-            breadcrumbs: false
+            breadcrumbs: true
         },
         {
             id: 'hoadon',
@@ -54,14 +54,14 @@ const utilities = {
                     title: 'Hóa đơn nhập',
                     type: 'item',
                     url: '/hoadon/nhap',
-                    breadcrumbs: false
+                    breadcrumbs: true
                 },
                 {
                     id: 'hoadon-xuat',
                     title: 'Hóa đơn xuất',
                     type: 'item',
                     url: '/hoadon/xuat',
-                    breadcrumbs: false
+                    breadcrumbs: true
                 }
             ]
         }

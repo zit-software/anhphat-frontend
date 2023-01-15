@@ -19,7 +19,13 @@ const ManageUserForm = ({
 }) => {
     return (
         <Formik
-            initialValues={{ ten: user.ten, mk: '', cfmk: '', laAdmin: user.laAdmin }}
+            initialValues={{
+                ten: user.ten,
+                mk: '',
+                cfmk: '',
+                laAdmin: user.laAdmin,
+                sdt: user.sdt || ''
+            }}
             validationSchema={Yup.object().shape({
                 ten: Yup.string().required('Vui lòng nhập tên'),
                 mk: requiredPassword
@@ -30,23 +36,45 @@ const ManageUserForm = ({
                           .required('Vui lòng nhập lại mật khẩu')
                           .equals([Yup.ref('mk')], 'Mật khẩu nhập lại không khớp')
                     : Yup.string().equals([Yup.ref('mk')], 'Mật khẩu nhập lại không khớp'),
-                laAdmin: Yup.boolean()
+                laAdmin: Yup.boolean(),
+                sdt: Yup.string()
+                    .nullable()
+                    .test(
+                        'len',
+                        'Số điện thoại có độ dài trong 6 đến 11 số',
+                        (v) => !v || (v.length >= 6 && v.length <= 11)
+                    )
             })}
             onSubmit={onSubmit}
         >
             {({ values, errors, handleChange, handleSubmit }) => (
                 <form noValidate style={{ padding: 20 }} onSubmit={handleSubmit}>
                     <FormControl fullWidth sx={{ mb: 2 }} error={!!errors.ten}>
-                        <InputLabel htmlFor="ten">Tên</InputLabel>
+                        <InputLabel htmlFor="ten">Tên nhân viên</InputLabel>
                         <OutlinedInput
                             id="ten"
                             name="ten"
-                            label="Tên"
-                            placeholder="Nhập tên nhân viên"
+                            label="Tên nhân viên"
+                            placeholder="Nguyễn Văn A"
+                            autoComplete="name"
                             value={values.ten}
                             onChange={handleChange}
                         />
-                        {errors.ten && <FormHelperText error>{errors.ten}</FormHelperText>}
+                        <FormHelperText error>{errors.ten}</FormHelperText>
+                    </FormControl>
+
+                    <FormControl fullWidth sx={{ mb: 2 }} error={!!errors.sdt}>
+                        <InputLabel htmlFor="sdt">Số điện thoại</InputLabel>
+                        <OutlinedInput
+                            id="sdt"
+                            name="sdt"
+                            label="Số điện thoại"
+                            placeholder="0123456789"
+                            autoComplete="tel"
+                            value={values.sdt}
+                            onChange={handleChange}
+                        />
+                        <FormHelperText error>{errors.sdt}</FormHelperText>
                     </FormControl>
 
                     <FormControl fullWidth sx={{ mb: 2 }}>
@@ -57,11 +85,12 @@ const ManageUserForm = ({
                             label="Mật khẩu"
                             type="password"
                             placeholder="Nhập mật khẩu"
+                            autoComplete="new-password"
                             value={values.mk}
                             error={!!errors.mk}
                             onChange={handleChange}
                         />
-                        {errors.mk && <FormHelperText error>{errors.mk}</FormHelperText>}
+                        <FormHelperText error>{errors.mk}</FormHelperText>
                     </FormControl>
 
                     <FormControl fullWidth sx={{ mb: 2 }}>
@@ -71,13 +100,14 @@ const ManageUserForm = ({
                             name="cfmk"
                             label="Xác nhận mật khẩu"
                             type="password"
+                            autoComplete="new-password"
                             placeholder="Xác nhận mật khẩu"
                             value={values.cfmk}
                             error={!!errors.cfmk}
                             onChange={handleChange}
                         />
 
-                        {errors.cfmk && <FormHelperText error>{errors.cfmk}</FormHelperText>}
+                        <FormHelperText error>{errors.cfmk}</FormHelperText>
                     </FormControl>
 
                     <FormControlLabel
@@ -87,7 +117,7 @@ const ManageUserForm = ({
                         checked={values.laAdmin}
                         onChange={handleChange}
                     />
-                    {errors.laAdmin && <FormHelperText error>{errors.laAdmin}</FormHelperText>}
+                    <FormHelperText error>{errors.laAdmin}</FormHelperText>
 
                     <Divider />
 
