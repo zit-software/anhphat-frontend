@@ -59,7 +59,7 @@ const NhaPhanPhoi = () => {
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell size="small">Mã</TableCell>
+                                    <TableCell>Mã</TableCell>
                                     <TableCell>Tên</TableCell>
                                     <TableCell>Tỉnh</TableCell>
                                     <TableCell>SĐT</TableCell>
@@ -81,20 +81,20 @@ const NhaPhanPhoi = () => {
                                 ) : (
                                     allNPP.data.map((npp) => (
                                         <TableRow key={npp.ma}>
-                                            <TableCell>{npp.ma}</TableCell>
-                                            <TableCell>{npp.ten}</TableCell>
+                                            <TableCell size="small">{npp.ma}</TableCell>
+                                            <TableCell size="medium">{npp.ten}</TableCell>
                                             <TableCell>{npp.tinh}</TableCell>
                                             <TableCell>{npp.sdt}</TableCell>
                                             <TableCell>{npp.chietkhau}</TableCell>
                                             <TableCell>{npp.diem}</TableCell>
-                                            <TableCell>
+                                            <TableCell size="small">
                                                 <Tooltip onClick={() => {}} title="Chỉnh sửa">
                                                     <IconButton aria-label="edit">
                                                         <IconPencil color="blue" />
                                                     </IconButton>
                                                 </Tooltip>
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell size="small">
                                                 <Tooltip onClick={() => {}} title="Xóa">
                                                     <IconButton aria-label="delete">
                                                         <IconTrash color="red" />

@@ -6,7 +6,9 @@ import {
     IconWindmill,
     IconPackage,
     IconBox,
-    IconFileInvoice
+    IconFileInvoice,
+    IconBuildingStore,
+    IconGift
 } from '@tabler/icons';
 
 // constant
@@ -17,7 +19,9 @@ const icons = {
     IconWindmill,
     IconPackage,
     IconBox,
-    IconFileInvoice
+    IconFileInvoice,
+    IconBuildingStore,
+    IconGift
 };
 
 // ==============================|| UTILITIES MENU ITEMS ||============================== //
@@ -78,7 +82,7 @@ const utilities = [
                 title: 'Nhà Phân Phối',
                 type: 'item',
                 url: '/npp/thongtin',
-                icon: icons.IconPackage,
+                icon: icons.IconBuildingStore,
                 breadcrumbs: false
             },
             {
@@ -86,7 +90,7 @@ const utilities = [
                 title: 'Điểm Tích Lũy',
                 type: 'item',
                 url: '/npp/diem',
-                icon: icons.IconPackage,
+                icon: icons.IconGift,
                 breadcrumbs: false
             }
         ]
