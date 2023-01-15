@@ -13,7 +13,7 @@ const productcategoryservice = {
             const allDonViRes = await request.get(`/donvi?loaihang=${loaihang.ma}`);
             result.push({
                 ...loaihang,
-                donvi: allDonViRes.data
+                donvi: allDonViRes.data,
             });
         }
         return result;
@@ -67,7 +67,7 @@ const productcategoryservice = {
         } catch (error) {
             console.log(error);
         }
-    }
+    },
 };
 
 export default productcategoryservice;

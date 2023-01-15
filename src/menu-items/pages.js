@@ -3,7 +3,7 @@ import { IconKey } from '@tabler/icons';
 
 // constant
 const icons = {
-    IconKey
+    IconKey,
 };
 
 // ==============================|| EXTRA PAGES MENU ITEMS ||============================== //
@@ -26,18 +26,18 @@ const pages = {
                     title: 'Login',
                     type: 'item',
                     url: '/pages/login/login3',
-                    target: true
+                    target: true,
                 },
                 {
                     id: 'register3',
                     title: 'Register',
                     type: 'item',
                     url: '/pages/register/register3',
-                    target: true
-                }
-            ]
-        }
-    ]
+                    target: true,
+                },
+            ],
+        },
+    ],
 };
 
 export default pages;

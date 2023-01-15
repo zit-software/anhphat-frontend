@@ -22,7 +22,7 @@ const linkSX = {
     color: 'grey.900',
     textDecoration: 'none',
     alignContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
 };
 
 // ==============================|| BREADCRUMBS ||============================== //
@@ -47,7 +47,7 @@ const Breadcrumbs = ({
         marginTop: `-${theme.spacing(0.25)}`,
         width: '1rem',
         height: '1rem',
-        color: theme.palette.secondary.main
+        color: theme.palette.secondary.main,
     };
 
     const [main, setMain] = useState();
@@ -118,7 +118,7 @@ const Breadcrumbs = ({
                     textDecoration: 'none',
                     alignContent: 'center',
                     alignItems: 'center',
-                    color: 'grey.500'
+                    color: 'grey.500',
                 }}
             >
                 {icons && <ItemIcon style={iconStyle} />}
@@ -135,14 +135,14 @@ const Breadcrumbs = ({
                         border: card === false ? 'none' : '1px solid',
                         borderColor: theme.palette.primary[200] + 75,
                         background:
-                            card === false ? 'transparent' : theme.palette.background.default
+                            card === false ? 'transparent' : theme.palette.background.default,
                     }}
                     {...others}
                 >
                     <Box
                         sx={{
                             p: 2,
-                            pl: card === false ? 0 : 2
+                            pl: card === false ? 0 : 2,
                         }}
                     >
                         <Grid
@@ -157,7 +157,7 @@ const Breadcrumbs = ({
                                     <Typography
                                         variant="h3"
                                         sx={{
-                                            fontWeight: 500
+                                            fontWeight: 500,
                                         }}
                                     >
                                         {item.title}
@@ -170,8 +170,8 @@ const Breadcrumbs = ({
                                         '& .MuiBreadcrumbs-separator': {
                                             width: 16,
                                             ml: 1.25,
-                                            mr: 1.25
-                                        }
+                                            mr: 1.25,
+                                        },
                                     }}
                                     aria-label="breadcrumb"
                                     maxItems={maxItems || 8}
@@ -189,7 +189,7 @@ const Breadcrumbs = ({
                                             <HomeIcon
                                                 sx={{
                                                     ...iconStyle,
-                                                    mr: 0
+                                                    mr: 0,
                                                 }}
                                             />
                                         )}
@@ -204,7 +204,7 @@ const Breadcrumbs = ({
                                     <Typography
                                         variant="h3"
                                         sx={{
-                                            fontWeight: 500
+                                            fontWeight: 500,
                                         }}
                                     >
                                         {item.title}
@@ -217,7 +217,7 @@ const Breadcrumbs = ({
                         <Divider
                             sx={{
                                 borderColor: theme.palette.primary.main,
-                                mb: gridSpacing
+                                mb: gridSpacing,
                             }}
                         />
                     )}
@@ -239,7 +239,7 @@ Breadcrumbs.propTypes = {
     rightAlign: PropTypes.bool,
     separator: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
     title: PropTypes.bool,
-    titleBottom: PropTypes.bool
+    titleBottom: PropTypes.bool,
 };
 
 export default Breadcrumbs;

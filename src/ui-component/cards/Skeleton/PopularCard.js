@@ -226,7 +226,7 @@ const PopularCard = () => (
                 p: 1.25,
                 display: 'flex',
                 pt: 0,
-                justifyContent: 'center'
+                justifyContent: 'center',
             }}
         >
             <Skeleton variant="rectangular" height={25} width={75} />

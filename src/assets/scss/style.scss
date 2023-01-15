@@ -131,3 +131,21 @@ a {
     text-decoration: none;
     color: unset;
 }
+
+.milk-box {
+    animation: milk-box 1s ease infinite;
+}
+
+@keyframes milk-box {
+    0%,
+    100% {
+        transform: translate(1px, 1px) rotate(10deg);
+    }
+    50% {
+    }
+
+    25%,
+    75% {
+        transform: translate(-1px, -1px) rotate(-10deg);
+    }
+}

@@ -14,7 +14,7 @@ class HoaDonNhapService {
     static async getAll({ page, limit, daluu } = {}) {
         return await (
             await request.get('nhaphang/phieunhap', {
-                params: { page, limit, daluu }
+                params: { page, limit, daluu },
             })
         ).data;
     }

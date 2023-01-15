@@ -24,11 +24,11 @@ import {
     TableHead,
     TableRow,
     TextField,
-    Typography
+    Typography,
 } from '@mui/material';
 import { Stack } from '@mui/system';
 import { DatePicker } from '@mui/x-date-pickers';
-import { IconDeviceFloppy, IconFile, IconPencil, IconPlus, IconTrash } from '@tabler/icons';
+import { IconDeviceFloppy, IconFile, IconPencil, IconPlus, IconTrash, IconX } from '@tabler/icons';
 import { Formik } from 'formik';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
@@ -66,7 +66,7 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
                 malh: value.malh || products[0]?.ma,
                 soluong: value.soluong || 1,
                 hsd: value.hsd || new Date(),
-                gianhap: value.gianhap || 0
+                gianhap: value.gianhap || 0,
             }}
             validationSchema={Yup.object().shape({
                 malh: Yup.string().required('Vui lòng chọn sản phẩm'),
@@ -80,7 +80,7 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
                     .required('Vui lòng nhập số lượng')
                     .min(1, 'Số lượng phải từ 1'),
                 hsd: Yup.date().required('Vui lòng chọn hạn sử dụng'),
-                gianhap: Yup.number().required('Vui lòng nhập giá nhập').min(0, 'Giá phải từ 0')
+                gianhap: Yup.number().required('Vui lòng nhập giá nhập').min(0, 'Giá phải từ 0'),
             })}
             validateOnChange
             validate={onChange}
@@ -142,8 +142,8 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
                                 handleChange({
                                     target: {
                                         name: 'hsd',
-                                        value: value.$d
-                                    }
+                                        value: value.$d,
+                                    },
                                 })
                             }
                         />
@@ -239,7 +239,7 @@ function ChinhSuaHoaDon() {
         data: phieunhap,
         isLoading,
         isError,
-        refetch
+        refetch,
     } = useQuery(['phieunhap', params.ma], () => HoaDonNhapService.layPhieuNhap(params.ma));
     const [saveModal, setSaveModal] = useState(null);
 
@@ -269,7 +269,7 @@ function ChinhSuaHoaDon() {
                 malh: row.mathang.malh,
                 madv: row.mathang.madv,
                 hsd: row.mathang.hsd,
-                gianhap: row.mathang.gianhap
+                gianhap: row.mathang.gianhap,
             }))
         );
     }, [phieunhap, isLoading]);
@@ -279,14 +279,13 @@ function ChinhSuaHoaDon() {
 
     return (
         <MainCard
-            showBreadcrumbs
             title={
                 <Badge>
                     <Typography variant="h2">
                         Hóa đơn nhập{' '}
                         <span
                             style={{
-                                color: '#aaa'
+                                color: '#aaa',
                             }}
                         >
                             #{phieunhap.ma}
@@ -297,14 +296,14 @@ function ChinhSuaHoaDon() {
         >
             <Formik
                 initialValues={{
-                    ...phieunhap
+                    ...phieunhap,
                 }}
                 validationSchema={Yup.object().shape({
                     nguon: Yup.string().required('Vui lòng nhập nguồn nhập hàng'),
                     ngaynhap: Yup.date('Vui lòng nhập đúng định dạng DD/MM/YYYY').required(
                         'Vui lòng chọn ngày nhập'
                     ),
-                    nguoigiao: Yup.string().required('Vui lòng nhập tên người giao')
+                    nguoigiao: Yup.string().required('Vui lòng nhập tên người giao'),
                 })}
                 onSubmit={setSaveModal}
             >
@@ -415,8 +414,8 @@ function ChinhSuaHoaDon() {
                                                 handleChange({
                                                     target: {
                                                         name: 'ngaynhap',
-                                                        value: value?.$d
-                                                    }
+                                                        value: value?.$d,
+                                                    },
                                                 });
                                             }}
                                         />
@@ -529,6 +528,15 @@ function ChinhSuaHoaDon() {
                                     onClick={handleSubmit}
                                 >
                                     Lưu
+                                </Button>
+
+                                <Button
+                                    type="button"
+                                    color="error"
+                                    startIcon={<IconX />}
+                                    onClick={() => navigate(-1)}
+                                >
+                                    Đóng
                                 </Button>
                             </Stack>
                         </Stack>

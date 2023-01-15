@@ -21,7 +21,7 @@ export const strengthColor = (count) => {
     if (count < 6)
         return {
             label: 'Strong',
-            color: value.successDark
+            color: value.successDark,
         };
     return { label: 'Poor', color: value.errorMain };
 };

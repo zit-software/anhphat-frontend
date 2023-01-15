@@ -19,7 +19,7 @@ import {
     OutlinedInput,
     TextField,
     Typography,
-    useMediaQuery
+    useMediaQuery,
 } from '@mui/material';
 
 // third party
@@ -84,7 +84,7 @@ const FirebaseRegister = ({ ...others }) => {
                             sx={{
                                 color: 'grey.700',
                                 backgroundColor: theme.palette.grey[50],
-                                borderColor: theme.palette.grey[100]
+                                borderColor: theme.palette.grey[100],
                             }}
                         >
                             <Box
@@ -92,8 +92,8 @@ const FirebaseRegister = ({ ...others }) => {
                                     mr: {
                                         xs: 1,
                                         sm: 2,
-                                        width: 20
-                                    }
+                                        width: 20,
+                                    },
                                 }}
                             >
                                 <img
@@ -102,7 +102,7 @@ const FirebaseRegister = ({ ...others }) => {
                                     width={16}
                                     height={16}
                                     style={{
-                                        marginRight: matchDownSM ? 8 : 16
+                                        marginRight: matchDownSM ? 8 : 16,
                                     }}
                                 />
                             </Box>
@@ -114,7 +114,7 @@ const FirebaseRegister = ({ ...others }) => {
                     <Box
                         sx={{
                             alignItems: 'center',
-                            display: 'flex'
+                            display: 'flex',
                         }}
                     >
                         <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
@@ -128,7 +128,7 @@ const FirebaseRegister = ({ ...others }) => {
                                 borderColor: `${theme.palette.grey[100]} !important`,
                                 color: `${theme.palette.grey[900]}!important`,
                                 fontWeight: 500,
-                                borderRadius: `${customization.borderRadius}px`
+                                borderRadius: `${customization.borderRadius}px`,
                             }}
                             disableRipple
                             disabled
@@ -149,14 +149,14 @@ const FirebaseRegister = ({ ...others }) => {
                 initialValues={{
                     email: '',
                     password: '',
-                    submit: null
+                    submit: null,
                 }}
                 validationSchema={Yup.object().shape({
                     email: Yup.string()
                         .email('Must be a valid email')
                         .max(255)
                         .required('Email is required'),
-                    password: Yup.string().max(255).required('Password is required')
+                    password: Yup.string().max(255).required('Password is required'),
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
@@ -169,7 +169,7 @@ const FirebaseRegister = ({ ...others }) => {
                         if (scriptedRef.current) {
                             setStatus({ success: false });
                             setErrors({
-                                submit: err.message
+                                submit: err.message,
                             });
                             setSubmitting(false);
                         }
@@ -183,7 +183,7 @@ const FirebaseRegister = ({ ...others }) => {
                     handleSubmit,
                     isSubmitting,
                     touched,
-                    values
+                    values,
                 }) => (
                     <form noValidate onSubmit={handleSubmit} {...others}>
                         <Grid container spacing={matchDownSM ? 0 : 2}>
@@ -196,7 +196,7 @@ const FirebaseRegister = ({ ...others }) => {
                                     type="text"
                                     defaultValue=""
                                     sx={{
-                                        ...theme.typography.customInput
+                                        ...theme.typography.customInput,
                                     }}
                                 />
                             </Grid>
@@ -209,7 +209,7 @@ const FirebaseRegister = ({ ...others }) => {
                                     type="text"
                                     defaultValue=""
                                     sx={{
-                                        ...theme.typography.customInput
+                                        ...theme.typography.customInput,
                                     }}
                                 />
                             </Grid>
@@ -218,7 +218,7 @@ const FirebaseRegister = ({ ...others }) => {
                             fullWidth
                             error={Boolean(touched.email && errors.email)}
                             sx={{
-                                ...theme.typography.customInput
+                                ...theme.typography.customInput,
                             }}
                         >
                             <InputLabel htmlFor="outlined-adornment-email-register">
@@ -244,7 +244,7 @@ const FirebaseRegister = ({ ...others }) => {
                             fullWidth
                             error={Boolean(touched.password && errors.password)}
                             sx={{
-                                ...theme.typography.customInput
+                                ...theme.typography.customInput,
                             }}
                         >
                             <InputLabel htmlFor="outlined-adornment-password-register">
@@ -293,12 +293,12 @@ const FirebaseRegister = ({ ...others }) => {
                                         <Grid item>
                                             <Box
                                                 style={{
-                                                    backgroundColor: level?.color
+                                                    backgroundColor: level?.color,
                                                 }}
                                                 sx={{
                                                     width: 85,
                                                     height: 8,
-                                                    borderRadius: '7px'
+                                                    borderRadius: '7px',
                                                 }}
                                             />
                                         </Grid>

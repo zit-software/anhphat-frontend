@@ -2,37 +2,15 @@ import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
 
 // material-ui
-import {
-    Breadcrumbs,
-    Card,
-    CardContent,
-    CardHeader,
-    Divider,
-    Typography,
-    Link
-} from '@mui/material';
+import { Card, CardContent, CardHeader, Divider, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { Link as LinkRouter, useLocation } from 'react-router-dom';
 
 // constant
 const headerSX = {
-    '& .MuiCardHeader-action': { mr: 0 }
+    '& .MuiCardHeader-action': { mr: 0 },
 };
 
 // ==============================|| CUSTOM MAIN CARD ||============================== //
-
-const breadcrumbNameMap = {
-    '/loaihang': 'Loại hàng',
-    '/hoadon': 'Hóa đơn',
-    '/hoadon/nhap': 'Hóa đơn nhập',
-    '/hoadon/xuat': 'Hóa đơn xuất',
-    '/mathang': 'Mặt hàng',
-    '/quantri': 'Quản trị',
-    '/quantri/taikhoan': 'Quản trị tài khoản',
-    '/hanghoa': 'Hàng hóa',
-    '/hanghoa/loaihang': 'Loại hàng',
-    '/hanghoa/mathang': 'Mặt hàng'
-};
 
 const MainCard = forwardRef(
     (
@@ -48,14 +26,11 @@ const MainCard = forwardRef(
             shadow,
             sx = {},
             title,
-            showBreadcrumbs,
             ...others
         },
         ref
     ) => {
         const theme = useTheme();
-        const location = useLocation();
-        const pathnames = location.pathname.split('/').filter((x) => x);
 
         return (
             <Card
@@ -67,32 +42,11 @@ const MainCard = forwardRef(
                     ':hover': {
                         boxShadow: boxShadow
                             ? shadow || '0 2px 14px 0 rgb(32 40 45 / 8%)'
-                            : 'inherit'
+                            : 'inherit',
                     },
-                    ...sx
+                    ...sx,
                 }}
             >
-                {showBreadcrumbs && (
-                    <Breadcrumbs sx={{ pl: 3, pr: 3, pt: 3 }}>
-                        <Link to="/" color="inherit" component={LinkRouter}>
-                            Home
-                        </Link>
-                        {pathnames.map((value, index) => {
-                            const last = index === pathnames.length - 1;
-                            const to = `/${pathnames.slice(0, index + 1).join('/')}`;
-
-                            return last ? (
-                                <Typography color="text.primary" key={to}>
-                                    {breadcrumbNameMap[to]}
-                                </Typography>
-                            ) : (
-                                <LinkRouter underline="hover" color="inherit" to={to} key={to}>
-                                    {breadcrumbNameMap[to]}
-                                </LinkRouter>
-                            );
-                        })}
-                    </Breadcrumbs>
-                )}
                 {/* card header and action */}
                 {!darkTitle && title && (
                     <CardHeader sx={headerSX} title={title} action={secondary} />
@@ -131,7 +85,7 @@ MainCard.propTypes = {
     secondary: PropTypes.oneOfType([PropTypes.node, PropTypes.string, PropTypes.object]),
     shadow: PropTypes.string,
     sx: PropTypes.object,
-    title: PropTypes.oneOfType([PropTypes.node, PropTypes.string, PropTypes.object])
+    title: PropTypes.oneOfType([PropTypes.node, PropTypes.string, PropTypes.object]),
 };
 
 export default MainCard;

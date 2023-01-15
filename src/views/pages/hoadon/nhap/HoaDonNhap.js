@@ -16,13 +16,12 @@ import {
     TableBody,
     TableCell,
     TableContainer,
-    TableFooter,
     TableHead,
     TablePagination,
     TableRow,
     Tabs,
     TextField,
-    Tooltip
+    Tooltip,
 } from '@mui/material';
 import {
     IconEye,
@@ -30,7 +29,7 @@ import {
     IconGitPullRequestClosed,
     IconGitPullRequestDraft,
     IconPencil,
-    IconX
+    IconX,
 } from '@tabler/icons';
 import { Formik } from 'formik';
 import { useState } from 'react';
@@ -44,7 +43,7 @@ import HoaDonNhapService from 'services/hoadonnhap.service';
 import MainCard from 'ui-component/cards/MainCard';
 import RowSkeleton from 'ui-component/skeletons/RowSkeleton';
 
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import dayjs from 'utils/dayjs';
 
 const TaoHoaDonModal = ({ open, onClose }) => {
@@ -59,19 +58,19 @@ const TaoHoaDonModal = ({ open, onClose }) => {
                     initialValues={{
                         nguon: 'Công ty',
                         nguoigiao: '',
-                        ngaynhap: new Date()
+                        ngaynhap: new Date(),
                     }}
                     validationSchema={Yup.object().shape({
                         nguon: Yup.string().required('Vui lòng nhập nguồn nhập hàng'),
                         ngaynhap: Yup.date().required('Vui lòng chọn ngày nhập'),
-                        nguoigiao: Yup.string().required('Vui lòng nhập tên người giao')
+                        nguoigiao: Yup.string().required('Vui lòng nhập tên người giao'),
                     })}
                     onSubmit={async (values) => {
                         try {
                             const data = await (
                                 await HoaDonNhapService.taoHoaDon({
                                     ...values,
-                                    mauser: currentUser.ma
+                                    mauser: currentUser.ma,
                                 })
                             ).data;
                             navigate(`/hoadon/nhap/${data.ma}`);
@@ -127,8 +126,8 @@ const TaoHoaDonModal = ({ open, onClose }) => {
                                             handleChange({
                                                 target: {
                                                     name: 'ngaynhap',
-                                                    value: value?.$d
-                                                }
+                                                    value: value?.$d,
+                                                },
                                             });
                                         }}
                                     />
@@ -150,14 +149,16 @@ const TaoHoaDonModal = ({ open, onClose }) => {
 const HoaDonNhap = () => {
     const [open, setOpen] = useState(false);
     const [page, setPage] = useState(0);
-    const [daluu, setDaLuu] = useState('false');
     const [rowsPerPage, setRowPerPage] = useState(10);
     const [selectedDelete, setSelectedDelete] = useState(null);
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const daluu = JSON.parse(searchParams.get('daluu') || 'false');
 
     const {
         data: phieunhap,
         isLoading,
-        refetch
+        refetch,
     } = useQuery(['phieunhap', page, rowsPerPage, daluu], () =>
         HoaDonNhapService.getAll({ page, limit: rowsPerPage, daluu: JSON.parse(daluu) })
     );
@@ -174,12 +175,11 @@ const HoaDonNhap = () => {
 
     const fixedPhieuNhap = phieunhap || {
         data: [],
-        total: 0
+        total: 0,
     };
 
     return (
         <MainCard
-            showBreadcrumbs
             title="Hóa đơn nhập"
             secondary={
                 <Tooltip title="Tạo hóa đơn">
@@ -189,7 +189,14 @@ const HoaDonNhap = () => {
                 </Tooltip>
             }
         >
-            <Tabs value={daluu} onChange={(_, v) => setDaLuu(v)}>
+            <Tabs
+                value={JSON.stringify(daluu)}
+                onChange={(_, daluu) =>
+                    setSearchParams({
+                        daluu,
+                    })
+                }
+            >
                 <Tab
                     value="false"
                     label="Chưa lưu"
@@ -203,6 +210,24 @@ const HoaDonNhap = () => {
                     iconPosition="start"
                 />
             </Tabs>
+            <TablePagination
+                size="small"
+                showFirstButton
+                showLastButton
+                component="div"
+                rowsPerPage={rowsPerPage}
+                count={fixedPhieuNhap.total}
+                page={Math.min(page, fixedPhieuNhap.total)}
+                labelRowsPerPage="Dòng trên trang"
+                onPageChange={(_, value) => setPage(value)}
+                onRowsPerPageChange={({ target: { value } }) => {
+                    setRowPerPage(value);
+                    setPage(0);
+                }}
+                labelDisplayedRows={({ from, to, count }) =>
+                    `${from}–${to} của ${count !== -1 ? count : `nhiều hơn ${to}`}`
+                }
+            />
             <TableContainer sx={{ maxHeight: '70vh' }}>
                 <Table stickyHeader size="small">
                     <TableHead>
@@ -244,7 +269,10 @@ const HoaDonNhap = () => {
                                         {dayjs(phieu.updatedAt).format('DD/MM/YYYY')}
                                     </TableCell>
                                     <TableCell>
-                                        <Link to={{ pathname: '/hoadon/nhap/' + phieu.ma }}>
+                                        <Link
+                                            target="_blank"
+                                            to={{ pathname: '/hoadon/nhap/' + phieu.ma }}
+                                        >
                                             {phieu.daluu ? (
                                                 <IconEye />
                                             ) : (
@@ -266,25 +294,6 @@ const HoaDonNhap = () => {
                             ))
                         )}
                     </TableBody>
-
-                    <TableFooter>
-                        <TableRow>
-                            <TablePagination
-                                rowsPerPage={rowsPerPage}
-                                count={fixedPhieuNhap.total}
-                                page={page}
-                                labelRowsPerPage="Dòng trên trang"
-                                onPageChange={(_, value) => setPage(value)}
-                                onRowsPerPageChange={({ target: { value } }) => {
-                                    setRowPerPage(value);
-                                    setPage(0);
-                                }}
-                                labelDisplayedRows={({ from, to, count }) =>
-                                    `${from}–${to} của ${count !== -1 ? count : `nhiều hơn ${to}`}`
-                                }
-                            />
-                        </TableRow>
-                    </TableFooter>
                 </Table>
             </TableContainer>
 
@@ -294,7 +303,7 @@ const HoaDonNhap = () => {
                 <Formik
                     initialValues={{ accept: false }}
                     validationSchema={Yup.object().shape({
-                        accept: Yup.bool().equals([true], 'Vui lòng xác nhận để xóa hóa đơn')
+                        accept: Yup.bool().equals([true], 'Vui lòng xác nhận để xóa hóa đơn'),
                     })}
                     onSubmit={handleDelete}
                 >

@@ -26,8 +26,8 @@ const Header = ({ handleLeftDrawerToggle }) => {
                     width: 228,
                     display: 'flex',
                     [theme.breakpoints.down('md')]: {
-                        width: 'auto'
-                    }
+                        width: 'auto',
+                    },
                 }}
             >
                 <Box
@@ -35,9 +35,9 @@ const Header = ({ handleLeftDrawerToggle }) => {
                     sx={{
                         display: {
                             xs: 'none',
-                            md: 'block'
+                            md: 'block',
                         },
-                        flexGrow: 1
+                        flexGrow: 1,
                     }}
                 >
                     <LogoSection />
@@ -45,7 +45,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
                 <ButtonBase
                     sx={{
                         borderRadius: '12px',
-                        overflow: 'hidden'
+                        overflow: 'hidden',
                     }}
                 >
                     <Avatar
@@ -58,8 +58,8 @@ const Header = ({ handleLeftDrawerToggle }) => {
                             color: theme.palette.secondary.dark,
                             '&:hover': {
                                 background: theme.palette.secondary.dark,
-                                color: theme.palette.secondary.light
-                            }
+                                color: theme.palette.secondary.light,
+                            },
                         }}
                         onClick={handleLeftDrawerToggle}
                         color="inherit"
@@ -82,7 +82,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
 };
 
 Header.propTypes = {
-    handleLeftDrawerToggle: PropTypes.func
+    handleLeftDrawerToggle: PropTypes.func,
 };
 
 export default Header;

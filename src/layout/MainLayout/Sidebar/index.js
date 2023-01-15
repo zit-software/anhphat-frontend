@@ -24,14 +24,14 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
         <>
             <Box
                 sx={{
-                    display: { xs: 'block', md: 'none' }
+                    display: { xs: 'block', md: 'none' },
                 }}
             >
                 <Box
                     sx={{
                         display: 'flex',
                         p: 2,
-                        mx: 'auto'
+                        mx: 'auto',
                     }}
                 >
                     <LogoSection />
@@ -43,7 +43,7 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
                     style={{
                         height: !matchUpMd ? 'calc(100vh - 56px)' : 'calc(100vh - 88px)',
                         paddingLeft: '16px',
-                        paddingRight: '16px'
+                        paddingRight: '16px',
                     }}
                 >
                     <MenuList />
@@ -66,7 +66,7 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
             component="nav"
             sx={{
                 flexShrink: { md: 0 },
-                width: matchUpMd ? drawerWidth : 'auto'
+                width: matchUpMd ? drawerWidth : 'auto',
             }}
             aria-label="mailbox folders"
         >
@@ -83,9 +83,9 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
                         color: theme.palette.text.primary,
                         borderRight: 'none',
                         [theme.breakpoints.up('md')]: {
-                            top: '88px'
-                        }
-                    }
+                            top: '88px',
+                        },
+                    },
                 }}
                 ModalProps={{ keepMounted: true }}
                 color="inherit"
@@ -99,7 +99,7 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
 Sidebar.propTypes = {
     drawerOpen: PropTypes.bool,
     drawerToggle: PropTypes.func,
-    window: PropTypes.object
+    window: PropTypes.object,
 };
 
 export default Sidebar;

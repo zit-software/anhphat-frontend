@@ -16,7 +16,7 @@ import {
     TableRow,
     TextField,
     Tooltip,
-    Typography
+    Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { IconPencil } from '@tabler/icons';
@@ -40,12 +40,12 @@ const modalStyle = {
     px: 4,
     pb: 3,
     borderRadius: '12px',
-    padding: '16px'
+    padding: '16px',
 };
 const inputContainerStyle = {
     padding: '16px',
     borderRadius: '10px',
-    marginTop: '8px'
+    marginTop: '8px',
 };
 const RowSkeleton = () => (
     <TableRow>
@@ -77,14 +77,14 @@ const _InputModal = ({ open, onClose, onSubmit, refetch }) => {
         productcategoryservice.getAllDonVisByLoaiHang,
         {
             initialData: [],
-            enabled: !!selectedloaihang
+            enabled: !!selectedloaihang,
         }
     );
     const { data: categories } = useQuery(
         'allProductsCategoryAddQuyCach',
         productcategoryservice.getAllCategories,
         {
-            initialData: []
+            initialData: [],
         }
     );
     return (
@@ -99,7 +99,7 @@ const _InputModal = ({ open, onClose, onSubmit, refetch }) => {
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            margin: '10px 0'
+                            margin: '10px 0',
                         }}
                     >
                         <CircularProgress />
@@ -210,13 +210,13 @@ const QuyCach = () => {
     const [editingOriginalData, setEditingOriginData] = useState({
         dv1: '',
         dv2: '',
-        soluong: ''
+        soluong: '',
     });
     const [editingData, setEditingData] = useState({ ...editingOriginalData });
     const {
         data: quycachs,
         isLoading,
-        refetch: refetchAllQuyCachs
+        refetch: refetchAllQuyCachs,
     } = useQuery('allQuyCachs', productcategoryservice.getAllQuyCachs, { initialData: [] });
 
     const handleStartEdit = (quycach) => {
@@ -224,12 +224,12 @@ const QuyCach = () => {
         setEditingOriginData({
             dv1: quycach.dv1.ten,
             dv2: quycach.dv2.ten,
-            soluong: quycach.soluong
+            soluong: quycach.soluong,
         });
         setEditingData({
             dv1: quycach.dv1.ten,
             dv2: quycach.dv2.ten,
-            soluong: quycach.soluong
+            soluong: quycach.soluong,
         });
     };
 
@@ -240,7 +240,7 @@ const QuyCach = () => {
             await productcategoryservice.updateDonVi(newQuyCach.madv2, { ten: newQuyCach.dv2 });
         if (newQuyCach.soluong !== editingOriginalData.soluong)
             await productcategoryservice.updateQuyCach(newQuyCach.ma, {
-                soluong: newQuyCach.soluong
+                soluong: newQuyCach.soluong,
             });
         refetchAllQuyCachs();
         handleCancelEdit();
@@ -251,12 +251,12 @@ const QuyCach = () => {
         setEditingOriginData({
             dv1: '',
             dv2: '',
-            soluong: ''
+            soluong: '',
         });
         setEditingData({
             dv1: '',
             dv2: '',
-            soluong: ''
+            soluong: '',
         });
     };
 
@@ -313,7 +313,7 @@ const QuyCach = () => {
                                                     onChange={(e) => {
                                                         setEditingData({
                                                             ...editingData,
-                                                            dv1: e.target.value
+                                                            dv1: e.target.value,
                                                         });
                                                     }}
                                                     defaultValue={editingOriginalData.dv1}
@@ -328,7 +328,7 @@ const QuyCach = () => {
                                                     onChange={(e) => {
                                                         setEditingData({
                                                             ...editingData,
-                                                            dv2: e.target.value
+                                                            dv2: e.target.value,
                                                         });
                                                     }}
                                                     defaultValue={editingOriginalData.dv2}
@@ -343,7 +343,7 @@ const QuyCach = () => {
                                                     onChange={(e) => {
                                                         setEditingData({
                                                             ...editingData,
-                                                            soluong: e.target.value
+                                                            soluong: e.target.value,
                                                         });
                                                     }}
                                                     defaultValue={editingOriginalData.soluong}
@@ -361,7 +361,7 @@ const QuyCach = () => {
                                                 <div
                                                     style={{
                                                         display: 'flex',
-                                                        flexDirection: 'row'
+                                                        flexDirection: 'row',
                                                     }}
                                                 >
                                                     <Button
@@ -370,7 +370,7 @@ const QuyCach = () => {
                                                                 ...editingData,
                                                                 ma: quycach.ma,
                                                                 madv1: quycach.dv1.ma,
-                                                                madv2: quycach.dv2.ma
+                                                                madv2: quycach.dv2.ma,
                                                             });
                                                         }}
                                                         variant="text"

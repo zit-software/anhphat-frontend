@@ -4,8 +4,7 @@ import { lazy } from 'react';
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 import Product from 'views/pages/storage/product/Product';
-import NhaPhanPhoi from 'views/pages/npp/NPP';
-import Points from 'views/pages/npp/Points';
+import NhaPhanPhoi from 'views/pages/manage/npp/NhaPhanphoi';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -26,99 +25,91 @@ const MainRoutes = {
     children: [
         {
             path: '/',
-            element: <DashboardDefault />
+            element: <DashboardDefault />,
         },
         {
             path: 'dashboard',
             children: [
                 {
                     path: 'default',
-                    element: <DashboardDefault />
-                }
-            ]
+                    element: <DashboardDefault />,
+                },
+            ],
+        },
+
+        {
+            path: 'hanghoa',
+            children: [
+                {
+                    path: 'loaihang',
+                    element: <ProductCategory />,
+                },
+                {
+                    path: 'mathang',
+                    element: <Product />,
+                },
+            ],
+        },
+        {
+            path: 'hoadon',
+            children: [
+                {
+                    path: 'nhap',
+                    element: <HoaDonNhap />,
+                },
+            ],
+        },
+        {
+            path: 'hoadon',
+            children: [
+                {
+                    path: 'nhap',
+                    children: [
+                        {
+                            path: ':ma',
+                            element: <ChinhSuaHoaDon />,
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            path: 'hoadon',
+            children: [
+                {
+                    path: 'nhap',
+                    element: <HoaDonNhap />,
+                },
+            ],
+        },
+        {
+            path: 'hoadon',
+            children: [
+                {
+                    path: 'nhap',
+                    children: [
+                        {
+                            path: ':ma',
+                            element: <ChinhSuaHoaDon />,
+                        },
+                    ],
+                },
+            ],
         },
         {
             path: 'quantri',
             children: [
                 {
                     path: 'taikhoan',
-                    element: <Accounts />
-                }
-            ]
-        },
-        {
-            path: 'hanghoa',
-            children: [
-                {
-                    path: 'loaihang',
-                    element: <ProductCategory />
+                    element: <Accounts />,
                 },
                 {
-                    path: 'mathang',
-                    element: <Product />
-                }
-            ]
-        },
-        {
-            path: 'hoadon',
-            children: [
-                {
-                    path: 'nhap',
-                    element: <HoaDonNhap />
-                }
-            ]
-        },
-        {
-            path: 'hoadon',
-            children: [
-                {
-                    path: 'nhap',
-                    children: [
-                        {
-                            path: ':ma',
-                            element: <ChinhSuaHoaDon />
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            path: 'hoadon',
-            children: [
-                {
-                    path: 'nhap',
-                    element: <HoaDonNhap />
-                }
-            ]
-        },
-        {
-            path: 'hoadon',
-            children: [
-                {
-                    path: 'nhap',
-                    children: [
-                        {
-                            path: ':ma',
-                            element: <ChinhSuaHoaDon />
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            path: 'npp',
-            children: [
-                {
-                    path: 'thongtin',
-                    element: <NhaPhanPhoi />
+                    path: 'npp',
+                    element: <NhaPhanPhoi />,
                 },
-                {
-                    path: 'diem',
-                    element: <Points />
-                }
-            ]
-        }
-    ]
+            ],
+        },
+    ],
 };
 
 export default MainRoutes;

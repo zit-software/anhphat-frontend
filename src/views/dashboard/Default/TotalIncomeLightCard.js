@@ -9,7 +9,7 @@ import {
     ListItem,
     ListItemAvatar,
     ListItemText,
-    Typography
+    Typography,
 } from '@mui/material';
 
 // project imports
@@ -31,7 +31,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
         background: `linear-gradient(210.04deg, ${theme.palette.warning.dark} -50.94%, rgba(144, 202, 249, 0) 83.49%)`,
         borderRadius: '50%',
         top: -30,
-        right: -180
+        right: -180,
     },
     '&:before': {
         content: '""',
@@ -41,8 +41,8 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
         background: `linear-gradient(140.9deg, ${theme.palette.warning.dark} -14.02%, rgba(144, 202, 249, 0) 70.50%)`,
         borderRadius: '50%',
         top: -160,
-        right: -130
-    }
+        right: -130,
+    },
 }));
 
 // ==============================|| DASHBOARD - TOTAL INCOME LIGHT CARD ||============================== //
@@ -66,7 +66,7 @@ const TotalIncomeLightCard = ({ isLoading }) => {
                                             ...theme.typography.commonAvatar,
                                             ...theme.typography.largeAvatar,
                                             backgroundColor: theme.palette.warning.light,
-                                            color: theme.palette.warning.dark
+                                            color: theme.palette.warning.dark,
                                         }}
                                     >
                                         <StorefrontTwoToneIcon fontSize="inherit" />
@@ -76,7 +76,7 @@ const TotalIncomeLightCard = ({ isLoading }) => {
                                     sx={{
                                         py: 0,
                                         mt: 0.45,
-                                        mb: 0.45
+                                        mb: 0.45,
                                     }}
                                     primary={<Typography variant="h4">$203k</Typography>}
                                     secondary={
@@ -84,7 +84,7 @@ const TotalIncomeLightCard = ({ isLoading }) => {
                                             variant="subtitle2"
                                             sx={{
                                                 color: theme.palette.grey[500],
-                                                mt: 0.5
+                                                mt: 0.5,
                                             }}
                                         >
                                             Total Income
@@ -101,7 +101,7 @@ const TotalIncomeLightCard = ({ isLoading }) => {
 };
 
 TotalIncomeLightCard.propTypes = {
-    isLoading: PropTypes.bool
+    isLoading: PropTypes.bool,
 };
 
 export default TotalIncomeLightCard;

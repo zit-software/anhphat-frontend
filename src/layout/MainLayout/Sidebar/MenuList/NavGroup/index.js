@@ -37,7 +37,7 @@ const NavGroup = ({ item }) => {
                         <Typography
                             variant="caption"
                             sx={{
-                                ...theme.typography.menuCaption
+                                ...theme.typography.menuCaption,
                             }}
                             display="block"
                             gutterBottom
@@ -47,7 +47,7 @@ const NavGroup = ({ item }) => {
                                 <Typography
                                     variant="caption"
                                     sx={{
-                                        ...theme.typography.subMenuCaption
+                                        ...theme.typography.subMenuCaption,
                                     }}
                                     display="block"
                                     gutterBottom
@@ -69,7 +69,7 @@ const NavGroup = ({ item }) => {
 };
 
 NavGroup.propTypes = {
-    item: PropTypes.object
+    item: PropTypes.object,
 };
 
 export default NavGroup;

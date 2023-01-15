@@ -9,7 +9,7 @@ const accessToken = {
         window?.localStorage.setItem(config.tokenName, newToken);
 
         request.defaults.headers['authorization'] = 'Bearer ' + newToken;
-    }
+    },
 };
 
 export default accessToken;

@@ -21,7 +21,7 @@ const ColorBox = ({ bgcolor, title, data, dark }) => (
                     alignItems: 'center',
                     py: 4.5,
                     bgcolor,
-                    color: dark ? 'grey.800' : '#ffffff'
+                    color: dark ? 'grey.800' : '#ffffff',
                 }}
             >
                 {title && (
@@ -51,7 +51,7 @@ ColorBox.propTypes = {
     bgcolor: PropTypes.string,
     title: PropTypes.string,
     data: PropTypes.object.isRequired,
-    dark: PropTypes.bool
+    dark: PropTypes.bool,
 };
 
 // ===============================|| UI COLOR ||=============================== //
@@ -70,7 +70,7 @@ const UIColor = () => (
                                 bgcolor="primary.light"
                                 data={{
                                     label: 'Blue-50',
-                                    color: '#E3F2FD'
+                                    color: '#E3F2FD',
                                 }}
                                 title="primary.light"
                                 dark
@@ -81,7 +81,7 @@ const UIColor = () => (
                                 bgcolor="primary.200"
                                 data={{
                                     label: 'Blue-200',
-                                    color: '#90CAF9'
+                                    color: '#90CAF9',
                                 }}
                                 title="primary[200]"
                                 dark
@@ -92,7 +92,7 @@ const UIColor = () => (
                                 bgcolor="primary.main"
                                 data={{
                                     label: 'Blue-500',
-                                    color: '#2196F3'
+                                    color: '#2196F3',
                                 }}
                                 title="primary.main"
                             />
@@ -102,7 +102,7 @@ const UIColor = () => (
                                 bgcolor="primary.dark"
                                 data={{
                                     label: 'Blue-600',
-                                    color: '#1E88E5'
+                                    color: '#1E88E5',
                                 }}
                                 title="primary.dark"
                             />
@@ -112,7 +112,7 @@ const UIColor = () => (
                                 bgcolor="primary.800"
                                 data={{
                                     label: 'Blue-800',
-                                    color: '#1565C0'
+                                    color: '#1565C0',
                                 }}
                                 title="primary[800]"
                             />
@@ -128,7 +128,7 @@ const UIColor = () => (
                                 bgcolor="secondary.light"
                                 data={{
                                     label: 'DeepPurple-50',
-                                    color: '#ede7f6'
+                                    color: '#ede7f6',
                                 }}
                                 title="secondary.light"
                                 dark
@@ -139,7 +139,7 @@ const UIColor = () => (
                                 bgcolor="secondary.200"
                                 data={{
                                     label: 'DeepPurple-200',
-                                    color: '#b39ddb'
+                                    color: '#b39ddb',
                                 }}
                                 title="secondary[200]"
                                 dark
@@ -150,7 +150,7 @@ const UIColor = () => (
                                 bgcolor="secondary.main"
                                 data={{
                                     label: 'DeepPurple-500',
-                                    color: '#673ab7'
+                                    color: '#673ab7',
                                 }}
                                 title="secondary.main"
                             />
@@ -160,7 +160,7 @@ const UIColor = () => (
                                 bgcolor="secondary.dark"
                                 data={{
                                     label: 'DeepPurple-600',
-                                    color: '#5e35b1'
+                                    color: '#5e35b1',
                                 }}
                                 title="secondary.dark"
                             />
@@ -170,7 +170,7 @@ const UIColor = () => (
                                 bgcolor="secondary.800"
                                 data={{
                                     label: 'DeepPurple-800',
-                                    color: '#4527a0'
+                                    color: '#4527a0',
                                 }}
                                 title="secondary[800]"
                             />
@@ -186,7 +186,7 @@ const UIColor = () => (
                                 bgcolor="success.light"
                                 data={{
                                     label: 'Green-A100',
-                                    color: '#b9f6ca'
+                                    color: '#b9f6ca',
                                 }}
                                 title="success.light"
                                 dark
@@ -197,7 +197,7 @@ const UIColor = () => (
                                 bgcolor="success.main"
                                 data={{
                                     label: 'Green-A200',
-                                    color: '#69f0ae'
+                                    color: '#69f0ae',
                                 }}
                                 title="success[200]"
                             />
@@ -207,7 +207,7 @@ const UIColor = () => (
                                 bgcolor="success.main"
                                 data={{
                                     label: 'Green-A400',
-                                    color: '#69f0ae'
+                                    color: '#69f0ae',
                                 }}
                                 title="success.main"
                             />
@@ -217,7 +217,7 @@ const UIColor = () => (
                                 bgcolor="success.dark"
                                 data={{
                                     label: 'Green-A700',
-                                    color: '#00c853'
+                                    color: '#00c853',
                                 }}
                                 title="success.dark"
                             />
@@ -233,7 +233,7 @@ const UIColor = () => (
                                 bgcolor="orange.light"
                                 data={{
                                     label: 'DeepOrange-50',
-                                    color: '#fbe9e7'
+                                    color: '#fbe9e7',
                                 }}
                                 title="orange.light"
                                 dark
@@ -244,7 +244,7 @@ const UIColor = () => (
                                 bgcolor="orange.main"
                                 data={{
                                     label: 'DeepOrange-200',
-                                    color: '#ffab91'
+                                    color: '#ffab91',
                                 }}
                                 title="orange.main"
                             />
@@ -254,7 +254,7 @@ const UIColor = () => (
                                 bgcolor="orange.dark"
                                 data={{
                                     label: 'DeepOrange-800',
-                                    color: '#d84315'
+                                    color: '#d84315',
                                 }}
                                 title="orange.dark"
                             />
@@ -270,7 +270,7 @@ const UIColor = () => (
                                 bgcolor="error.light"
                                 data={{
                                     label: 'Red-50',
-                                    color: '#ef9a9a'
+                                    color: '#ef9a9a',
                                 }}
                                 title="error.light"
                                 dark
@@ -281,7 +281,7 @@ const UIColor = () => (
                                 bgcolor="error.main"
                                 data={{
                                     label: 'Red-200',
-                                    color: '#f44336'
+                                    color: '#f44336',
                                 }}
                                 title="error.main"
                             />
@@ -291,7 +291,7 @@ const UIColor = () => (
                                 bgcolor="error.dark"
                                 data={{
                                     label: 'Red-800',
-                                    color: '#c62828'
+                                    color: '#c62828',
                                 }}
                                 title="error.dark"
                             />
@@ -307,7 +307,7 @@ const UIColor = () => (
                                 bgcolor="warning.light"
                                 data={{
                                     label: 'Amber-50',
-                                    color: '#b9f6ca'
+                                    color: '#b9f6ca',
                                 }}
                                 title="warning.light"
                                 dark
@@ -318,7 +318,7 @@ const UIColor = () => (
                                 bgcolor="warning.main"
                                 data={{
                                     label: 'Amber-100',
-                                    color: '#ffe57f'
+                                    color: '#ffe57f',
                                 }}
                                 title="warning.main"
                                 dark
@@ -329,7 +329,7 @@ const UIColor = () => (
                                 bgcolor="warning.dark"
                                 data={{
                                     label: 'Amber-500',
-                                    color: '#FFC107'
+                                    color: '#FFC107',
                                 }}
                                 title="warning.dark"
                             />
@@ -345,7 +345,7 @@ const UIColor = () => (
                                 bgcolor="grey.50"
                                 data={{
                                     label: 'Grey-50',
-                                    color: '#fafafa'
+                                    color: '#fafafa',
                                 }}
                                 title="grey[50]"
                                 dark
@@ -356,7 +356,7 @@ const UIColor = () => (
                                 bgcolor="grey.100"
                                 data={{
                                     label: 'Grey-100',
-                                    color: '#f5f5f5'
+                                    color: '#f5f5f5',
                                 }}
                                 title="grey[100]"
                                 dark
@@ -367,7 +367,7 @@ const UIColor = () => (
                                 bgcolor="grey.200"
                                 data={{
                                     label: 'Grey-200',
-                                    color: '#eeeeee'
+                                    color: '#eeeeee',
                                 }}
                                 title="grey[200]"
                                 dark
@@ -378,7 +378,7 @@ const UIColor = () => (
                                 bgcolor="grey.300"
                                 data={{
                                     label: 'Grey-300',
-                                    color: '#e0e0e0'
+                                    color: '#e0e0e0',
                                 }}
                                 title="grey[300]"
                                 dark
@@ -389,7 +389,7 @@ const UIColor = () => (
                                 bgcolor="grey.500"
                                 data={{
                                     label: 'Grey-500',
-                                    color: '#9e9e9e'
+                                    color: '#9e9e9e',
                                 }}
                                 title="grey[500]"
                             />
@@ -399,7 +399,7 @@ const UIColor = () => (
                                 bgcolor="grey.700"
                                 data={{
                                     label: 'Grey-600',
-                                    color: '#757575'
+                                    color: '#757575',
                                 }}
                                 title="grey[600]"
                             />
@@ -409,7 +409,7 @@ const UIColor = () => (
                                 bgcolor="grey.700"
                                 data={{
                                     label: 'Grey-700',
-                                    color: '#616161'
+                                    color: '#616161',
                                 }}
                                 title="grey[700]"
                             />
@@ -419,7 +419,7 @@ const UIColor = () => (
                                 bgcolor="grey.900"
                                 data={{
                                     label: 'Grey-900',
-                                    color: '#212121'
+                                    color: '#212121',
                                 }}
                                 title="grey[900]"
                             />
@@ -429,7 +429,7 @@ const UIColor = () => (
                                 bgcolor="#fff"
                                 data={{
                                     label: 'Pure White',
-                                    color: '#ffffff'
+                                    color: '#ffffff',
                                 }}
                                 title="Pure White"
                                 dark

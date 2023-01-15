@@ -19,7 +19,7 @@ import {
     TableRow,
     Toolbar,
     Tooltip,
-    Typography
+    Typography,
 } from '@mui/material';
 import { IconPencil, IconShield, IconTrash, IconUser, IconUserPlus, IconX } from '@tabler/icons';
 import { useState } from 'react';
@@ -107,7 +107,7 @@ const Accounts = () => {
     const {
         data: accounts,
         isLoading,
-        refetch
+        refetch,
     } = useQuery(['userList'], () => usernamangeService.getAllUsers());
 
     const handleOpenDeleteDialog = (index) => {
@@ -159,7 +159,6 @@ const Accounts = () => {
     return (
         <MainCard
             title="Tài khoản"
-            showBreadcrumbs
             secondary={
                 <Tooltip title="Tạo tài khoản">
                     <IconButton onClick={handleOpenCreateModal}>
@@ -174,6 +173,7 @@ const Accounts = () => {
                         <TableRow>
                             <TableCell>Mã số</TableCell>
                             <TableCell>Tên tài khoản</TableCell>
+                            <TableCell>Số điện thoại</TableCell>
                             <TableCell>Quyền</TableCell>
                             <TableCell>Ngày tạo</TableCell>
                             <TableCell>Chỉnh sửa lần cuối</TableCell>
@@ -195,6 +195,7 @@ const Accounts = () => {
                                 <TableRow key={user.ma} hover>
                                     <TableCell>{user.ma}</TableCell>
                                     <TableCell>{user.ten}</TableCell>
+                                    <TableCell>{user.sdt}</TableCell>
                                     <TableCell>
                                         {user.laAdmin ? <IconShield /> : <IconUser />}
                                     </TableCell>

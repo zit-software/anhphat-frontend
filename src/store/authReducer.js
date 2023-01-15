@@ -4,7 +4,7 @@
 import * as actionTypes from './actions';
 
 export const initialState = {
-    user: {}
+    user: {},
 };
 
 const authReducer = (state = initialState, action) => {
@@ -12,7 +12,7 @@ const authReducer = (state = initialState, action) => {
         case actionTypes.SET_USER:
             return {
                 ...state,
-                user: action.payload
+                user: action.payload,
             };
         default:
             return state;

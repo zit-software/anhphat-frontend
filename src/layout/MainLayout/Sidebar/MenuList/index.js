@@ -4,11 +4,16 @@ import { Typography } from '@mui/material';
 // project imports
 import NavGroup from './NavGroup';
 import menuItem from 'menu-items';
+import { useSelector } from 'react-redux';
 
 // ==============================|| SIDEBAR MENU LIST ||============================== //
 
 const MenuList = () => {
+    const currentUser = useSelector((state) => state.auth.user);
+
     const navItems = menuItem.items.map((item) => {
+        if (item.id === 'quantri' && !currentUser.laAdmin) return null;
+
         switch (item.type) {
             case 'group':
                 return <NavGroup key={item.id} item={item} />;

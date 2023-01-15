@@ -7,36 +7,36 @@ const chartData = {
         chart: {
             id: 'support-chart',
             sparkline: {
-                enabled: true
-            }
+                enabled: true,
+            },
         },
         dataLabels: {
-            enabled: false
+            enabled: false,
         },
         stroke: {
             curve: 'smooth',
-            width: 1
+            width: 1,
         },
         tooltip: {
             fixed: {
-                enabled: false
+                enabled: false,
             },
             x: {
-                show: false
+                show: false,
             },
             y: {
-                title: 'Ticket '
+                title: 'Ticket ',
             },
             marker: {
-                show: false
-            }
-        }
+                show: false,
+            },
+        },
     },
     series: [
         {
-            data: [0, 15, 10, 50, 30, 40, 25]
-        }
-    ]
+            data: [0, 15, 10, 50, 30, 40, 25],
+        },
+    ],
 };
 
 export default chartData;

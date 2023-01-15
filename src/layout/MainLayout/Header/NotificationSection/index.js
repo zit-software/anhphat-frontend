@@ -18,7 +18,7 @@ import {
     Stack,
     TextField,
     Typography,
-    useMediaQuery
+    useMediaQuery,
 } from '@mui/material';
 
 // third-party
@@ -36,20 +36,20 @@ import { IconBell } from '@tabler/icons';
 const status = [
     {
         value: 'all',
-        label: 'All Notification'
+        label: 'All Notification',
     },
     {
         value: 'new',
-        label: 'New'
+        label: 'New',
     },
     {
         value: 'unread',
-        label: 'Unread'
+        label: 'Unread',
     },
     {
         value: 'other',
-        label: 'Other'
-    }
+        label: 'Other',
+    },
 ];
 
 // ==============================|| NOTIFICATION ||============================== //
@@ -95,8 +95,8 @@ const NotificationSection = () => {
                     ml: 2,
                     mr: 3,
                     [theme.breakpoints.down('md')]: {
-                        mr: 2
-                    }
+                        mr: 2,
+                    },
                 }}
             >
                 <ButtonBase sx={{ borderRadius: '12px' }}>
@@ -110,8 +110,8 @@ const NotificationSection = () => {
                             color: theme.palette.secondary.dark,
                             '&[aria-controls="menu-list-grow"],&:hover': {
                                 background: theme.palette.secondary.dark,
-                                color: theme.palette.secondary.light
-                            }
+                                color: theme.palette.secondary.light,
+                            },
                         }}
                         ref={anchorRef}
                         aria-controls={open ? 'menu-list-grow' : undefined}
@@ -135,10 +135,10 @@ const NotificationSection = () => {
                         {
                             name: 'offset',
                             options: {
-                                offset: [matchesXs ? 5 : 0, 20]
-                            }
-                        }
-                    ]
+                                offset: [matchesXs ? 5 : 0, 20],
+                            },
+                        },
+                    ],
                 }}
             >
                 {({ TransitionProps }) => (
@@ -164,7 +164,7 @@ const NotificationSection = () => {
                                                 justifyContent="space-between"
                                                 sx={{
                                                     pt: 2,
-                                                    px: 2
+                                                    px: 2,
                                                 }}
                                             >
                                                 <Grid item>
@@ -178,7 +178,7 @@ const NotificationSection = () => {
                                                             sx={{
                                                                 color: theme.palette.background
                                                                     .default,
-                                                                bgcolor: theme.palette.warning.dark
+                                                                bgcolor: theme.palette.warning.dark,
                                                             }}
                                                         />
                                                     </Stack>
@@ -200,7 +200,7 @@ const NotificationSection = () => {
                                                 style={{
                                                     height: '100%',
                                                     maxHeight: 'calc(100vh - 205px)',
-                                                    overflowX: 'hidden'
+                                                    overflowX: 'hidden',
                                                 }}
                                             >
                                                 <Grid container direction="column" spacing={2}>
@@ -208,7 +208,7 @@ const NotificationSection = () => {
                                                         <Box
                                                             sx={{
                                                                 px: 2,
-                                                                pt: 0.25
+                                                                pt: 0.25,
                                                             }}
                                                         >
                                                             <TextField
@@ -218,7 +218,7 @@ const NotificationSection = () => {
                                                                 value={value}
                                                                 onChange={handleChange}
                                                                 SelectProps={{
-                                                                    native: true
+                                                                    native: true,
                                                                 }}
                                                             >
                                                                 {status.map((option) => (
@@ -235,7 +235,7 @@ const NotificationSection = () => {
                                                     <Grid item xs={12} p={0}>
                                                         <Divider
                                                             sx={{
-                                                                my: 0
+                                                                my: 0,
                                                             }}
                                                         />
                                                     </Grid>
@@ -248,7 +248,7 @@ const NotificationSection = () => {
                                     <CardActions
                                         sx={{
                                             p: 1.25,
-                                            justifyContent: 'center'
+                                            justifyContent: 'center',
                                         }}
                                     >
                                         <Button size="small" disableElevation>

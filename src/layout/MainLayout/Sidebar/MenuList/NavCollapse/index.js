@@ -10,7 +10,7 @@ import {
     ListItemButton,
     ListItemIcon,
     ListItemText,
-    Typography
+    Typography,
 } from '@mui/material';
 
 // project imports
@@ -57,14 +57,14 @@ const NavCollapse = ({ menu, level }) => {
             size="1.3rem"
             style={{
                 marginTop: 'auto',
-                marginBottom: 'auto'
+                marginBottom: 'auto',
             }}
         />
     ) : (
         <FiberManualRecordIcon
             sx={{
                 width: selected === menu.id ? 8 : 6,
-                height: selected === menu.id ? 8 : 6
+                height: selected === menu.id ? 8 : 6,
             }}
             fontSize={level > 0 ? 'inherit' : 'medium'}
         />
@@ -79,7 +79,7 @@ const NavCollapse = ({ menu, level }) => {
                     alignItems: 'flex-start',
                     backgroundColor: level > 1 ? 'transparent !important' : 'inherit',
                     py: level > 1 ? 1 : 1.25,
-                    pl: `${level * 24}px`
+                    pl: `${level * 24}px`,
                 }}
                 selected={selected === menu.id}
                 onClick={handleClick}
@@ -87,7 +87,7 @@ const NavCollapse = ({ menu, level }) => {
                 <ListItemIcon
                     sx={{
                         my: 'auto',
-                        minWidth: !menu.icon ? 18 : 36
+                        minWidth: !menu.icon ? 18 : 36,
                     }}
                 >
                     {menuIcon}
@@ -107,7 +107,7 @@ const NavCollapse = ({ menu, level }) => {
                             <Typography
                                 variant="caption"
                                 sx={{
-                                    ...theme.typography.subMenuCaption
+                                    ...theme.typography.subMenuCaption,
                                 }}
                                 display="block"
                                 gutterBottom
@@ -123,7 +123,7 @@ const NavCollapse = ({ menu, level }) => {
                         size="1rem"
                         style={{
                             marginTop: 'auto',
-                            marginBottom: 'auto'
+                            marginBottom: 'auto',
                         }}
                     />
                 ) : (
@@ -132,7 +132,7 @@ const NavCollapse = ({ menu, level }) => {
                         size="1rem"
                         style={{
                             marginTop: 'auto',
-                            marginBottom: 'auto'
+                            marginBottom: 'auto',
                         }}
                     />
                 )}
@@ -151,8 +151,8 @@ const NavCollapse = ({ menu, level }) => {
                             height: '100%',
                             width: '1px',
                             opacity: 1,
-                            background: theme.palette.primary.light
-                        }
+                            background: theme.palette.primary.light,
+                        },
                     }}
                 >
                     {menus}
@@ -164,7 +164,7 @@ const NavCollapse = ({ menu, level }) => {
 
 NavCollapse.propTypes = {
     menu: PropTypes.object,
-    level: PropTypes.number
+    level: PropTypes.number,
 };
 
 export default NavCollapse;
