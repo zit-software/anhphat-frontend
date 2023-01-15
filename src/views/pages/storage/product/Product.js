@@ -1,5 +1,6 @@
 import {
     Button,
+    CircularProgress,
     FormControl,
     FormControlLabel,
     Grid,
@@ -37,7 +38,11 @@ const Product = () => {
         productcategoryservice.getAllCategoriesAndDonvi,
         { initialData: [] }
     );
-    const { data: allMatHang, refetch: refetchAllMH } = useQuery(
+    const {
+        data: allMatHang,
+        isLoading,
+        refetch: refetchAllMH
+    } = useQuery(
         ['allMH', { ...selected, order: selectedOrder, page: currentPage }],
         productcategoryservice.getAllMatHang,
         { enabled: false, initialData: { data: [], total: 0 } }
@@ -163,49 +168,65 @@ const Product = () => {
                 </Grid>
 
                 <Grid item md={8}>
-                    <TableContainer>
-                        <Table size="small">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Loại Hàng</TableCell>
-                                    <TableCell>Đơn Vị</TableCell>
-                                    <TableCell>Số Lượng</TableCell>
-                                    <TableCell>Ngày Nhập</TableCell>
-                                    <TableCell>Hạn Sử Dụng</TableCell>
-                                    <TableCell>Giá Nhập</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {allMatHang.data.map((mh, index) => {
-                                    return (
-                                        <TableRow key={index}>
-                                            <TableCell>{mh.loaihang.ten}</TableCell>
-                                            <TableCell>{mh.donvi.ten}</TableCell>
-                                            <TableCell>{mh.soluong}</TableCell>
-                                            <TableCell>
-                                                {dayjs(mh.ngaynhap).format('DD-MM-YYYY')}
-                                            </TableCell>
-                                            <TableCell>
-                                                {dayjs(mh.hsd).format('DD-MM-YYYY')}
-                                            </TableCell>
-                                            <TableCell>{mh.gianhap}</TableCell>
+                    {isLoading ? (
+                        <div
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center'
+                            }}
+                        >
+                            {' '}
+                            <CircularProgress />
+                        </div>
+                    ) : (
+                        <>
+                            <TableContainer>
+                                <Table size="small">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>Loại Hàng</TableCell>
+                                            <TableCell>Đơn Vị</TableCell>
+                                            <TableCell>Số Lượng</TableCell>
+                                            <TableCell>Ngày Nhập</TableCell>
+                                            <TableCell>Hạn Sử Dụng</TableCell>
+                                            <TableCell>Giá Nhập</TableCell>
                                         </TableRow>
-                                    );
-                                })}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                    <TablePagination
-                        count={allMatHang.total}
-                        rowsPerPageOptions={[10]}
-                        rowsPerPage={10}
-                        component="div"
-                        page={currentPage - 1}
-                        onPageChange={handleChangePage}
-                        showLastButton
-                        showFirstButton
-                        labelDisplayedRows={({ from, to, count, page }) => `Trang ${page + 1}`}
-                    />
+                                    </TableHead>
+                                    <TableBody>
+                                        {allMatHang.data.map((mh, index) => {
+                                            return (
+                                                <TableRow key={index}>
+                                                    <TableCell>{mh.loaihang.ten}</TableCell>
+                                                    <TableCell>{mh.donvi.ten}</TableCell>
+                                                    <TableCell>{mh.soluong}</TableCell>
+                                                    <TableCell>
+                                                        {dayjs(mh.ngaynhap).format('DD-MM-YYYY')}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        {dayjs(mh.hsd).format('DD-MM-YYYY')}
+                                                    </TableCell>
+                                                    <TableCell>{mh.gianhap}</TableCell>
+                                                </TableRow>
+                                            );
+                                        })}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                            <TablePagination
+                                count={allMatHang.total}
+                                rowsPerPageOptions={[10]}
+                                rowsPerPage={10}
+                                component="div"
+                                page={currentPage - 1}
+                                onPageChange={handleChangePage}
+                                showLastButton
+                                showFirstButton
+                                labelDisplayedRows={({ from, to, count, page }) =>
+                                    `Trang ${page + 1}`
+                                }
+                            />
+                        </>
+                    )}
                 </Grid>
             </Grid>
         </MainCard>
