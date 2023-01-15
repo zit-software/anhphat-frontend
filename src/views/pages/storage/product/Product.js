@@ -12,7 +12,6 @@ import {
     TableBody,
     TableCell,
     TableContainer,
-    TableFooter,
     TableHead,
     TablePagination,
     TableRow,
@@ -72,7 +71,7 @@ const Product = () => {
                     <Stack spacing={1}>
                         <Typography variant="subtitle1">Tìm kiếm</Typography>
 
-                        <FormControl fullWidth>
+                        <FormControl fullWidth size="small">
                             <InputLabel id="loaihang">Loại Hàng</InputLabel>
                             <Select
                                 value={selected.malh}
@@ -99,7 +98,7 @@ const Product = () => {
                             </Select>
                         </FormControl>
 
-                        <FormControl fullWidth>
+                        <FormControl fullWidth size="small">
                             <InputLabel id="donvi">Đơn Vị</InputLabel>
                             <Select
                                 onChange={(e) => {
@@ -124,7 +123,7 @@ const Product = () => {
 
                         <Typography variant="subtitle1">Sắp xếp theo</Typography>
 
-                        <FormControl fullWidth>
+                        <FormControl fullWidth size="small">
                             <RadioGroup
                                 onChange={(e) => {
                                     setSelectedOrder(e.target.value);
@@ -152,18 +151,20 @@ const Product = () => {
                         </FormControl>
 
                         <Button
+                            size="small"
                             onClick={() => {
                                 handleSearch();
                             }}
                             variant="contained"
+                            color="primary"
                         >
                             Tìm Kiếm
                         </Button>
                         <Button
+                            size="small"
                             onClick={() => {
                                 handleReset();
                             }}
-                            variant="contained"
                             color="info"
                         >
                             Đặt Lại
@@ -172,8 +173,21 @@ const Product = () => {
                 </Grid>
 
                 <Grid item md={8}>
-                    <TableContainer>
-                        <Table size="small">
+                    <TablePagination
+                        component="div"
+                        count={allMatHang.total}
+                        rowsPerPageOptions={[10]}
+                        rowsPerPage={10}
+                        page={Math.min(currentPage, allMatHang.total)}
+                        onPageChange={handleChangePage}
+                        showLastButton
+                        showFirstButton
+                        labelDisplayedRows={({ from, to, count }) =>
+                            `${from}–${to} của ${count !== -1 ? count : `nhiều hơn ${to}`}`
+                        }
+                    />
+                    <TableContainer sx={{ maxHeight: '70vh' }}>
+                        <Table size="small" stickyHeader>
                             <TableHead>
                                 <TableRow>
                                     <TableCell>Loại Hàng</TableCell>
@@ -187,7 +201,7 @@ const Product = () => {
                             <TableBody>
                                 {allMatHang.data.map((mh, index) => {
                                     return (
-                                        <TableRow key={index}>
+                                        <TableRow key={index} hover>
                                             <TableCell>{mh.loaihang.ten}</TableCell>
                                             <TableCell>{mh.donvi.ten}</TableCell>
                                             <TableCell>{mh.soluong}</TableCell>
@@ -202,25 +216,6 @@ const Product = () => {
                                     );
                                 })}
                             </TableBody>
-                            <TableFooter>
-                                <TableRow>
-                                    <TablePagination
-                                        colSpan={6}
-                                        count={allMatHang.total}
-                                        rowsPerPageOptions={[10]}
-                                        rowsPerPage={10}
-                                        page={Math.min(currentPage, allMatHang.total)}
-                                        onPageChange={handleChangePage}
-                                        showLastButton
-                                        showFirstButton
-                                        labelDisplayedRows={({ from, to, count }) =>
-                                            `${from}–${to} của ${
-                                                count !== -1 ? count : `nhiều hơn ${to}`
-                                            }`
-                                        }
-                                    />
-                                </TableRow>
-                            </TableFooter>
                         </Table>
                     </TableContainer>
                 </Grid>

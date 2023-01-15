@@ -16,7 +16,6 @@ import {
     TableBody,
     TableCell,
     TableContainer,
-    TableFooter,
     TableHead,
     TablePagination,
     TableRow,
@@ -202,6 +201,23 @@ const HoaDonNhap = () => {
                     iconPosition="start"
                 />
             </Tabs>
+            <TablePagination
+                showFirstButton
+                showLastButton
+                component="div"
+                rowsPerPage={rowsPerPage}
+                count={fixedPhieuNhap.total}
+                page={Math.min(page, fixedPhieuNhap.total)}
+                labelRowsPerPage="Dòng trên trang"
+                onPageChange={(_, value) => setPage(value)}
+                onRowsPerPageChange={({ target: { value } }) => {
+                    setRowPerPage(value);
+                    setPage(0);
+                }}
+                labelDisplayedRows={({ from, to, count }) =>
+                    `${from}–${to} của ${count !== -1 ? count : `nhiều hơn ${to}`}`
+                }
+            />
             <TableContainer sx={{ maxHeight: '70vh' }}>
                 <Table stickyHeader size="small">
                     <TableHead>
@@ -265,25 +281,6 @@ const HoaDonNhap = () => {
                             ))
                         )}
                     </TableBody>
-
-                    <TableFooter>
-                        <TableRow>
-                            <TablePagination
-                                rowsPerPage={rowsPerPage}
-                                count={fixedPhieuNhap.total}
-                                page={Math.min(page, fixedPhieuNhap.total)}
-                                labelRowsPerPage="Dòng trên trang"
-                                onPageChange={(_, value) => setPage(value)}
-                                onRowsPerPageChange={({ target: { value } }) => {
-                                    setRowPerPage(value);
-                                    setPage(0);
-                                }}
-                                labelDisplayedRows={({ from, to, count }) =>
-                                    `${from}–${to} của ${count !== -1 ? count : `nhiều hơn ${to}`}`
-                                }
-                            />
-                        </TableRow>
-                    </TableFooter>
                 </Table>
             </TableContainer>
 
