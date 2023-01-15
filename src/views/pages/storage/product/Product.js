@@ -18,6 +18,7 @@ import {
     TableRow,
     Typography,
 } from '@mui/material';
+import { Stack } from '@mui/system';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
@@ -67,101 +68,107 @@ const Product = () => {
     return (
         <MainCard title="Mặt Hàng Tồn Kho">
             <Grid container spacing={2}>
-                <Grid item md={4} alignItems="center" gap={[2, 2]} container>
-                    <Typography variant="subtitle1">Tìm kiếm</Typography>
+                <Grid item md={4}>
+                    <Stack spacing={1}>
+                        <Typography variant="subtitle1">Tìm kiếm</Typography>
 
-                    <FormControl fullWidth>
-                        <InputLabel id="loaihang">Loại Hàng</InputLabel>
-                        <Select
-                            value={selected.malh}
-                            fullWidth
-                            labelId="loaihang"
-                            label="Loại Hàng"
-                            onChange={(e) => {
-                                const malh = e.target.value;
-                                setSelected({ ...selected, malh });
-                                const donvis = allcategories.find(
-                                    (loaihang) => loaihang.ma === malh
-                                )?.donvi;
-                                setDonViToChoose(donvis);
-                                setCurrentPage(1);
+                        <FormControl fullWidth>
+                            <InputLabel id="loaihang">Loại Hàng</InputLabel>
+                            <Select
+                                value={selected.malh}
+                                fullWidth
+                                labelId="loaihang"
+                                label="Loại Hàng"
+                                onChange={(e) => {
+                                    const malh = e.target.value;
+                                    setSelected({ ...selected, malh });
+                                    const donvis = allcategories.find(
+                                        (loaihang) => loaihang.ma === malh
+                                    )?.donvi;
+                                    setDonViToChoose(donvis);
+                                    setCurrentPage(1);
+                                }}
+                            >
+                                {allcategories.map((category) => {
+                                    return (
+                                        <MenuItem key={category.ma} value={category.ma}>
+                                            {category.ten}
+                                        </MenuItem>
+                                    );
+                                })}
+                            </Select>
+                        </FormControl>
+
+                        <FormControl fullWidth>
+                            <InputLabel id="donvi">Đơn Vị</InputLabel>
+                            <Select
+                                onChange={(e) => {
+                                    setSelected({ ...selected, madv: e.target.value });
+                                    setCurrentPage(1);
+                                }}
+                                value={selected.madv}
+                                fullWidth
+                                labelId="donvi"
+                                label="Đơn Vị"
+                                disabled={!selected.malh}
+                            >
+                                {donViToChoose.map((dv) => {
+                                    return (
+                                        <MenuItem key={dv.ma} value={dv.ma}>
+                                            {dv.ten}
+                                        </MenuItem>
+                                    );
+                                })}
+                            </Select>
+                        </FormControl>
+
+                        <Typography variant="subtitle1">Sắp xếp theo</Typography>
+
+                        <FormControl fullWidth>
+                            <RadioGroup
+                                onChange={(e) => {
+                                    setSelectedOrder(e.target.value);
+                                }}
+                                value={selectedOrder}
+                                row
+                                aria-labelledby="radio-order"
+                            >
+                                <FormControlLabel
+                                    value="hsd"
+                                    control={<Radio />}
+                                    label="Hạn Sử Dụng"
+                                />
+                                <FormControlLabel
+                                    value="ngaynhap"
+                                    control={<Radio />}
+                                    label="Ngày Nhập"
+                                />
+                                <FormControlLabel
+                                    value="soluong"
+                                    control={<Radio />}
+                                    label="Số Lượng"
+                                />
+                            </RadioGroup>
+                        </FormControl>
+
+                        <Button
+                            onClick={() => {
+                                handleSearch();
                             }}
+                            variant="contained"
                         >
-                            {allcategories.map((category) => {
-                                return (
-                                    <MenuItem key={category.ma} value={category.ma}>
-                                        {category.ten}
-                                    </MenuItem>
-                                );
-                            })}
-                        </Select>
-                    </FormControl>
-
-                    <FormControl fullWidth>
-                        <InputLabel id="donvi">Đơn Vị</InputLabel>
-                        <Select
-                            onChange={(e) => {
-                                setSelected({ ...selected, madv: e.target.value });
-                                setCurrentPage(1);
+                            Tìm Kiếm
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                handleReset();
                             }}
-                            value={selected.madv}
-                            fullWidth
-                            labelId="donvi"
-                            label="Đơn Vị"
-                            disabled={!selected.malh}
+                            variant="contained"
+                            color="info"
                         >
-                            {donViToChoose.map((dv) => {
-                                return (
-                                    <MenuItem key={dv.ma} value={dv.ma}>
-                                        {dv.ten}
-                                    </MenuItem>
-                                );
-                            })}
-                        </Select>
-                    </FormControl>
-
-                    <Typography variant="subtitle1">Sắp xếp theo</Typography>
-
-                    <FormControl fullWidth>
-                        <RadioGroup
-                            onChange={(e) => {
-                                setSelectedOrder(e.target.value);
-                            }}
-                            value={selectedOrder}
-                            row
-                            aria-labelledby="radio-order"
-                        >
-                            <FormControlLabel value="hsd" control={<Radio />} label="Hạn Sử Dụng" />
-                            <FormControlLabel
-                                value="ngaynhap"
-                                control={<Radio />}
-                                label="Ngày Nhập"
-                            />
-                            <FormControlLabel
-                                value="soluong"
-                                control={<Radio />}
-                                label="Số Lượng"
-                            />
-                        </RadioGroup>
-                    </FormControl>
-
-                    <Button
-                        onClick={() => {
-                            handleSearch();
-                        }}
-                        variant="contained"
-                    >
-                        Tìm Kiếm
-                    </Button>
-                    <Button
-                        onClick={() => {
-                            handleReset();
-                        }}
-                        variant="contained"
-                        color="info"
-                    >
-                        Đặt Lại
-                    </Button>
+                            Đặt Lại
+                        </Button>
+                    </Stack>
                 </Grid>
 
                 <Grid item md={8}>

@@ -48,7 +48,7 @@ const ManageUserForm = ({
             onSubmit={onSubmit}
         >
             {({ values, errors, handleChange, handleSubmit }) => (
-                <form noValidate style={{ padding: 20 }} onSubmit={handleSubmit}>
+                <form noValidate style={{ padding: '20px 0' }} onSubmit={handleSubmit}>
                     <FormControl fullWidth sx={{ mb: 2 }} error={!!errors.ten}>
                         <InputLabel htmlFor="ten">Tên nhân viên</InputLabel>
                         <OutlinedInput
