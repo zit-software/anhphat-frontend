@@ -211,6 +211,7 @@ const HoaDonNhap = () => {
                 />
             </Tabs>
             <TablePagination
+                size="small"
                 showFirstButton
                 showLastButton
                 component="div"

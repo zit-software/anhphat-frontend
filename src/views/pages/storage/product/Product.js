@@ -174,6 +174,7 @@ const Product = () => {
 
                 <Grid item md={8}>
                     <TablePagination
+                        size="small"
                         component="div"
                         count={allMatHang.total}
                         rowsPerPageOptions={[10]}
