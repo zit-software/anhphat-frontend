@@ -43,7 +43,7 @@ import HoaDonNhapService from 'services/hoadonnhap.service';
 import MainCard from 'ui-component/cards/MainCard';
 import RowSkeleton from 'ui-component/skeletons/RowSkeleton';
 
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import dayjs from 'utils/dayjs';
 
 const TaoHoaDonModal = ({ open, onClose }) => {
@@ -149,9 +149,11 @@ const TaoHoaDonModal = ({ open, onClose }) => {
 const HoaDonNhap = () => {
     const [open, setOpen] = useState(false);
     const [page, setPage] = useState(0);
-    const [daluu, setDaLuu] = useState('false');
     const [rowsPerPage, setRowPerPage] = useState(10);
     const [selectedDelete, setSelectedDelete] = useState(null);
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const daluu = JSON.parse(searchParams.get('daluu') || 'false');
 
     const {
         data: phieunhap,
@@ -187,7 +189,14 @@ const HoaDonNhap = () => {
                 </Tooltip>
             }
         >
-            <Tabs value={daluu} onChange={(_, v) => setDaLuu(v)}>
+            <Tabs
+                value={JSON.stringify(daluu)}
+                onChange={(_, daluu) =>
+                    setSearchParams({
+                        daluu,
+                    })
+                }
+            >
                 <Tab
                     value="false"
                     label="Chưa lưu"
