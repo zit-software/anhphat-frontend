@@ -7,7 +7,6 @@ import {
     IconPackage,
     IconBox,
     IconFileInvoice,
-    IconDiscount,
 } from '@tabler/icons';
 
 // constant
@@ -19,7 +18,6 @@ const icons = {
     IconPackage,
     IconBox,
     IconFileInvoice,
-    IconDiscount,
 };
 
 // ==============================|| UTILITIES MENU ITEMS ||============================== //
@@ -44,28 +42,6 @@ const utilities = {
             url: 'hanghoa/mathang',
             icon: icons.IconBox,
             breadcrumbs: true,
-        },
-        {
-            id: 'hanghoa-khuyenmai',
-            title: 'Khuyến Mãi',
-            type: 'collapse',
-            icon: icons.IconDiscount,
-            children: [
-                {
-                    id: 'khuyenmai-giam',
-                    title: 'Khuyến mãi giảm',
-                    type: 'item',
-                    url: 'khuyenmai/giam',
-                    breadcrumbs: true,
-                },
-                {
-                    id: 'khuyenmai-tang',
-                    title: 'Khuyến mãi tặng',
-                    type: 'item',
-                    url: 'khuyenmai/giam',
-                    breadcrumbs: true,
-                },
-            ],
         },
         {
             id: 'hoadon',
