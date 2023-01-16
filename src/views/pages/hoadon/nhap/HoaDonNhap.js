@@ -12,13 +12,6 @@ import {
     Grid,
     IconButton,
     Tab,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TablePagination,
-    TableRow,
     Tabs,
     TextField,
     Tooltip,
@@ -41,7 +34,6 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import HoaDonNhapService from 'services/hoadonnhap.service';
 import MainCard from 'ui-component/cards/MainCard';
-import RowSkeleton from 'ui-component/skeletons/RowSkeleton';
 
 import { DataGrid, GridToolbar, viVN } from '@mui/x-data-grid';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -201,13 +193,13 @@ const HoaDonNhap = () => {
                 <Tab
                     value="false"
                     label="Chưa lưu"
-                    icon={<IconGitPullRequestDraft />}
+                    icon={<IconGitPullRequestDraft size={20} />}
                     iconPosition="start"
                 />
                 <Tab
                     value="true"
                     label="Đã lưu"
-                    icon={<IconGitPullRequestClosed />}
+                    icon={<IconGitPullRequestClosed size={20} />}
                     iconPosition="start"
                 />
             </Tabs>
@@ -220,6 +212,17 @@ const HoaDonNhap = () => {
                     density="compact"
                     localeText={viVN.components.MuiDataGrid.defaultProps.localeText}
                     loading={isLoading}
+                    paginationMode="server"
+                    rowCount={fixedPhieuNhap.total}
+                    initialState={{
+                        pagination: {
+                            page,
+                            pageSize: rowsPerPage,
+                        },
+                    }}
+                    rowsPerPageOptions={[10, 50, 100, 500, 1000]}
+                    onPageChange={setPage}
+                    onPageSizeChange={setRowPerPage}
                     columns={[
                         {
                             field: 'ma',
@@ -268,6 +271,7 @@ const HoaDonNhap = () => {
                             },
                             flex: 2,
                         },
+
                         {
                             field: 'edit',
                             headerName: '',
@@ -275,11 +279,12 @@ const HoaDonNhap = () => {
                                 return (
                                     <Link to={`/hoadon/nhap/${params.row.ma}`}>
                                         <IconButton size="small">
-                                            <IconPencil />
+                                            {params.row.daluu ? <IconEye /> : <IconPencil />}
                                         </IconButton>
                                     </Link>
                                 );
                             },
+                            flex: 1,
                         },
                         {
                             field: 'delete',
@@ -294,6 +299,7 @@ const HoaDonNhap = () => {
                                     </IconButton>
                                 );
                             },
+                            flex: 1,
                         },
                     ]}
                     rows={fixedPhieuNhap.data.map((e) => ({
@@ -302,90 +308,6 @@ const HoaDonNhap = () => {
                     }))}
                 />
             </div>
-
-            <TablePagination
-                size="small"
-                showFirstButton
-                showLastButton
-                component="div"
-                rowsPerPage={rowsPerPage}
-                count={fixedPhieuNhap.total}
-                page={Math.min(page, fixedPhieuNhap.total)}
-                labelRowsPerPage="Dòng trên trang"
-                onPageChange={(_, value) => setPage(value)}
-                onRowsPerPageChange={({ target: { value } }) => {
-                    setRowPerPage(value);
-                    setPage(0);
-                }}
-                labelDisplayedRows={({ from, to, count }) =>
-                    `${from}–${to} của ${count !== -1 ? count : `nhiều hơn ${to}`}`
-                }
-            />
-            <TableContainer sx={{ maxHeight: '70vh' }}>
-                <Table stickyHeader size="small">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Mã số</TableCell>
-                            <TableCell>Người tạo</TableCell>
-                            <TableCell>Nguồn</TableCell>
-                            <TableCell>Người giao</TableCell>
-                            <TableCell>Ngày nhập</TableCell>
-                            <TableCell>Ngày tạo</TableCell>
-                            <TableCell>Chỉnh sửa lần cuối</TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {isLoading ? (
-                            <>
-                                <RowSkeleton cols={9} />
-                                <RowSkeleton cols={9} />
-                                <RowSkeleton cols={9} />
-                                <RowSkeleton cols={9} />
-                                <RowSkeleton cols={9} />
-                            </>
-                        ) : (
-                            fixedPhieuNhap.data.map((phieu) => (
-                                <TableRow key={phieu.ma}>
-                                    <TableCell>{phieu.ma}</TableCell>
-                                    <TableCell>{phieu.nguoinhap.ten}</TableCell>
-                                    <TableCell>{phieu.nguon}</TableCell>
-                                    <TableCell>{phieu.nguoigiao}</TableCell>
-                                    <TableCell>
-                                        {dayjs(phieu.ngaynhap).format('DD/MM/YYYY')}
-                                    </TableCell>
-                                    <TableCell>
-                                        {dayjs(phieu.createdAt).format('DD/MM/YYYY')}
-                                    </TableCell>
-                                    <TableCell>
-                                        {dayjs(phieu.updatedAt).format('DD/MM/YYYY')}
-                                    </TableCell>
-                                    <TableCell>
-                                        <Link to={{ pathname: '/hoadon/nhap/' + phieu.ma }}>
-                                            {phieu.daluu ? (
-                                                <IconEye />
-                                            ) : (
-                                                <IconButton>
-                                                    <IconPencil />
-                                                </IconButton>
-                                            )}
-                                        </Link>
-                                    </TableCell>
-                                    <TableCell>
-                                        <IconButton
-                                            color="error"
-                                            onClick={() => setSelectedDelete(phieu.ma)}
-                                        >
-                                            <IconX />
-                                        </IconButton>
-                                    </TableCell>
-                                </TableRow>
-                            ))
-                        )}
-                    </TableBody>
-                </Table>
-            </TableContainer>
 
             <TaoHoaDonModal open={open} onClose={handleClose} />
 

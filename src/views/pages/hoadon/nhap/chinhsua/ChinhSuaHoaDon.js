@@ -38,9 +38,9 @@ import MainCard from 'ui-component/cards/MainCard';
 import * as Yup from 'yup';
 
 import productcategoryservice from 'services/productcategory.service';
+import RowSkeleton from 'ui-component/skeletons/RowSkeleton';
 import dayjs from 'utils/dayjs';
 import formatter from 'views/utilities/formatter';
-import RowSkeleton from 'ui-component/skeletons/RowSkeleton';
 
 const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
     const { data: products, isLoading } = useQuery(
@@ -529,7 +529,6 @@ function ChinhSuaHoaDon() {
                                 >
                                     Lưu
                                 </Button>
-
                                 <Button
                                     type="button"
                                     startIcon={<IconX />}
