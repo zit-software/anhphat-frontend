@@ -14,8 +14,6 @@ import {
     FormControlLabel,
     FormHelperText,
     IconButton,
-    MenuItem,
-    Select,
     Toolbar,
     Tooltip,
     Typography,
@@ -30,8 +28,8 @@ import * as Yup from 'yup';
 import usernamangeService from 'services/usermanage.service';
 import MainCard from 'ui-component/cards/MainCard';
 
-import ManageUserForm from '../manage-forms/ManageUserForm';
 import dayjs from 'dayjs';
+import ManageUserForm from '../manage-forms/ManageUserForm';
 
 const DeleteAccountModal = ({ open, onClose, accountName, onSubmit }) => (
     <Dialog open={open} onClose={onClose}>
@@ -186,23 +184,14 @@ const Accounts = () => {
                     editMode="row"
                     columns={[
                         { field: 'ma', headerName: 'Mã số', flex: 1 },
-                        { field: 'ten', headerName: 'Tên tài khoản', flex: 2, editable: true },
-                        { field: 'sdt', headerName: 'Số điện thoại', flex: 2, editable: true },
+                        { field: 'ten', headerName: 'Tên tài khoản', flex: 2 },
+                        { field: 'sdt', headerName: 'Số điện thoại', flex: 2 },
                         {
                             field: 'laAdmin',
                             headerName: 'Quyền',
                             flex: 2,
-                            editable: true,
                             renderCell({ value }) {
                                 return value ? <Shield fontSize="20" /> : <Person fontSize="20" />;
-                            },
-                            renderEditCell({ value }) {
-                                return (
-                                    <Select defaultValue={[value]} size="small" fullWidth>
-                                        <MenuItem value={false}>Nhân viên</MenuItem>
-                                        <MenuItem value={true}>Quản trị viên</MenuItem>
-                                    </Select>
-                                );
                             },
                         },
                         {
