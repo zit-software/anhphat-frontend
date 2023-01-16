@@ -118,7 +118,7 @@ function NhaPhanPhoi() {
             field: 'chietkhau',
             headerName: 'Chiết khấu',
             flex: 2,
-            renderCell: (params) => `${params.row.chietkhau * 100}%`,
+            renderCell: ({ value }) => `${value * 100}%`,
         },
         {
             field: 'diem',
@@ -129,19 +129,19 @@ function NhaPhanPhoi() {
             field: 'tinh',
             headerName: 'Tỉnh / thành phố',
             flex: 2,
-            renderCell: (params) => ProvinceService.findByCode(params.row.tinh)?.name,
+            renderCell: ({ value }) => ProvinceService.findByCode(value)?.name,
         },
         {
             field: 'createdAt',
             headerName: 'Tạo vào',
             flex: 2,
-            renderCell: (params) => dayjs(params.row.createdAt).format('DD/MM/YYYY'),
+            renderCell: ({ value }) => dayjs(value).format('DD/MM/YYYY'),
         },
         {
             field: 'updatedAt',
             headerName: 'Chỉnh sửa lần cuối',
             flex: 2,
-            renderCell: (params) => dayjs(params.row.updatedAt).format('DD/MM/YYYY'),
+            renderCell: ({ value }) => dayjs(value).format('DD/MM/YYYY'),
         },
         {
             field: 'actions',

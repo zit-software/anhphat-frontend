@@ -226,10 +226,10 @@ const HoaDonNhap = () => {
                             flex: 1,
                         },
                         {
-                            field: 'nhanvien',
+                            field: 'nguoinhap',
                             headerName: 'Người tạo',
-                            renderCell(params) {
-                                return params.row.nguoinhap.ten;
+                            renderCell({ value }) {
+                                return value.ten;
                             },
                             flex: 2,
                         },
@@ -246,24 +246,24 @@ const HoaDonNhap = () => {
                         {
                             field: 'ngaynhap',
                             headerName: 'Ngày nhập',
-                            renderCell(params) {
-                                return dayjs(params.row.ngaynhap).format('DD/MM/YYYY');
+                            renderCell({ value }) {
+                                return dayjs(value).format('DD/MM/YYYY');
                             },
                             flex: 2,
                         },
                         {
                             field: 'createdAt',
                             headerName: 'Ngày tạo',
-                            renderCell(params) {
-                                return dayjs(params.row.createdAt).format('DD/MM/YYYY');
+                            renderCell({ value }) {
+                                return dayjs(value).format('DD/MM/YYYY');
                             },
                             flex: 2,
                         },
                         {
                             field: 'updatedAt',
                             headerName: 'Chỉnh sửa lần cuối',
-                            renderCell(params) {
-                                return dayjs(params.row.updatedAt).format('HH:MM, DD/MM/YYYY');
+                            renderCell({ value }) {
+                                return dayjs(value).format('HH:MM, DD/MM/YYYY');
                             },
                             flex: 2,
                         },
