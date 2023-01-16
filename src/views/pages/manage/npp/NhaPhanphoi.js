@@ -8,15 +8,15 @@ import {
     DialogTitle,
     FormControlLabel,
     FormHelperText,
-    IconButton,
 } from '@mui/material';
-import { DataGrid, GridToolbar, viVN } from '@mui/x-data-grid';
-import { IconCirclePlus, IconPencil, IconX } from '@tabler/icons';
+import { DataGrid, GridActionsCellItem, GridToolbar, viVN } from '@mui/x-data-grid';
+import { IconCirclePlus } from '@tabler/icons';
 import { Formik } from 'formik';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import * as Yup from 'yup';
 
+import { Delete, Edit } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import NppService from 'services/npp.service';
 import ProvinceService from 'services/province.service';
@@ -144,28 +144,27 @@ function NhaPhanPhoi() {
             renderCell: (params) => dayjs(params.row.updatedAt).format('DD/MM/YYYY'),
         },
         {
-            field: 'edit',
-            headerName: '',
-            flex: 1,
-            renderCell(params) {
-                return (
-                    <IconButton onClick={() => handleOpenUpdateModal(params.row)}>
-                        <IconPencil />
-                    </IconButton>
-                );
+            field: 'actions',
+            type: 'actions',
+            headerName: 'Hành động',
+            getActions(params) {
+                return [
+                    <GridActionsCellItem
+                        icon={<Edit />}
+                        label="Chỉnh sửa"
+                        size="small"
+                        onClick={() => handleOpenUpdateModal(params.row)}
+                    />,
+                    <GridActionsCellItem
+                        icon={<Delete />}
+                        label="Xóa"
+                        size="small"
+                        color="error"
+                        onClick={() => setDeleteId(params.row.ma)}
+                    />,
+                ];
             },
-        },
-        {
-            field: 'delete',
-            headerName: '',
-            flex: 1,
-            renderCell(params) {
-                return (
-                    <IconButton onClick={() => setDeleteId(params.row.ma)}>
-                        <IconX />
-                    </IconButton>
-                );
-            },
+            flex: 2,
         },
     ];
 

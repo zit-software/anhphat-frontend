@@ -16,14 +16,7 @@ import {
     TextField,
     Tooltip,
 } from '@mui/material';
-import {
-    IconEye,
-    IconFilePlus,
-    IconGitPullRequestClosed,
-    IconGitPullRequestDraft,
-    IconPencil,
-    IconX,
-} from '@tabler/icons';
+import { IconFilePlus, IconGitPullRequestClosed, IconGitPullRequestDraft } from '@tabler/icons';
 import { Formik } from 'formik';
 import { useState } from 'react';
 import * as Yup from 'yup';
@@ -35,8 +28,9 @@ import { useNavigate } from 'react-router';
 import HoaDonNhapService from 'services/hoadonnhap.service';
 import MainCard from 'ui-component/cards/MainCard';
 
-import { DataGrid, GridToolbar, viVN } from '@mui/x-data-grid';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Delete, Edit, Visibility } from '@mui/icons-material';
+import { DataGrid, GridActionsCellItem, GridToolbar, viVN } from '@mui/x-data-grid';
+import { useSearchParams } from 'react-router-dom';
 import dayjs from 'utils/dayjs';
 
 const TaoHoaDonModal = ({ open, onClose }) => {
@@ -145,6 +139,8 @@ const HoaDonNhap = () => {
     const [rowsPerPage, setRowPerPage] = useState(10);
     const [selectedDelete, setSelectedDelete] = useState(null);
     const [searchParams, setSearchParams] = useSearchParams();
+
+    const navigate = useNavigate();
 
     const daluu = JSON.parse(searchParams.get('daluu') || 'false');
 
@@ -273,33 +269,27 @@ const HoaDonNhap = () => {
                         },
 
                         {
-                            field: 'edit',
-                            headerName: '',
-                            renderCell(params) {
-                                return (
-                                    <Link to={`/hoadon/nhap/${params.row.ma}`}>
-                                        <IconButton size="small">
-                                            {params.row.daluu ? <IconEye /> : <IconPencil />}
-                                        </IconButton>
-                                    </Link>
-                                );
-                            },
-                            flex: 1,
-                        },
-                        {
-                            field: 'delete',
-                            headerName: '',
-                            renderCell(params) {
-                                return (
-                                    <IconButton
+                            field: 'actions',
+                            headerName: 'Hành động',
+                            type: 'actions',
+                            getActions(params) {
+                                return [
+                                    <GridActionsCellItem
+                                        icon={params.row.daluu ? <Visibility /> : <Edit />}
+                                        label="Chỉnh sửa"
+                                        onClick={() => navigate(`/hoadon/nhap/${params.row.ma}`)}
+                                        size="small"
+                                    />,
+                                    <GridActionsCellItem
+                                        color="error"
+                                        icon={<Delete />}
+                                        label="Xóa"
                                         onClick={() => setSelectedDelete(params.row.ma)}
                                         size="small"
-                                    >
-                                        <IconX />
-                                    </IconButton>
-                                );
+                                    />,
+                                ];
                             },
-                            flex: 1,
+                            flex: 2,
                         },
                     ]}
                     rows={fixedPhieuNhap.data.map((e) => ({
