@@ -9,24 +9,19 @@ import {
     FormControlLabel,
     FormHelperText,
     IconButton,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
 } from '@mui/material';
+import { DataGrid, GridToolbar, viVN } from '@mui/x-data-grid';
 import { IconCirclePlus, IconPencil, IconX } from '@tabler/icons';
-import dayjs from 'dayjs';
 import { Formik } from 'formik';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from 'react-query';
 import * as Yup from 'yup';
 
 import NppService from 'services/npp.service';
-import ProvinceService from 'services/province.service';
 import MainCard from 'ui-component/cards/MainCard';
-import RowSkeleton from 'ui-component/skeletons/RowSkeleton';
 import ManageNppForm from '../manage-forms/ManageNppForm';
+import ProvinceService from 'services/province.service';
+import dayjs from 'dayjs';
 
 const CreateModal = ({ open, onClose, onSubmit }) => {
     return (
@@ -66,11 +61,9 @@ function NhaPhanPhoi() {
     const handleOpenUpdateModal = (value) => setUpdatePayload(value);
     const handleCloseUpdateModal = () => setUpdatePayload(null);
 
-    const {
-        data: npps,
-        isLoading,
-        refetch,
-    } = useQuery(['npp'], () => NppService.layTatCa().then((res) => res.data));
+    const { data: npps, refetch } = useQuery(['npp'], () =>
+        NppService.layTatCa().then((res) => res.data)
+    );
 
     const handleCreate = async (values) => {
         try {
@@ -103,6 +96,76 @@ function NhaPhanPhoi() {
     };
 
     const fixedNpps = npps?.data || [];
+    const columns = [
+        {
+            field: 'ma',
+            headerName: 'Mã nhà phân phối',
+            flex: 1,
+        },
+        {
+            field: 'ten',
+            headerName: 'Tên nhà phân phối',
+            flex: 1,
+        },
+        {
+            field: 'sdt',
+            headerName: 'Số điện thoại',
+            flex: 1,
+        },
+        {
+            field: 'chietkhau',
+            headerName: 'Chiết khấu',
+            flex: 1,
+            renderCell: (params) => `${params.row.chietkhau * 100}%`,
+        },
+        {
+            field: 'tinh',
+            headerName: 'Tỉnh / thành phố',
+            flex: 1,
+            renderCell: (params) => ProvinceService.findByCode(params.row.tinh)?.name,
+        },
+        {
+            field: 'createdAt',
+            headerName: 'Tạo vào',
+            flex: 1,
+            renderCell: (params) => dayjs(params.row.createdAt).format('DD/MM/YYYY'),
+        },
+        {
+            field: 'updatedAt',
+            headerName: 'Chỉnh sửa lần cuối',
+            flex: 1,
+            renderCell: (params) => dayjs(params.row.updatedAt).format('DD/MM/YYYY'),
+        },
+        {
+            field: 'edit',
+            headerName: '',
+            flex: 1,
+            renderCell(params) {
+                return (
+                    <IconButton onClick={() => handleOpenUpdateModal(params.row)}>
+                        <IconPencil />
+                    </IconButton>
+                );
+            },
+        },
+        {
+            field: 'delete',
+            headerName: '',
+            flex: 1,
+            renderCell(params) {
+                return (
+                    <IconButton onClick={() => setDeleteId(params.row.ma)}>
+                        <IconX />
+                    </IconButton>
+                );
+            },
+        },
+    ];
+
+    const rows = fixedNpps.map((e) => ({
+        ...e,
+        id: e.ma,
+    }));
 
     return (
         <MainCard
@@ -113,58 +176,18 @@ function NhaPhanPhoi() {
                 </Button>
             }
         >
-            <Table size="small">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Mã nhà phân phối</TableCell>
-                        <TableCell>Tên nhà phân phối</TableCell>
-                        <TableCell>Chiết khấu</TableCell>
-                        <TableCell>Số điện thoại</TableCell>
-                        <TableCell>Tỉnh / Thành phố</TableCell>
-                        <TableCell>Tạo vào</TableCell>
-                        <TableCell>Chỉnh sửa lần cuối</TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                    </TableRow>
-                </TableHead>
-
-                <TableBody>
-                    {isLoading ? (
-                        <React.Fragment>
-                            <RowSkeleton cols={9} />
-                            <RowSkeleton cols={9} />
-                            <RowSkeleton cols={9} />
-                            <RowSkeleton cols={9} />
-                            <RowSkeleton cols={9} />
-                            <RowSkeleton cols={9} />
-                            <RowSkeleton cols={9} />
-                        </React.Fragment>
-                    ) : (
-                        fixedNpps.map((npp) => (
-                            <TableRow key={npp.ma}>
-                                <TableCell>{npp.ma}</TableCell>
-                                <TableCell>{npp.ten}</TableCell>
-                                <TableCell>{npp.chietkhau * 100}%</TableCell>
-                                <TableCell>{npp.sdt}</TableCell>
-                                <TableCell>{ProvinceService.findByCode(npp.tinh)?.name}</TableCell>
-                                <TableCell>{dayjs(npp.createdAt).format('DD/MM/YYYY')}</TableCell>
-                                <TableCell>{dayjs(npp.updatedAt).format('DD/MM/YYYY')}</TableCell>
-                                <TableCell>
-                                    <IconButton onClick={() => handleOpenUpdateModal(npp)}>
-                                        <IconPencil />
-                                    </IconButton>
-                                </TableCell>
-                                <TableCell>
-                                    <IconButton onClick={() => setDeleteId(npp.ma)}>
-                                        <IconX />
-                                    </IconButton>
-                                </TableCell>
-                            </TableRow>
-                        ))
-                    )}
-                </TableBody>
-            </Table>
-
+            <div style={{ height: '60vh' }}>
+                <DataGrid
+                    autoPageSize
+                    components={{
+                        Toolbar: GridToolbar,
+                    }}
+                    localeText={viVN.components.MuiDataGrid.defaultProps.localeText}
+                    columns={columns}
+                    rows={rows}
+                    density="compact"
+                />
+            </div>
             <CreateModal
                 open={openCreateModal}
                 onClose={handleCloseCreateModal}
