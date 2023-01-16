@@ -41,10 +41,19 @@ export default function ChipsArray({ values, setDonVi }) {
                     justifyContent: 'center',
                 }}
             >
-                <TextField inputRef={donViRef} fullWidth label="Đơn Vị Cần Thêm" />
+                <TextField
+                    onKeyUp={(e) => {
+                        if (e.key === 'Enter' && donViRef.current.value)
+                            handleAdd({ inDB: false, ten: donViRef.current.value });
+                    }}
+                    inputRef={donViRef}
+                    fullWidth
+                    label="Đơn Vị Cần Thêm"
+                />
                 <Button
                     onClick={() => {
-                        handleAdd({ inDB: false, ten: donViRef.current.value });
+                        if (donViRef.current.value)
+                            handleAdd({ inDB: false, ten: donViRef.current.value });
                     }}
                     variant="text"
                 >
