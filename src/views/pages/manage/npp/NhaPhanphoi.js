@@ -17,11 +17,11 @@ import { useState } from 'react';
 import { useQuery } from 'react-query';
 import * as Yup from 'yup';
 
+import dayjs from 'dayjs';
 import NppService from 'services/npp.service';
+import ProvinceService from 'services/province.service';
 import MainCard from 'ui-component/cards/MainCard';
 import ManageNppForm from '../manage-forms/ManageNppForm';
-import ProvinceService from 'services/province.service';
-import dayjs from 'dayjs';
 
 const CreateModal = ({ open, onClose, onSubmit }) => {
     return (
@@ -61,9 +61,11 @@ function NhaPhanPhoi() {
     const handleOpenUpdateModal = (value) => setUpdatePayload(value);
     const handleCloseUpdateModal = () => setUpdatePayload(null);
 
-    const { data: npps, refetch } = useQuery(['npp'], () =>
-        NppService.layTatCa().then((res) => res.data)
-    );
+    const {
+        data: npps,
+        refetch,
+        isLoading,
+    } = useQuery(['npp'], () => NppService.layTatCa().then((res) => res.data));
 
     const handleCreate = async (values) => {
         try {
@@ -105,35 +107,40 @@ function NhaPhanPhoi() {
         {
             field: 'ten',
             headerName: 'Tên nhà phân phối',
-            flex: 1,
+            flex: 2,
         },
         {
             field: 'sdt',
             headerName: 'Số điện thoại',
-            flex: 1,
+            flex: 2,
         },
         {
             field: 'chietkhau',
             headerName: 'Chiết khấu',
-            flex: 1,
+            flex: 2,
             renderCell: (params) => `${params.row.chietkhau * 100}%`,
+        },
+        {
+            field: 'diem',
+            headerName: 'Điểm',
+            flex: 2,
         },
         {
             field: 'tinh',
             headerName: 'Tỉnh / thành phố',
-            flex: 1,
+            flex: 2,
             renderCell: (params) => ProvinceService.findByCode(params.row.tinh)?.name,
         },
         {
             field: 'createdAt',
             headerName: 'Tạo vào',
-            flex: 1,
+            flex: 2,
             renderCell: (params) => dayjs(params.row.createdAt).format('DD/MM/YYYY'),
         },
         {
             field: 'updatedAt',
             headerName: 'Chỉnh sửa lần cuối',
-            flex: 1,
+            flex: 2,
             renderCell: (params) => dayjs(params.row.updatedAt).format('DD/MM/YYYY'),
         },
         {
@@ -186,6 +193,7 @@ function NhaPhanPhoi() {
                     columns={columns}
                     rows={rows}
                     density="compact"
+                    loading={isLoading}
                 />
             </div>
             <CreateModal
