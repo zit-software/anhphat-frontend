@@ -1,5 +1,6 @@
 import {
     Badge,
+    FormHelperText,
     Grid,
     IconButton,
     Table,
@@ -8,6 +9,7 @@ import {
     TableContainer,
     TableHead,
     TableRow,
+    TextField,
     Typography,
 } from '@mui/material';
 import dayjs from 'dayjs';
@@ -18,6 +20,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useSearchParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { IconPlus } from '@tabler/icons';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 
 const { default: MainCard } = require('ui-component/cards/MainCard');
 
@@ -64,28 +68,64 @@ const EditKhuyenMaiTang = () => {
         >
             <Grid justifyContent="flex-end" container>
                 <Grid item xs={6}>
-                    <Table size="small">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Mã</TableCell>
-                                <TableCell>Tên</TableCell>
-                                <TableCell>Cập Nhật Lần Cuối</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            <TableRow>
-                                <TableCell>{data.ma}</TableCell>
-                                <TableCell>
-                                    <b>{data.ten}</b>
-                                </TableCell>
-                                <TableCell>
-                                    {data.updatedAt
-                                        ? dayjs(data.updatedAt).format('DD-MM-YYYY')
-                                        : ''}
-                                </TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
+                    <Formik
+                        initialValues={
+                            data
+                                ? { ma: data.ma, ten: data.ten, updatedAt: data.updatedAt }
+                                : {
+                                      ma: 0,
+                                      ten: '',
+                                      updatedAt: '',
+                                  }
+                        }
+                        validationSchema={Yup.object().shape({
+                            ten: Yup.string().required('Vui lòng nhập tên cho khuyễn mãi '),
+                        })}
+                    >
+                        {({ values, errors, handleChange, handleSubmit }) => (
+                            <form onSubmit={handleSubmit}>
+                                {type === 'view' ? (
+                                    <Table size="small">
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell>Mã</TableCell>
+                                                <TableCell>Tên</TableCell>
+                                                <TableCell size="small">
+                                                    Cập Nhật Lần Cuối
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            <TableRow>
+                                                <TableCell>{data.ma}</TableCell>
+                                                <TableCell>{values.ten}</TableCell>
+                                                <TableCell size="small">
+                                                    {data.updatedAt
+                                                        ? dayjs(values.updatedAt).format(
+                                                              'DD-MM-YYYY'
+                                                          )
+                                                        : ''}
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                    </Table>
+                                ) : (
+                                    <>
+                                        <TextField
+                                            name="ten"
+                                            label="Tên"
+                                            placeholder="Nhập Tên Khuyến Mãi Tặng"
+                                            error={!!errors.ten}
+                                            value={values.ten}
+                                            fullWidth
+                                            onChange={handleChange}
+                                        />
+                                        <FormHelperText error>{errors.ten}</FormHelperText>
+                                    </>
+                                )}
+                            </form>
+                        )}
+                    </Formik>
                 </Grid>
             </Grid>
             <Grid container marginTop={4}>
@@ -99,8 +139,12 @@ const EditKhuyenMaiTang = () => {
                                 <TableCell>Số Lượng Mua</TableCell>
                                 <TableCell>Số Lượng Tặng</TableCell>
                                 <TableCell>Diễn Giải</TableCell>
-                                <TableCell></TableCell>
-                                <TableCell></TableCell>
+                                {type !== 'view' && (
+                                    <>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                    </>
+                                )}
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -113,16 +157,20 @@ const EditKhuyenMaiTang = () => {
                                         <TableCell>{chitiet.soluongmua}</TableCell>
                                         <TableCell>{chitiet.soluongtang}</TableCell>
                                         <TableCell>{`Mua ${chitiet.soluongmua} ${chitiet.dvmua.ten} tặng ${chitiet.soluongtang} ${chitiet.dvtang.ten}`}</TableCell>
-                                        <TableCell>
-                                            <IconButton onClick={() => {}}>
-                                                <EditIcon color="info" />
-                                            </IconButton>
-                                        </TableCell>
-                                        <TableCell>
-                                            <IconButton onClick={() => {}}>
-                                                <DeleteIcon color="error" />
-                                            </IconButton>
-                                        </TableCell>
+                                        {type !== 'view' && (
+                                            <>
+                                                <TableCell>
+                                                    <IconButton onClick={() => {}}>
+                                                        <EditIcon color="info" />
+                                                    </IconButton>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <IconButton onClick={() => {}}>
+                                                        <DeleteIcon color="error" />
+                                                    </IconButton>
+                                                </TableCell>
+                                            </>
+                                        )}
                                     </TableRow>
                                 ))
                             ) : (
