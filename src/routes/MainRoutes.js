@@ -3,9 +3,6 @@ import { lazy } from 'react';
 // project imports
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
-import Product from 'views/pages/storage/product/Product';
-import NhaPhanPhoi from 'views/pages/manage/npp/NhaPhanphoi';
-
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 
@@ -18,6 +15,9 @@ const HoaDonNhap = Loadable(lazy(() => import('views/pages/hoadon/nhap/HoaDonNha
 const ChinhSuaHoaDon = Loadable(
     lazy(() => import('views/pages/hoadon/nhap/chinhsua/ChinhSuaHoaDon'))
 );
+const HoaDonXuat = Loadable(lazy(() => import('views/pages/hoadon/xuat/HoaDonXuat')));
+const Product = Loadable(lazy(() => import('views/pages/storage/product/Product')));
+const NhaPhanPhoi = Loadable(lazy(() => import('views/pages/manage/npp/NhaPhanphoi')));
 
 const MainRoutes = {
     path: '/',
@@ -79,6 +79,10 @@ const MainRoutes = {
                 {
                     path: 'nhap',
                     element: <HoaDonNhap />,
+                },
+                {
+                    path: 'xuat',
+                    element: <HoaDonXuat />,
                 },
             ],
         },
