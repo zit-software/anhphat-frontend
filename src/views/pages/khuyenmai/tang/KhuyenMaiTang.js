@@ -1,15 +1,19 @@
-import { IconButton } from '@mui/material';
-import { DataGrid, GridToolbar, viVN } from '@mui/x-data-grid';
+import { IconButton, Tooltip } from '@mui/material';
+import { DataGrid, viVN } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import { useQuery } from 'react-query';
 import khuyenmaitangService from 'services/khuyenmaitang.service';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useNavigate } from 'react-router';
+import { createSearchParams } from 'react-router-dom';
+import { IconFilePlus } from '@tabler/icons';
 const { default: MainCard } = require('ui-component/cards/MainCard');
 
 const KhuyenMaiTang = () => {
-    const { data: allKMT, isLoading } = useQuery('getAllKMT', khuyenmaitangService.getAllKMT);
+    const { data: allKMT } = useQuery('getAllKMT', khuyenmaitangService.getAllKMT);
+    const navigate = useNavigate();
 
     const columns = [
         {
@@ -31,11 +35,21 @@ const KhuyenMaiTang = () => {
         {
             field: 'view',
             headerName: '',
-            flex: 1,
-            renderCell: () => {
+            flex: 0.2,
+            renderCell: (params) => {
                 return (
-                    <IconButton onClick={() => {}}>
-                        <VisibilityIcon />
+                    <IconButton
+                        onClick={() => {
+                            navigate({
+                                pathname: '/quantri/khuyenmai/tang/edit',
+                                search: createSearchParams({
+                                    type: 'view',
+                                    ma: params.row.ma,
+                                }).toString(),
+                            });
+                        }}
+                    >
+                        <VisibilityIcon color="primary" />
                     </IconButton>
                 );
             },
@@ -43,11 +57,21 @@ const KhuyenMaiTang = () => {
         {
             field: 'edit',
             headerName: '',
-            flex: 1,
-            renderCell: () => {
+            flex: 0.2,
+            renderCell: (params) => {
                 return (
-                    <IconButton onClick={() => {}}>
-                        <EditIcon color="blue" />
+                    <IconButton
+                        onClick={() => {
+                            navigate({
+                                pathname: '/quantri/khuyenmai/tang/edit',
+                                search: createSearchParams({
+                                    type: 'edit',
+                                    ma: params.row.ma,
+                                }).toString(),
+                            });
+                        }}
+                    >
+                        <EditIcon color="info" />
                     </IconButton>
                 );
             },
@@ -55,11 +79,11 @@ const KhuyenMaiTang = () => {
         {
             field: 'delete',
             headerName: '',
-            flex: 1,
+            flex: 0.2,
             renderCell: () => {
                 return (
                     <IconButton onClick={() => {}}>
-                        <DeleteIcon color="red" />
+                        <DeleteIcon color="error" />
                     </IconButton>
                 );
             },
@@ -69,13 +93,28 @@ const KhuyenMaiTang = () => {
     const arrs = allKMT || [];
     const rows = arrs.map((kmt) => ({ ...kmt, id: kmt.ma }));
     return (
-        <MainCard title="Các Khuyến Mãi Tặng">
+        <MainCard
+            title="Các Khuyến Mãi Tặng"
+            secondary={
+                <Tooltip title="Tạo hóa đơn">
+                    <IconButton
+                        onClick={() => {
+                            navigate({
+                                pathname: '/quantri/khuyenmai/tang/edit',
+                                search: createSearchParams({
+                                    type: 'add',
+                                }).toString(),
+                            });
+                        }}
+                    >
+                        <IconFilePlus />
+                    </IconButton>
+                </Tooltip>
+            }
+        >
             <div style={{ height: '60vh' }}>
                 <DataGrid
                     autoPageSize
-                    components={{
-                        Toolbar: GridToolbar,
-                    }}
                     localeText={viVN.components.MuiDataGrid.defaultProps.localeText}
                     columns={columns}
                     rows={rows}
