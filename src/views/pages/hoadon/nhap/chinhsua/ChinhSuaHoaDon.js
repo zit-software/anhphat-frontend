@@ -532,7 +532,6 @@ function ChinhSuaHoaDon() {
 
                                 <Button
                                     type="button"
-                                    color="error"
                                     startIcon={<IconX />}
                                     onClick={() => navigate(-1)}
                                 >

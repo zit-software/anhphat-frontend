@@ -49,6 +49,7 @@ function ManageNppForm({ value = {}, buttonText, onSubmit, onClose }) {
                             name="ten"
                             autoComplete="name"
                             onChange={handleChange}
+                            size="small"
                         />
 
                         <FormHelperText error>{errors.ten}</FormHelperText>
@@ -59,11 +60,13 @@ function ManageNppForm({ value = {}, buttonText, onSubmit, onClose }) {
                             name="sdt"
                             value={values.sdt}
                             onChange={handleChange}
+                            size="small"
                         />
 
                         <FormHelperText error>{errors.sdt}</FormHelperText>
 
                         <Autocomplete
+                            size="small"
                             options={ProvinceService.getAll().map((province) => ({
                                 label: province.name,
                                 ma: province.code,
@@ -94,7 +97,7 @@ function ManageNppForm({ value = {}, buttonText, onSubmit, onClose }) {
                         />
                         <FormHelperText error>{errors.tinh}</FormHelperText>
 
-                        <FormControl fullWidth>
+                        <FormControl fullWidth size="small">
                             <InputLabel>Chiết khấu</InputLabel>
                             <OutlinedInput
                                 value={values.chietkhau * 100 || ''}
