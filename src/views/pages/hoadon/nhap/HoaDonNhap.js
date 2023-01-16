@@ -43,6 +43,7 @@ import HoaDonNhapService from 'services/hoadonnhap.service';
 import MainCard from 'ui-component/cards/MainCard';
 import RowSkeleton from 'ui-component/skeletons/RowSkeleton';
 
+import { DataGrid, GridToolbar, viVN } from '@mui/x-data-grid';
 import { Link, useSearchParams } from 'react-router-dom';
 import dayjs from 'utils/dayjs';
 
@@ -210,6 +211,98 @@ const HoaDonNhap = () => {
                     iconPosition="start"
                 />
             </Tabs>
+
+            <div style={{ height: '60vh' }}>
+                <DataGrid
+                    components={{
+                        Toolbar: GridToolbar,
+                    }}
+                    density="compact"
+                    localeText={viVN.components.MuiDataGrid.defaultProps.localeText}
+                    loading={isLoading}
+                    columns={[
+                        {
+                            field: 'ma',
+                            headerName: 'Mã phiếu',
+                            flex: 1,
+                        },
+                        {
+                            field: 'nhanvien',
+                            headerName: 'Người tạo',
+                            renderCell(params) {
+                                return params.row.nguoinhap.ten;
+                            },
+                            flex: 2,
+                        },
+                        {
+                            field: 'nguon',
+                            headerName: 'Nguồn',
+                            flex: 2,
+                        },
+                        {
+                            field: 'nguoigiao',
+                            headerName: 'Người giao',
+                            flex: 2,
+                        },
+                        {
+                            field: 'ngaynhap',
+                            headerName: 'Ngày nhập',
+                            renderCell(params) {
+                                return dayjs(params.row.ngaynhap).format('DD/MM/YYYY');
+                            },
+                            flex: 2,
+                        },
+                        {
+                            field: 'createdAt',
+                            headerName: 'Ngày tạo',
+                            renderCell(params) {
+                                return dayjs(params.row.createdAt).format('DD/MM/YYYY');
+                            },
+                            flex: 2,
+                        },
+                        {
+                            field: 'updatedAt',
+                            headerName: 'Chỉnh sửa lần cuối',
+                            renderCell(params) {
+                                return dayjs(params.row.updatedAt).format('HH:MM, DD/MM/YYYY');
+                            },
+                            flex: 2,
+                        },
+                        {
+                            field: 'edit',
+                            headerName: '',
+                            renderCell(params) {
+                                return (
+                                    <Link to={`/hoadon/nhap/${params.row.ma}`}>
+                                        <IconButton size="small">
+                                            <IconPencil />
+                                        </IconButton>
+                                    </Link>
+                                );
+                            },
+                        },
+                        {
+                            field: 'delete',
+                            headerName: '',
+                            renderCell(params) {
+                                return (
+                                    <IconButton
+                                        onClick={() => setSelectedDelete(params.row.ma)}
+                                        size="small"
+                                    >
+                                        <IconX />
+                                    </IconButton>
+                                );
+                            },
+                        },
+                    ]}
+                    rows={fixedPhieuNhap.data.map((e) => ({
+                        ...e,
+                        id: e.ma,
+                    }))}
+                />
+            </div>
+
             <TablePagination
                 size="small"
                 showFirstButton
@@ -269,10 +362,7 @@ const HoaDonNhap = () => {
                                         {dayjs(phieu.updatedAt).format('DD/MM/YYYY')}
                                     </TableCell>
                                     <TableCell>
-                                        <Link
-                                            target="_blank"
-                                            to={{ pathname: '/hoadon/nhap/' + phieu.ma }}
-                                        >
+                                        <Link to={{ pathname: '/hoadon/nhap/' + phieu.ma }}>
                                             {phieu.daluu ? (
                                                 <IconEye />
                                             ) : (
