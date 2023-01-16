@@ -46,28 +46,6 @@ const utilities = {
             breadcrumbs: true,
         },
         {
-            id: 'hanghoa-khuyenmai',
-            title: 'Khuyến Mãi',
-            type: 'collapse',
-            icon: icons.IconDiscount,
-            children: [
-                {
-                    id: 'khuyenmai-giam',
-                    title: 'Khuyến mãi giảm',
-                    type: 'item',
-                    url: 'khuyenmai/giam',
-                    breadcrumbs: true,
-                },
-                {
-                    id: 'khuyenmai-tang',
-                    title: 'Khuyến mãi tặng',
-                    type: 'item',
-                    url: 'khuyenmai/giam',
-                    breadcrumbs: true,
-                },
-            ],
-        },
-        {
             id: 'hoadon',
             title: 'Hóa đơn',
             type: 'collapse',

@@ -6,7 +6,6 @@ import Loadable from 'ui-component/Loadable';
 import Product from 'views/pages/storage/product/Product';
 import NhaPhanPhoi from 'views/pages/manage/npp/NhaPhanphoi';
 import KhuyenMaiTang from 'views/pages/khuyenmai/tang/KhuyenMaiTang';
-import EditKhuyenMaiTang from 'views/pages/khuyenmai/tang/ChinhSua';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -76,29 +75,6 @@ const MainRoutes = {
             ],
         },
         {
-            path: 'hoadon',
-            children: [
-                {
-                    path: 'nhap',
-                    element: <HoaDonNhap />,
-                },
-            ],
-        },
-        {
-            path: 'hoadon',
-            children: [
-                {
-                    path: 'nhap',
-                    children: [
-                        {
-                            path: ':ma',
-                            element: <ChinhSuaHoaDon />,
-                        },
-                    ],
-                },
-            ],
-        },
-        {
             path: 'quantri',
             children: [
                 {
@@ -110,17 +86,13 @@ const MainRoutes = {
                     element: <NhaPhanPhoi />,
                 },
                 {
-                    path: 'khuyenmai/tang',
-                    element: <KhuyenMaiTang />,
-                },
-            ],
-        },
-        {
-            path: 'khuyenmai/tang',
-            children: [
-                {
-                    path: 'edit',
-                    element: <EditKhuyenMaiTang />,
+                    path: 'khuyenmai',
+                    children: [
+                        {
+                            path: 'tang',
+                            element: <KhuyenMaiTang />,
+                        },
+                    ],
                 },
             ],
         },
