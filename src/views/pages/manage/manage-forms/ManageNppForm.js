@@ -16,13 +16,14 @@ import * as Yup from 'yup';
 import MilkBox from 'assets/images/milk-box.png';
 import MilkBox2 from 'assets/images/milk-box-2.png';
 
-function ManageNppForm({ value = {}, buttonText, onSubmit }) {
+function ManageNppForm({ value = {}, buttonText, onSubmit, onClose }) {
     return (
         <Formik
             initialValues={{
                 ten: value.ten || '',
                 chietkhau: value.chietkhau || 0,
-                matinh: value.matinh || '92',
+                tinh: value.tinh || 92,
+                sdt: value.sdt || '',
             }}
             validationSchema={Yup.object().shape({
                 ten: Yup.string().required('Vui lòng nhập tên nhà phân phối'),
@@ -31,12 +32,13 @@ function ManageNppForm({ value = {}, buttonText, onSubmit }) {
                     'Chiếu khấu phải từ 0 - 100%',
                     (v) => v >= 0 && v <= 1
                 ),
-                matinh: Yup.string().required('Vui lòng chọn tỉnh thành'),
+                tinh: Yup.string().required('Vui lòng chọn tỉnh thành'),
+                sdt: Yup.string(),
             })}
             onSubmit={onSubmit}
         >
             {({ values, errors, handleChange, handleSubmit }) => (
-                <form onSubmit={handleSubmit} style={{ padding: '10px 0', width: 300 }}>
+                <form onSubmit={handleSubmit} style={{ padding: '10px 0' }}>
                     <Stack spacing={1}>
                         <TextField
                             fullWidth
@@ -51,6 +53,16 @@ function ManageNppForm({ value = {}, buttonText, onSubmit }) {
 
                         <FormHelperText error>{errors.ten}</FormHelperText>
 
+                        <TextField
+                            label="Số điện thoại"
+                            placeholder="0123456789"
+                            name="sdt"
+                            value={values.sdt}
+                            onChange={handleChange}
+                        />
+
+                        <FormHelperText error>{errors.sdt}</FormHelperText>
+
                         <Autocomplete
                             options={ProvinceService.getAll().map((province) => ({
                                 label: province.name,
@@ -60,27 +72,27 @@ function ManageNppForm({ value = {}, buttonText, onSubmit }) {
                                 return opt.ma === v;
                             }}
                             getOptionLabel={(v) => ProvinceService.findByCode(v.ma || v)?.name}
-                            value={values.matinh}
+                            value={values.tinh}
                             renderInput={(params) => {
                                 return (
                                     <TextField
                                         {...params}
                                         label="Tỉnh / Thành phố"
                                         placeholder="Thành phố Cần Thơ"
-                                        error={!!errors.matinh}
+                                        error={!!errors.tinh}
                                     />
                                 );
                             }}
                             onChange={(_, v) => {
                                 handleChange({
                                     target: {
-                                        name: 'matinh',
+                                        name: 'tinh',
                                         value: v.ma,
                                     },
                                 });
                             }}
                         />
-                        <FormHelperText error>{errors.matinh}</FormHelperText>
+                        <FormHelperText error>{errors.tinh}</FormHelperText>
 
                         <FormControl fullWidth>
                             <InputLabel>Chiết khấu</InputLabel>
@@ -106,17 +118,7 @@ function ManageNppForm({ value = {}, buttonText, onSubmit }) {
                         </FormControl>
 
                         <div style={{ position: 'relative' }} className="milk-box">
-                            <img
-                                src={MilkBox2}
-                                alt="milk-box"
-                                width="100%"
-                                style={{
-                                    transition: '2s ease',
-                                    position: 'absolute',
-                                    top: 0,
-                                    left: '0',
-                                }}
-                            />
+                            <img src={MilkBox2} alt="milk-box" width="100%" />
 
                             <img
                                 src={MilkBox}
@@ -126,13 +128,16 @@ function ManageNppForm({ value = {}, buttonText, onSubmit }) {
                                     clipPath: `polygon(0 ${values.chietkhau * 100}%, 100% ${
                                         values.chietkhau * 100
                                     }%, 100% 100%, 0 100%)`,
-                                    transition: '2s ease',
                                 }}
                             />
                         </div>
 
                         <Button variant="contained" color="primary" type="submit">
                             {buttonText || 'Thêm'}
+                        </Button>
+
+                        <Button color="primary" type="button" onClick={onClose}>
+                            Hủy
                         </Button>
                     </Stack>
                 </form>

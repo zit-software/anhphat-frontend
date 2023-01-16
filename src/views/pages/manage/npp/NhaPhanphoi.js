@@ -30,10 +30,10 @@ import ManageNppForm from '../manage-forms/ManageNppForm';
 
 const CreateModal = ({ open, onClose, onSubmit }) => {
     return (
-        <Dialog open={open} onClose={onClose}>
+        <Dialog fullWidth open={open} onClose={onClose}>
             <DialogTitle>Thêm nhà phân phối</DialogTitle>
             <DialogContent>
-                <ManageNppForm onSubmit={onSubmit} />
+                <ManageNppForm onSubmit={onSubmit} onClose={onClose} />
             </DialogContent>
         </Dialog>
     );
@@ -41,10 +41,15 @@ const CreateModal = ({ open, onClose, onSubmit }) => {
 
 const UpdateModal = ({ value, open, onClose, onSubmit }) => {
     return (
-        <Dialog open={open} onClose={onClose}>
+        <Dialog fullWidth open={open} onClose={onClose}>
             <DialogTitle>Thêm nhà phân phối</DialogTitle>
             <DialogContent>
-                <ManageNppForm value={value || {}} buttonText="Lưu" onSubmit={onSubmit} />
+                <ManageNppForm
+                    value={value || {}}
+                    buttonText="Lưu"
+                    onSubmit={onSubmit}
+                    onClose={onClose}
+                />
             </DialogContent>
         </Dialog>
     );
@@ -97,7 +102,7 @@ function NhaPhanPhoi() {
         }
     };
 
-    const fixedNpps = npps || [];
+    const fixedNpps = npps?.data || [];
 
     return (
         <MainCard
@@ -141,9 +146,7 @@ function NhaPhanPhoi() {
                                 <TableCell>{npp.ten}</TableCell>
                                 <TableCell>{npp.chietkhau * 100}%</TableCell>
                                 <TableCell>{npp.sdt}</TableCell>
-                                <TableCell>
-                                    {ProvinceService.findByCode(npp.matinh)?.name}
-                                </TableCell>
+                                <TableCell>{ProvinceService.findByCode(npp.tinh)?.name}</TableCell>
                                 <TableCell>{dayjs(npp.createdAt).format('DD/MM/YYYY')}</TableCell>
                                 <TableCell>{dayjs(npp.updatedAt).format('DD/MM/YYYY')}</TableCell>
                                 <TableCell>
