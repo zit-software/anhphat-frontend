@@ -1,179 +1,31 @@
-import { Delete, Edit } from '@mui/icons-material';
-import {
-    Button,
-    CardHeader,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    FormControl,
-    FormHelperText,
-    Grid,
-    IconButton,
-    InputLabel,
-    MenuItem,
-    Select,
-    TextField,
-    Typography,
-} from '@mui/material';
+import { Edit } from '@mui/icons-material';
+import { CardHeader, Dialog, IconButton, MenuItem, Select, Typography } from '@mui/material';
 import { DataGrid, GridActionsCellItem, GridToolbar, viVN } from '@mui/x-data-grid';
-import { IconEqual, IconFileUpload, IconX } from '@tabler/icons';
-import { Formik } from 'formik';
+import { IconFileUpload } from '@tabler/icons';
 import { memo, useState } from 'react';
 import { useQuery } from 'react-query';
-import * as Yup from 'yup';
 
 import productcategoryservice from 'services/productcategory.service';
+import QuyCachForm from '../forms/QuyCachForm';
 
 // INPUT MODAL
 const _InputModal = ({ open, onClose, onSubmit }) => {
-    const [selectedloaihang, setselectedloaihang] = useState('');
-
-    const { data: donvis } = useQuery(
-        [open, selectedloaihang],
-        productcategoryservice.getAllDonVisByLoaiHang,
-        {
-            initialData: [],
-            enabled: !!selectedloaihang,
-        }
-    );
-    const { data: categories } = useQuery(
-        'allProductsCategoryAddQuyCach',
-        productcategoryservice.getAllCategories,
-        {
-            initialData: [],
-        }
-    );
     return (
         <Dialog fullWidth open={open} onClose={onClose}>
-            <Formik
-                initialValues={{ malh: '', madv1: '', madv2: '', soluong: 0 }}
-                validationSchema={Yup.object().shape({
-                    malh: Yup.number().required('Vui lòng chọn loại hàng'),
-                    madv1: Yup.number().required('Vui lòng chọn đơn vị lớn'),
-                    madv2: Yup.number().required('Vui lòng chọn đơn vị nhỏ'),
-                    soluong: Yup.number()
-                        .required('Vui lòng nhập số lượng')
-                        .integer('Số lượng phải là số nguyên')
-                        .min(1, 'Số lượng phải > 0'),
-                })}
-                onSubmit={onSubmit}
-            >
-                {({ values, errors, handleChange, handleSubmit, setFieldValue }) => (
-                    <form onSubmit={handleSubmit}>
-                        <DialogTitle>Thêm quy cách</DialogTitle>
-                        <DialogContent>
-                            <FormControl fullWidth sx={{ mt: 1 }} error={!!errors.malh}>
-                                <InputLabel>Loại hàng</InputLabel>
-                                <Select
-                                    name="malh"
-                                    value={values.malh}
-                                    label="Loại hàng"
-                                    placeholder="Loại hàng"
-                                    onChange={(event) => {
-                                        handleChange(event);
-                                        setFieldValue('madv1', '');
-                                        setFieldValue('madv2', '');
-                                        setselectedloaihang(event.target.value);
-                                    }}
-                                >
-                                    {categories.map((e) => (
-                                        <MenuItem key={e.ma} value={e.ma}>
-                                            {e.ten}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-
-                                <FormHelperText error>{errors.malh}</FormHelperText>
-                            </FormControl>
-                            <Grid container spacing={2} mt={1}>
-                                <Grid item xs={3}>
-                                    <FormControl fullWidth error={!!errors.madv1}>
-                                        <InputLabel>Đơn vị lớn</InputLabel>
-                                        <Select
-                                            name="madv1"
-                                            value={values.madv1}
-                                            label="Đơn vị lớn"
-                                            placeholder="Đơn vị lớn"
-                                            onChange={handleChange}
-                                        >
-                                            {donvis
-                                                .filter(() => values.malh)
-                                                .map((e) => (
-                                                    <MenuItem key={e.ma} value={e.ma}>
-                                                        {e.ten}
-                                                    </MenuItem>
-                                                ))}
-                                        </Select>
-
-                                        <FormHelperText error>{errors.madv1}</FormHelperText>
-                                    </FormControl>
-                                </Grid>
-
-                                <Grid item xs={1}>
-                                    <IconButton disabled>
-                                        <IconEqual />
-                                    </IconButton>
-                                </Grid>
-
-                                <Grid item xs={3}>
-                                    <FormControl fullWidth error={!!errors.madv2}>
-                                        <InputLabel>Đơn vị nhỏ</InputLabel>
-                                        <Select
-                                            name="madv2"
-                                            value={values.madv2}
-                                            label="Đơn vị nhỏ"
-                                            placeholder="Đơn vị nhỏ"
-                                            onChange={handleChange}
-                                        >
-                                            {donvis
-                                                .filter((e) => e.ma !== values.madv1 && values.malh)
-                                                .map((e) => (
-                                                    <MenuItem key={e.ma} value={e.ma}>
-                                                        {e.ten}
-                                                    </MenuItem>
-                                                ))}
-                                        </Select>
-                                        <FormHelperText error>{errors.madv2}</FormHelperText>
-                                    </FormControl>
-                                </Grid>
-                                <Grid item xs={1}>
-                                    <IconButton disabled>
-                                        <IconX />
-                                    </IconButton>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <TextField
-                                        error={!!errors.soluong}
-                                        fullWidth
-                                        label="Số lượng quy đổi"
-                                        type="number"
-                                        placeholder="12"
-                                        name="soluong"
-                                        value={values.soluong}
-                                        onChange={handleChange}
-                                    />
-
-                                    <FormHelperText error>{errors.soluong}</FormHelperText>
-                                </Grid>
-                            </Grid>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button type="submit" variant="contained">
-                                Lưu
-                            </Button>
-                            <Button type="button" onClick={onClose}>
-                                Hủy
-                            </Button>
-                        </DialogActions>
-                    </form>
-                )}
-            </Formik>
+            <QuyCachForm onSubmit={onSubmit} onClose={onClose} />
         </Dialog>
     );
 };
 
 const InputModal = memo(_InputModal);
+
+const UpdateModal = ({ open, value, onClose, onSubmit }) => {
+    return (
+        <Dialog open={open} onClose={onClose}>
+            {open && <QuyCachForm value={value} onClose={onClose} onSubmit={onSubmit} />}
+        </Dialog>
+    );
+};
 
 const QuyCach = () => {
     // State là mã của quy cách đang chỉnh sửa, nếu đang không chỉnh sửa thì state là null
@@ -201,6 +53,22 @@ const QuyCach = () => {
         } catch (error) {
             console.log(error);
         } finally {
+            refetchAllQuyCachs();
+        }
+    };
+
+    // Update
+    const [updatePayload, setUpdatePayload] = useState(null);
+
+    const handleOpenUpdateModal = (payload) => setUpdatePayload(payload);
+    const handleCloseUpdateModal = () => setUpdatePayload(null);
+
+    const handleUpdate = async (values) => {
+        try {
+            await productcategoryservice.updateQuyCach(updatePayload.ma, values);
+        } catch (error) {
+        } finally {
+            handleCloseUpdateModal();
             refetchAllQuyCachs();
         }
     };
@@ -283,13 +151,7 @@ const QuyCach = () => {
                                 <GridActionsCellItem
                                     icon={<Edit />}
                                     label="Chỉnh sửa"
-                                    onClick={() => {}}
-                                />,
-
-                                <GridActionsCellItem
-                                    icon={<Delete />}
-                                    label="Xóa"
-                                    onClick={() => {}}
+                                    onClick={() => handleOpenUpdateModal(row)}
                                 />,
                             ];
                         },
@@ -312,6 +174,13 @@ const QuyCach = () => {
                 onClose={handleCloseInputModal}
                 onSubmit={handleSubmitInputModal}
                 refetch={refetchAllQuyCachs}
+            />
+
+            <UpdateModal
+                value={updatePayload}
+                open={!!updatePayload}
+                onClose={handleCloseUpdateModal}
+                onSubmit={handleUpdate}
             />
         </>
     );

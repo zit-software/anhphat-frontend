@@ -35,7 +35,7 @@ const productcategoryservice = {
         const res = await request.get(`/donvi`);
         return res.data;
     },
-    async getAllDonVisByLoaiHang({ queryKey: [_, malh] }) {
+    async getAllDonVisByLoaiHang({ queryKey: [malh] }) {
         if (!malh) return;
         const res = await request.get(`/donvi?loaihang=${malh}`);
         return res.data;
