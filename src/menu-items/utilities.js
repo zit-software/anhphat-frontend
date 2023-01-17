@@ -7,6 +7,7 @@ import {
     IconPackage,
     IconBox,
     IconFileInvoice,
+    IconDiscount,
 } from '@tabler/icons';
 
 // constant
@@ -18,6 +19,7 @@ const icons = {
     IconPackage,
     IconBox,
     IconFileInvoice,
+    IconDiscount,
 };
 
 // ==============================|| UTILITIES MENU ITEMS ||============================== //
