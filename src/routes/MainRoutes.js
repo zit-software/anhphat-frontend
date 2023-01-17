@@ -3,6 +3,8 @@ import { lazy } from 'react';
 // project imports
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
+import EditKhuyenMaiTang from 'views/pages/khuyenmai/tang/ChinhSua';
+import KhuyenMaiTang from 'views/pages/khuyenmai/tang/KhuyenMaiTang';
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 
@@ -110,6 +112,19 @@ const MainRoutes = {
                 {
                     path: 'npp',
                     element: <NhaPhanPhoi />,
+                },
+                {
+                    path: 'khuyenmai',
+                    children: [
+                        {
+                            path: 'tang',
+                            element: <KhuyenMaiTang />,
+                        },
+                    ],
+                },
+                {
+                    path: 'khuyenmai/tang/edit',
+                    element: <EditKhuyenMaiTang />,
                 },
             ],
         },
