@@ -19,11 +19,7 @@ import MainCard from 'ui-component/cards/MainCard';
 function ChinhSuaHoaDon() {
     const params = useParams();
 
-    const {
-        data: phieuxuat,
-        isLoading,
-        refetch,
-    } = useQuery([params.ma], () =>
+    const { data: phieuxuat, isLoading } = useQuery([params.ma], () =>
         HoaDonXuatService.layMotHoaDon(params.ma).then((res) => res.data)
     );
 
@@ -67,11 +63,13 @@ function ChinhSuaHoaDon() {
                     </TableHead>
 
                     <TableBody>
-                        <TableCell>{phieuxuat.ma}</TableCell>
-                        <TableCell>Hóa đơn xuất hàng</TableCell>
-                        <TableCell>{dayjs(phieuxuat.createdAt).format('DD/MM/YYYY')}</TableCell>
-                        <TableCell>{phieuxuat.nguoinhap.ma}</TableCell>
-                        <TableCell>{phieuxuat.nguoinhap.ten}</TableCell>
+                        <TableRow>
+                            <TableCell>{phieuxuat.ma}</TableCell>
+                            <TableCell>Hóa đơn xuất hàng</TableCell>
+                            <TableCell>{dayjs(phieuxuat.createdAt).format('DD/MM/YYYY')}</TableCell>
+                            <TableCell>{phieuxuat.nguoinhap.ma}</TableCell>
+                            <TableCell>{phieuxuat.nguoinhap.ten}</TableCell>
+                        </TableRow>
                     </TableBody>
                 </Table>
 
