@@ -14,12 +14,15 @@ const ProductCategory = Loadable(
     lazy(() => import('views/pages/storage/productCategory/ProductCategory'))
 );
 const HoaDonNhap = Loadable(lazy(() => import('views/pages/hoadon/nhap/HoaDonNhap')));
-const ChinhSuaHoaDon = Loadable(
+const ChinhSuaHoaDonNhap = Loadable(
     lazy(() => import('views/pages/hoadon/nhap/chinhsua/ChinhSuaHoaDon'))
 );
 const HoaDonXuat = Loadable(lazy(() => import('views/pages/hoadon/xuat/HoaDonXuat')));
 const Product = Loadable(lazy(() => import('views/pages/storage/product/Product')));
 const NhaPhanPhoi = Loadable(lazy(() => import('views/pages/manage/npp/NhaPhanphoi')));
+const ChinhSuaHoaDonXuat = Loadable(
+    lazy(() => import('views/pages/hoadon/xuat/chinhsua/ChinhSuaHoaDon'))
+);
 
 const MainRoutes = {
     path: '/',
@@ -69,7 +72,7 @@ const MainRoutes = {
                     children: [
                         {
                             path: ':ma',
-                            element: <ChinhSuaHoaDon />,
+                            element: <ChinhSuaHoaDonNhap />,
                         },
                     ],
                 },
@@ -96,7 +99,21 @@ const MainRoutes = {
                     children: [
                         {
                             path: ':ma',
-                            element: <ChinhSuaHoaDon />,
+                            element: <ChinhSuaHoaDonNhap />,
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            path: 'hoadon',
+            children: [
+                {
+                    path: 'xuat',
+                    children: [
+                        {
+                            path: ':ma',
+                            element: <ChinhSuaHoaDonXuat />,
                         },
                     ],
                 },

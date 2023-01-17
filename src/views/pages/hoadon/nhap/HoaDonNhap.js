@@ -333,7 +333,12 @@ const HoaDonNhap = () => {
                             </DialogContent>
 
                             <DialogActions>
-                                <Button type="submit">Xóa</Button>
+                                <Button type="submit" variant="contained">
+                                    Xóa
+                                </Button>
+                                <Button type="button" onClick={() => setSelectedDelete(null)}>
+                                    Hủy
+                                </Button>
                             </DialogActions>
                         </form>
                     )}
