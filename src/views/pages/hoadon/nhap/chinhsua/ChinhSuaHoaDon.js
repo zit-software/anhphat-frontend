@@ -56,6 +56,7 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
     const handleSave = () => {
         setEdit(false);
     };
+
     if (isLoading) return <RowSkeleton cols={9} />;
 
     return edit ? (
@@ -66,7 +67,7 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
                 malh: value.malh || products[0]?.ma,
                 soluong: value.soluong || 1,
                 hsd: value.hsd || new Date(),
-                gianhap: value.gianhap || 0,
+                gianhap: value.gianhap || product[0]?.donvi[0]?.gianhap || 0,
             }}
             validationSchema={Yup.object().shape({
                 malh: Yup.string().required('Vui lòng chọn sản phẩm'),
@@ -78,7 +79,8 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
                     ),
                 soluong: Yup.number()
                     .required('Vui lòng nhập số lượng')
-                    .min(1, 'Số lượng phải từ 1'),
+                    .min(1, 'Số lượng phải từ 1')
+                    .integer('Số lượng sản phẩm phải là số nguyên'),
                 hsd: Yup.date().required('Vui lòng chọn hạn sử dụng'),
                 gianhap: Yup.number().required('Vui lòng nhập giá nhập').min(0, 'Giá phải từ 0'),
             })}
@@ -178,17 +180,24 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
                                 onChange={handleChange}
                             />
                             <FormHelperText error>{errors.gianhap}</FormHelperText>
-                            {product.gianhap && values.gianhap !== product.gianhap && (
+                        </FormControl>
+
+                        {product.donvi.find((e) => e.ma === value.madv) &&
+                            product.donvi.find((e) => e.ma === value.madv).gianhap !==
+                                values.gianhap && (
                                 <Button
                                     size="small"
-                                    onClick={() => {
-                                        setFieldValue('gianhap', product.gianhap);
-                                    }}
+                                    fullWidth
+                                    onClick={() =>
+                                        setFieldValue(
+                                            'gianhap',
+                                            product.donvi.find((e) => e.ma === value.madv).gianhap
+                                        )
+                                    }
                                 >
-                                    {formatter.format(product.gianhap)}
+                                    {product.donvi.find((e) => e.ma === value.madv).gianhap}
                                 </Button>
                             )}
-                        </FormControl>
                     </TableCell>
                     <TableCell>
                         <Typography variant="subtitle2">
