@@ -1,3 +1,4 @@
+import { AutoFixNormalOutlined } from '@mui/icons-material';
 import {
     Button,
     FormControl,
@@ -11,7 +12,7 @@ import {
     Typography,
 } from '@mui/material';
 import { Box, Stack } from '@mui/system';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridActionsCellItem, GridToolbar, viVN } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
@@ -209,7 +210,21 @@ const Product = () => {
                                     field: 'giaxuat',
                                     headerName: 'Giá xuất',
                                     renderCell({ row }) {
-                                        return formatter.format(row.loaihang.giaban);
+                                        return formatter.format(row.donvi.giaban);
+                                    },
+                                },
+                                {
+                                    field: 'actions',
+                                    type: 'actions',
+                                    headerName: 'Phân rã',
+                                    getActions(params) {
+                                        return [
+                                            <GridActionsCellItem
+                                                label="Phân rã"
+                                                icon={<AutoFixNormalOutlined />}
+                                                onClick={() => {}}
+                                            />,
+                                        ];
                                     },
                                 },
                             ]}
@@ -219,6 +234,11 @@ const Product = () => {
                             }))}
                             loading={isLoading}
                             autoPageSize
+                            localeText={viVN.components.MuiDataGrid.defaultProps.localeText}
+                            density="compact"
+                            components={{
+                                Toolbar: GridToolbar,
+                            }}
                         />
                     </Box>
                 </Grid>

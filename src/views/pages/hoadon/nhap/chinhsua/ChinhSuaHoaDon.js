@@ -7,6 +7,7 @@ import {
     DialogContentText,
     DialogTitle,
     FormControl,
+    FormControlLabel,
     FormHelperText,
     Grid,
     IconButton,
@@ -16,6 +17,7 @@ import {
     MenuItem,
     OutlinedInput,
     Select,
+    Switch,
     Table,
     TableBody,
     TableCell,
@@ -227,7 +229,7 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
             <TableCell>{dayjs(value.hsd).format('DD/MM/YYYY')}</TableCell>
             <TableCell>{value.soluong}</TableCell>
             <TableCell>{formatter.format(value.gianhap)}</TableCell>
-            <TableCell>{formatter.format(value.soluong * value.gianhap)}</TableCell>
+            <TableCell>{formatter.format((value.soluong || 1) * value.gianhap)}</TableCell>
             {!disabled && (
                 <>
                     <TableCell>
@@ -245,13 +247,16 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
 function ChinhSuaHoaDon() {
     const params = useParams();
     const navigate = useNavigate();
+    const [chitiet, setChiTiet] = useState(false);
 
     const {
         data: phieunhap,
         isLoading,
         isError,
         refetch,
-    } = useQuery(['phieunhap', params.ma], () => HoaDonNhapService.layPhieuNhap(params.ma));
+    } = useQuery([params.ma, chitiet], () =>
+        HoaDonNhapService.layPhieuNhap(params.ma, { chitiet })
+    );
     const [saveModal, setSaveModal] = useState(null);
 
     const [rows, setRows] = useState([]);
@@ -437,6 +442,16 @@ function ChinhSuaHoaDon() {
 
                             <Typography variant="subtitle2">Thông tin chi tiết</Typography>
 
+                            {phieunhap.daluu && (
+                                <FormControlLabel
+                                    label="Hiện chi tiết mặt hàng"
+                                    control={<Switch checked={chitiet} />}
+                                    onChange={(event) => {
+                                        setChiTiet(event.target.checked);
+                                    }}
+                                />
+                            )}
+
                             <TableContainer>
                                 <Table size="small">
                                     <TableHead>
@@ -520,7 +535,8 @@ function ChinhSuaHoaDon() {
                                                 {formatter.format(
                                                     rows.reduce(
                                                         (prev, curent) =>
-                                                            curent.gianhap * curent.soluong + prev,
+                                                            curent.gianhap * (curent.soluong || 1) +
+                                                            prev,
                                                         0
                                                     )
                                                 )}
@@ -553,23 +569,33 @@ function ChinhSuaHoaDon() {
                 )}
             </Formik>
 
-            <Dialog open={!!saveModal} onClick={() => setSaveModal(null)}>
-                <DialogTitle>Lưu hóa đơn</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Lưu ý: Bạn không thể chỉnh sửa hóa đơn sau khi lưu
-                    </DialogContentText>
-                </DialogContent>
-
-                <DialogActions>
-                    <Button onClick={handleSave} variant="contained">
-                        Lưu
-                    </Button>
-                    <Button onClick={() => setSaveModal(null)}>Hủy</Button>
-                </DialogActions>
-            </Dialog>
+            <SaveModal
+                open={!!saveModal}
+                onClose={() => setSaveModal(null)}
+                onSubmit={handleSave}
+            />
         </MainCard>
     );
 }
+
+const SaveModal = ({ open, onClose, onSubmit }) => {
+    return (
+        <Dialog open={open} onClick={onClose}>
+            <DialogTitle>Lưu hóa đơn</DialogTitle>
+            <DialogContent>
+                <DialogContentText>
+                    Lưu ý: Bạn không thể chỉnh sửa hóa đơn sau khi lưu
+                </DialogContentText>
+            </DialogContent>
+
+            <DialogActions>
+                <Button onClick={onSubmit} variant="contained">
+                    Lưu
+                </Button>
+                <Button onClick={onClose}>Hủy</Button>
+            </DialogActions>
+        </Dialog>
+    );
+};
 
 export default ChinhSuaHoaDon;
