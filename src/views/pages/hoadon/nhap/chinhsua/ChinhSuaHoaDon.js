@@ -42,7 +42,7 @@ import RowSkeleton from 'ui-component/skeletons/RowSkeleton';
 import dayjs from 'utils/dayjs';
 import formatter from 'views/utilities/formatter';
 
-const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
+const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
     const { data: products, isLoading } = useQuery(
         ['products'],
         productcategoryservice.getAllCategoriesAndDonvi
@@ -51,6 +51,7 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
 
     const product = products?.find((e) => e.ma === value.malh) ||
         (products && products[0]) || { donvi: [] };
+
     const donvi = product?.donvi?.find((e) => e.ma === value.madv) || {};
 
     const handleSave = () => {
@@ -61,13 +62,14 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
 
     return edit ? (
         <Formik
+            enableReinitialize
             initialValues={{
-                ma: value.ma || '',
-                madv: value.madv || products[0]?.donvi[0]?.ma,
-                malh: value.malh || products[0]?.ma,
+                ma: value.ma || product.ma || '',
+                madv: value.madv || product.donvi[0]?.ma,
+                malh: value.malh || product.ma,
                 soluong: value.soluong || 1,
                 hsd: value.hsd || new Date(),
-                gianhap: value.gianhap || product[0]?.donvi[0]?.gianhap || 0,
+                gianhap: value.gianhap || product.donvi[0].gianhap || 0,
             }}
             validationSchema={Yup.object().shape({
                 malh: Yup.string().required('Vui lòng chọn sản phẩm'),
@@ -167,7 +169,7 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
                     </TableCell>
 
                     <TableCell>
-                        <FormControl variant="outlined" size="small">
+                        <FormControl variant="outlined" size="small" fullWidth>
                             <InputLabel>Đơn giá</InputLabel>
                             <OutlinedInput
                                 error={!!errors.gianhap}
@@ -182,9 +184,9 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
                             <FormHelperText error>{errors.gianhap}</FormHelperText>
                         </FormControl>
 
-                        {product.donvi.find((e) => e.ma === value.madv) &&
-                            product.donvi.find((e) => e.ma === value.madv).gianhap !==
-                                values.gianhap && (
+                        {product.donvi.find((e) => e.ma === value.madv)?.gianhap &&
+                            product.donvi.find((e) => e.ma === value.madv)?.gianhap !==
+                                value.gianhap && (
                                 <Button
                                     size="small"
                                     fullWidth
@@ -195,7 +197,7 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
                                         )
                                     }
                                 >
-                                    {product.donvi.find((e) => e.ma === value.madv).gianhap}
+                                    {product.donvi.find((e) => e.ma === value.madv)?.gianhap}
                                 </Button>
                             )}
                     </TableCell>

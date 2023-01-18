@@ -1,5 +1,4 @@
-import { AddCircle, Delete, Edit } from '@mui/icons-material';
-import { LoadingButton } from '@mui/lab';
+import { Delete, Edit } from '@mui/icons-material';
 import {
     Button,
     CardHeader,
@@ -13,7 +12,6 @@ import {
     FormHelperText,
     IconButton,
     LinearProgress,
-    TextField,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem, GridToolbar, viVN } from '@mui/x-data-grid';
@@ -23,151 +21,21 @@ import { Formik } from 'formik';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import productcategoryservice from 'services/productcategory.service';
-import formatter from 'views/utilities/formatter';
 import * as Yup from 'yup';
+import ProductCategoryForm from '../forms/ProductCategotyForm';
 
 const CreateModal = ({ open, onClose, onSubmit }) => {
-    const [donviList, setDonViList] = useState([]);
-    const [loading, setLoading] = useState(false);
-
-    const handleAddDonvi = () =>
-        setDonViList((prev) => [...prev, { id: Math.random(), ten: '', gianhap: 0, giaban: 0 }]);
-
-    const handleRemoveDonvi = (id) => {
-        setDonViList((prev) => prev.filter((e) => e.id !== id));
-    };
-
-    const handleUpdateDonvi = (values) => {
-        for (const id in values) {
-            const payload = values[id];
-
-            const update = {};
-
-            for (const key in payload) {
-                update[key] = payload[key].value;
-            }
-
-            setDonViList((prev) =>
-                prev.map((e) => {
-                    if (e.id === Number(id)) {
-                        return { ...e, ...update };
-                    }
-
-                    return e;
-                })
-            );
-        }
-    };
-
     return (
-        <Dialog fullWidth open={open} onClose={onClose}>
-            <Formik
-                initialValues={{ ten: '' }}
-                validationSchema={Yup.object().shape({
-                    ten: Yup.string().required('Vui lòng nhập tên loại hàng'),
-                })}
-                onSubmit={async (values) => {
-                    setLoading(true);
-                    await onSubmit(values, donviList);
-                    setLoading(false);
-                    onClose();
-                }}
-            >
-                {({ values, errors, handleChange, handleSubmit }) => (
-                    <form onSubmit={handleSubmit}>
-                        <DialogTitle>Thêm loại hàng</DialogTitle>
+        <Dialog fullWidth title="Thêm hàng hóa" open={open} onClose={onClose}>
+            {open && <ProductCategoryForm onSubmit={onSubmit} onClose={onClose} />}
+        </Dialog>
+    );
+};
 
-                        <DialogContent>
-                            <TextField
-                                sx={{ mt: 2 }}
-                                fullWidth
-                                name="ten"
-                                value={values.ten}
-                                error={!!errors.ten}
-                                placeholder="Yến sào Sanest"
-                                label="Tên loại hàng"
-                                onChange={handleChange}
-                            />
-                            <FormHelperText error>{errors.ten}</FormHelperText>
-                            <CardHeader
-                                title="Đơn vị"
-                                action={
-                                    <LoadingButton
-                                        startIcon={<AddCircle />}
-                                        variant="contained"
-                                        size="small"
-                                        loading={loading}
-                                        onClick={handleAddDonvi}
-                                    >
-                                        Thêm
-                                    </LoadingButton>
-                                }
-                            />
-                            <DataGrid
-                                sx={{ height: 300 }}
-                                density="compact"
-                                localeText={viVN.components.MuiDataGrid.defaultProps.localeText}
-                                columns={[
-                                    {
-                                        field: 'ten',
-                                        headerName: 'Tên đơn vị',
-                                        flex: 1,
-                                        editable: true,
-                                    },
-                                    {
-                                        field: 'gianhap',
-                                        headerName: 'Giá nhập',
-                                        flex: 1,
-                                        editable: true,
-                                        type: 'number',
-                                        renderCell({ value }) {
-                                            return formatter.format(value);
-                                        },
-                                    },
-                                    {
-                                        field: 'giaban',
-                                        headerName: 'Giá bán',
-                                        flex: 1,
-                                        editable: true,
-                                        type: 'number',
-                                        renderCell({ value }) {
-                                            return formatter.format(value);
-                                        },
-                                    },
-                                    {
-                                        field: 'actions',
-                                        type: 'actions',
-                                        headerName: 'Hành động',
-                                        getActions(params) {
-                                            return [
-                                                <GridActionsCellItem
-                                                    icon={<Delete />}
-                                                    label="delete"
-                                                    onClick={() => handleRemoveDonvi(params.row.id)}
-                                                />,
-                                            ];
-                                        },
-                                    },
-                                ]}
-                                rows={donviList}
-                                editMode="row"
-                                onEditRowsModelChange={handleUpdateDonvi}
-                                loading={loading}
-                                hideFooterPagination
-                            />
-                        </DialogContent>
-
-                        <DialogActions>
-                            <LoadingButton type="submit" variant="contained" loading={loading}>
-                                Thêm
-                            </LoadingButton>
-                            <LoadingButton type="button" loading={loading} onClick={onClose}>
-                                Hủy
-                            </LoadingButton>
-                        </DialogActions>
-                    </form>
-                )}
-            </Formik>
+const UpdateModal = ({ value, open, onClose, onSubmit }) => {
+    return (
+        <Dialog fullWidth title="Chỉnh sửa loại hàng" open={open} onClose={onClose}>
+            {value && <ProductCategoryForm value={value} onSubmit={onSubmit} onClose={onClose} />}
         </Dialog>
     );
 };
@@ -223,18 +91,16 @@ const DeleteModal = ({ open, onClose, onSubmit }) => {
 function Category() {
     const [openCreateModal, setOpenCreateModal] = useState(false);
     const [deletePayload, setDeletePayload] = useState(null);
+    const [updatePayload, setUpdatePayload] = useState(null);
 
     const {
         data: lhList,
         isLoading,
         refetch,
-    } = useQuery([], () => productcategoryservice.getAllCategories());
+    } = useQuery([], () => productcategoryservice.getAllCategoriesAndDonvi());
 
     const handleOpenCreateModal = () => setOpenCreateModal(true);
     const handleCloseCreateModal = () => setOpenCreateModal(false);
-
-    const handleOpenDeleteModal = (payload) => setDeletePayload(payload);
-    const handleCloseDeleteModal = () => setDeletePayload(null);
 
     const handleCreate = async (values, donviList) => {
         try {
@@ -252,12 +118,36 @@ function Category() {
         }
     };
 
+    const handleOpenDeleteModal = (payload) => setDeletePayload(payload);
+    const handleCloseDeleteModal = () => setDeletePayload(null);
+
     const handleDelete = async () => {
         try {
             await productcategoryservice.deleteCategory(deletePayload.ma);
         } catch (error) {
         } finally {
             handleCloseDeleteModal();
+            refetch();
+        }
+    };
+
+    const handleOpenUpdateModal = (payload) => setUpdatePayload(payload);
+    const handleCloseUpdateModal = () => setUpdatePayload(null);
+
+    const handleUpdate = async (values, donviList) => {
+        try {
+            await productcategoryservice.updateCategory(values, values.ma);
+
+            for (const donvi of donviList) {
+                if (donvi.ma) {
+                    await productcategoryservice.updateDonVi(donvi.ma, donvi);
+                } else {
+                    await productcategoryservice.addDonvi({ ...donvi, malh: values.ma });
+                }
+            }
+        } catch (error) {
+        } finally {
+            handleCloseUpdateModal();
             refetch();
         }
     };
@@ -310,7 +200,7 @@ function Category() {
                                     <GridActionsCellItem
                                         icon={<Edit />}
                                         label="Chỉnh sửa"
-                                        onClick={() => {}}
+                                        onClick={() => handleOpenUpdateModal(params.row)}
                                     />,
                                     <GridActionsCellItem
                                         icon={<Delete />}
@@ -339,6 +229,13 @@ function Category() {
                 open={!!deletePayload}
                 onClose={handleCloseDeleteModal}
                 onSubmit={handleDelete}
+            />
+
+            <UpdateModal
+                open={!!updatePayload}
+                value={updatePayload}
+                onClose={handleCloseUpdateModal}
+                onSubmit={handleUpdate}
             />
         </Box>
     );
