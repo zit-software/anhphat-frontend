@@ -128,6 +128,12 @@ function ProductCategoryForm({ value = { donvi: [] }, title, onSubmit, onClose }
                                     },
                                 },
                                 {
+                                    field: 'diem',
+                                    headerName: 'Điểm',
+                                    editable: true,
+                                    type: 'number',
+                                },
+                                {
                                     field: 'actions',
                                     type: 'actions',
                                     headerName: 'Hành động',
