@@ -39,7 +39,7 @@ const Product = () => {
         isLoading,
         refetch: refetchAllMH,
     } = useQuery(
-        ['allMH', { ...selected, order: selectedOrder, page: currentPage }],
+        ['allMH', { ...selected, order: selectedOrder, page: currentPage, group: 'true' }],
         productcategoryservice.getAllMatHang,
         { enabled: false, initialData: { data: [], total: 0 } }
     );
@@ -173,10 +173,6 @@ const Product = () => {
                         <DataGrid
                             columns={[
                                 {
-                                    field: 'ma',
-                                    headerName: 'Mã mặt hàng',
-                                },
-                                {
                                     field: 'loaihang',
                                     headerName: 'Loại hàng',
                                     flex: 1,
@@ -201,10 +197,15 @@ const Product = () => {
                                     renderCell: ({ value }) => dayjs(value).format('DD/MM/YYYY'),
                                 },
                                 {
+                                    field: 'soluong',
+                                    headerName: 'Số lượng',
+                                    flex: 1,
+                                },
+                                {
                                     field: 'gianhap',
                                     headerName: 'Giá nhập',
                                     flex: 1,
-                                    renderCell: ({ value }) => formatter.format(value),
+                                    renderCell: ({ row }) => formatter.format(row.donvi.gianhap),
                                 },
                                 {
                                     field: 'giaxuat',
@@ -230,7 +231,7 @@ const Product = () => {
                             ]}
                             rows={allMatHang.data.map((e) => ({
                                 ...e,
-                                id: e.ma,
+                                id: parseInt(Math.random() * 1000000),
                             }))}
                             loading={isLoading}
                             autoPageSize

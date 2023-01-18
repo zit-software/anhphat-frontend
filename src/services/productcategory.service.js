@@ -55,13 +55,14 @@ const productcategoryservice = {
     },
     async getAllMatHang({ queryKey: [_, params] }) {
         try {
-            const lh = params?.malh || '';
-            const dv = params?.madv || '';
-            const ngaynhap = params?.ngaynhap || '';
-            const order = params?.order || '';
-            const page = params?.page || '';
+            const lh = params.malh || '';
+            const dv = params.madv || '';
+            const ngaynhap = params.ngaynhap || '';
+            const order = params.order || '';
+            const page = params.page || '';
+            const group = params.group || '';
             const res = await request.get(
-                `/mathang?loaihang=${lh}&donvi=${dv}&ngaynhap=${ngaynhap}&order=${order}&page=${page}`
+                `/mathang?loaihang=${lh}&donvi=${dv}&ngaynhap=${ngaynhap}&order=${order}&page=${page}&group=${group}`
             );
             return res.data;
         } catch (error) {
