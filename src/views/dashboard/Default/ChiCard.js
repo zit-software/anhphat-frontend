@@ -50,7 +50,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
 
 // ===========================|| DASHBOARD DEFAULT - EARNING CARD ||=========================== //
 
-const ChiCard = ({ isLoading, tongchi }) => {
+const ChiCard = ({ isLoading, tongchi = 0 }) => {
     const theme = useTheme();
 
     return (

@@ -1,11 +1,11 @@
 import request from 'utils/request';
 
 class ThongKeService {
-    static async thongketheongay() {
+    static async thongketheongay({ ngaybd, ngaykt }) {
         return await request.get('thongke/ngay', {
             params: {
-                ngaybd: '2020-10-10',
-                ngaykt: '2023-10-10',
+                ngaybd,
+                ngaykt,
             },
         });
     }
