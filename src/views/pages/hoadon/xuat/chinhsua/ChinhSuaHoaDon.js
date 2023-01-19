@@ -30,7 +30,7 @@ import dayjs from 'dayjs';
 import { Formik } from 'formik';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import HoaDonXuatService from 'services/hoadonxuat.service';
 import productcategoryservice from 'services/productcategory.service';
 import ProvinceService from 'services/province.service';
@@ -306,10 +306,17 @@ const ManualAddModal = ({ open, selecteds = [], onUpdate, onClose }) => {
     );
 };
 
-const ManualRow = ({ ma, index }) => {
+const ManualRow = ({ ma, index, dongia, updateDongia }) => {
     const { data: mathang, isLoading } = useQuery(['mathang', ma], () =>
         productcategoryservice.getMatHang(ma).then((res) => res.data)
     );
+
+    useEffect(() => {
+        if (isLoading || dongia) return;
+
+        updateDongia(mathang.giaban);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [mathang, isLoading]);
 
     if (isLoading) return <RowSkeleton cols={10} />;
 
@@ -320,14 +327,33 @@ const ManualRow = ({ ma, index }) => {
             <TableCell>{mathang.donvi.ten}</TableCell>
             <TableCell>{dayjs(mathang.hsd).format('DD/MM/YYYY')}</TableCell>
             <TableCell>1</TableCell>
-            <TableCell>{formatter.format(mathang.giaban)}</TableCell>
-            <TableCell>{formatter.format(mathang.giaban)}</TableCell>
+            <TableCell>
+                <TextField
+                    size="small"
+                    label="Đơn giá"
+                    placeholder="1.000.000đ"
+                    value={dongia || '0'}
+                    required
+                    type="number"
+                    onChange={(event) => {
+                        updateDongia(event.target.value);
+                    }}
+                />
+
+                {parseInt(dongia) !== mathang.giaban && (
+                    <Button size="small" onClick={() => updateDongia(mathang.giaban)}>
+                        {formatter.format(mathang.giaban)}
+                    </Button>
+                )}
+            </TableCell>
+            <TableCell>{formatter.format(dongia)}</TableCell>
             <TableCell></TableCell>
         </TableRow>
     );
 };
 
 function ChinhSuaHoaDon() {
+    const navigate = useNavigate();
     const params = useParams();
 
     const { data: phieuxuat, isLoading } = useQuery([params.ma], () =>
@@ -361,6 +387,7 @@ function ChinhSuaHoaDon() {
 
     const [openManualModal, setOpenManualModal] = useState(false);
     const [selectedManual, setSelectedManual] = useState([]);
+    const [manualDongia, setManualDongia] = useState({});
 
     const handleOpenManualModal = () => setOpenManualModal(true);
     const handleCloseManualModal = () => setOpenManualModal(false);
@@ -372,7 +399,6 @@ function ChinhSuaHoaDon() {
 
     const handleSave = () => {
         try {
-            // Loop to add all product to
         } catch (error) {}
     };
 
@@ -501,7 +527,17 @@ function ChinhSuaHoaDon() {
                         </TableRow>
 
                         {selectedManual.map((ma, index) => (
-                            <ManualRow key={ma} index={index} ma={ma} />
+                            <ManualRow
+                                key={ma}
+                                index={index}
+                                ma={ma}
+                                updateDongia={(dongia) => {
+                                    setManualDongia((prev) => {
+                                        return { ...prev, [ma]: dongia };
+                                    });
+                                }}
+                                dongia={manualDongia[ma]}
+                            />
                         ))}
 
                         <TableRow>
@@ -523,7 +559,7 @@ function ChinhSuaHoaDon() {
                     <Button variant="contained" onClick={handleOpenSaveModal}>
                         Lưu
                     </Button>
-                    <Button>Đóng</Button>
+                    <Button onClick={() => navigate(-1)}>Đóng</Button>
                 </Stack>
             </Stack>
 
