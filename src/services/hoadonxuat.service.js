@@ -13,8 +13,14 @@ class HoaDonXuatService {
         return await request.delete(`xuathang/phieuxuat/${ma}`);
     }
 
-    static async layMotHoaDon(ma) {
-        return await request.get(`xuathang/phieuxuat/${ma}`);
+    static async layMotHoaDon(ma, { chitiet }) {
+        return await request.get(`xuathang/phieuxuat/${ma}`, {
+            params: { chitiet },
+        });
+    }
+
+    static async luuPhieuXuat(ma, payload) {
+        return await request.post(`xuathang/phieuxuat/${ma}/luu`, payload);
     }
 }
 

@@ -1,4 +1,4 @@
-import { AutoFixHigh, DeleteOutline, Edit, Save, SwipeVertical } from '@mui/icons-material';
+import { AutoFixHigh, Close, DeleteOutline, Edit, Save, SwipeVertical } from '@mui/icons-material';
 import {
     Badge,
     Button,
@@ -8,6 +8,7 @@ import {
     DialogContentText,
     DialogTitle,
     FormControl,
+    FormControlLabel,
     FormHelperText,
     IconButton,
     InputAdornment,
@@ -16,6 +17,7 @@ import {
     MenuItem,
     OutlinedInput,
     Select,
+    Switch,
     Table,
     TableBody,
     TableCell,
@@ -28,7 +30,7 @@ import { Stack } from '@mui/system';
 import { DataGrid, GridToolbar, viVN } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import { Formik } from 'formik';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useNavigate, useParams } from 'react-router';
 import HoaDonXuatService from 'services/hoadonxuat.service';
@@ -46,6 +48,7 @@ const AutoHangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
     );
     const [edit, setEdit] = useState(true && !disabled);
     const [conlai, setConlai] = useState(0);
+    const refFormik = useRef(null);
 
     const product = products?.find((e) => e.ma === value.malh) ||
         (products && products[0]) || { donvi: [] };
@@ -53,7 +56,7 @@ const AutoHangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
     const donvi = product?.donvi?.find((e) => e.ma === value.madv) || {};
 
     const handleSave = () => {
-        setEdit(false);
+        if (refFormik.current?.isValid) setEdit(false);
     };
 
     useEffect(() => {
@@ -62,19 +65,23 @@ const AutoHangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
         productcategoryservice.getSoluongMathang(value.madv || product.donvi[0]?.ma).then((res) => {
             setConlai(res.data.soluong);
         });
-    }, [product.donvi, value]);
+    }, [product.donvi, value.madv]);
+
+    useEffect(() => {
+        refFormik.current?.validateForm();
+    }, [conlai]);
 
     if (isLoading) return <RowSkeleton cols={9} />;
 
     return edit ? (
         <Formik
-            enableReinitialize
+            innerRef={refFormik}
             initialValues={{
                 ma: value.ma || product.ma || '',
                 madv: value.madv || product.donvi[0]?.ma,
                 malh: value.malh || product.ma,
                 soluong: value.soluong || 1,
-                gianhap: value.gianhap || product.donvi[0].gianhap || 0,
+                giaban: value.giaban || product.donvi[0].giaban || 0,
             }}
             validationSchema={Yup.object().shape({
                 malh: Yup.string().required('Vui lòng chọn sản phẩm'),
@@ -89,7 +96,7 @@ const AutoHangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                     .min(1, 'Số lượng phải từ 1')
                     .max(conlai, () => `Số lượng mặt hàng còn lại là ${conlai}`)
                     .integer('Số lượng sản phẩm phải là số nguyên'),
-                gianhap: Yup.number().required('Vui lòng nhập giá xuất').min(0, 'Giá phải từ 0'),
+                giaban: Yup.number().required('Vui lòng nhập giá xuất').min(0, 'Giá phải từ 0'),
             })}
             validateOnChange
             validate={onChange}
@@ -154,43 +161,47 @@ const AutoHangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                         <FormControl variant="outlined" size="small" fullWidth>
                             <InputLabel>Đơn giá</InputLabel>
                             <OutlinedInput
-                                error={!!errors.gianhap}
+                                error={!!errors.giaban}
                                 placeholder="Đơn giá"
                                 type="number"
                                 label="Đơn giá"
-                                value={values.gianhap}
-                                name="gianhap"
+                                value={values.giaban}
+                                name="giaban"
                                 endAdornment={<InputAdornment position="end">vnđ</InputAdornment>}
                                 onChange={handleChange}
                             />
-                            <FormHelperText error>{errors.gianhap}</FormHelperText>
+                            <FormHelperText error>{errors.giaban}</FormHelperText>
                         </FormControl>
 
-                        {product.donvi.find((e) => e.ma === value.madv)?.gianhap &&
-                            product.donvi.find((e) => e.ma === value.madv)?.gianhap !==
-                                value.gianhap && (
+                        {product.donvi.find((e) => e.ma === value.madv)?.giaban &&
+                            product.donvi.find((e) => e.ma === value.madv)?.giaban !==
+                                value.giaban && (
                                 <Button
                                     size="small"
                                     fullWidth
                                     onClick={() =>
                                         setFieldValue(
-                                            'gianhap',
-                                            product.donvi.find((e) => e.ma === value.madv).gianhap
+                                            'giaban',
+                                            product.donvi.find((e) => e.ma === value.madv).giaban
                                         )
                                     }
                                 >
-                                    {product.donvi.find((e) => e.ma === value.madv)?.gianhap}
+                                    {product.donvi.find((e) => e.ma === value.madv)?.giaban}
                                 </Button>
                             )}
                     </TableCell>
                     <TableCell>
                         <Typography variant="subtitle2">
-                            {formatter.format(values.gianhap * values.soluong)}
+                            {formatter.format(values.giaban * values.soluong)}
                         </Typography>
                     </TableCell>
                     <TableCell>
                         <Stack direction="row">
-                            <IconButton size="small" onClick={handleSubmit}>
+                            <IconButton
+                                disabled={!refFormik.current?.isValid}
+                                size="small"
+                                onClick={handleSubmit}
+                            >
                                 <Save />
                             </IconButton>
                             <IconButton size="small" onClick={onRemove}>
@@ -208,8 +219,8 @@ const AutoHangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
             <TableCell>{donvi.ten}</TableCell>
             <TableCell></TableCell>
             <TableCell>{value.soluong}</TableCell>
-            <TableCell>{formatter.format(value.gianhap)}</TableCell>
-            <TableCell>{formatter.format((value.soluong || 1) * value.gianhap)}</TableCell>
+            <TableCell>{formatter.format(value.giaban)}</TableCell>
+            <TableCell>{formatter.format((value.soluong || 1) * value.giaban)}</TableCell>
             {!disabled && (
                 <TableCell>
                     <IconButton onClick={() => setEdit(true)}>
@@ -352,12 +363,32 @@ const ManualRow = ({ ma, index, dongia, updateDongia }) => {
     );
 };
 
+const SavedRow = ({ value, index }) => {
+    return (
+        <TableRow hover>
+            <TableCell>{index + 1}</TableCell>
+            <TableCell>{value.mathang.loaihang.ten}</TableCell>
+            <TableCell>{value.mathang.donvi.ten}</TableCell>
+            <TableCell>{dayjs(value.mathang.hsd).format('DD/MM/YYYY')}</TableCell>
+            <TableCell>{value.soluong || 1}</TableCell>
+            <TableCell>{formatter.format(value.mathang.giaban)}</TableCell>
+            <TableCell>{formatter.format(value.thanhtien || value.mathang.giaban)}</TableCell>
+            <TableCell></TableCell>
+        </TableRow>
+    );
+};
+
 function ChinhSuaHoaDon() {
     const navigate = useNavigate();
     const params = useParams();
+    const [chitiet, setChitiet] = useState(false);
 
-    const { data: phieuxuat, isLoading } = useQuery([params.ma], () =>
-        HoaDonXuatService.layMotHoaDon(params.ma).then((res) => res.data)
+    const {
+        data: phieuxuat,
+        isLoading,
+        refetch,
+    } = useQuery([params.ma, chitiet], () =>
+        HoaDonXuatService.layMotHoaDon(params.ma, { chitiet }).then((res) => res.data)
     );
 
     const [autoRows, setAutoRows] = useState([]);
@@ -397,9 +428,21 @@ function ChinhSuaHoaDon() {
     const handleOpenSaveModal = () => setShowSaveModal(true);
     const handleCloseSaveModal = () => setShowSaveModal(false);
 
-    const handleSave = () => {
+    const handleSave = async () => {
         try {
-        } catch (error) {}
+            await HoaDonXuatService.luuPhieuXuat(params.ma, {
+                auto: autoRows,
+                manual: selectedManual.map((e) => ({
+                    mh: e,
+                    giaban: manualDongia[e],
+                })),
+            });
+        } catch (error) {
+            alert(error.response.data.message);
+        } finally {
+            handleCloseSaveModal();
+            refetch();
+        }
     };
 
     if (isLoading) return <LinearProgress />;
@@ -480,6 +523,15 @@ function ChinhSuaHoaDon() {
 
                 <Typography variant="subtitle2">Thông tin chi tiết</Typography>
 
+                {phieuxuat.daluu && (
+                    <FormControlLabel
+                        label="Chi tiết mặt hàng"
+                        checked={chitiet}
+                        onChange={(event) => setChitiet(event.target.checked)}
+                        control={<Switch />}
+                    />
+                )}
+
                 <Table size="small">
                     <TableHead>
                         <TableRow>
@@ -494,72 +546,111 @@ function ChinhSuaHoaDon() {
                         </TableRow>
                     </TableHead>
 
-                    <TableBody>
-                        <TableRow>
-                            <TableCell colSpan={10}>Các mặt hàng thêm tự động</TableCell>
-                        </TableRow>
+                    {!phieuxuat.daluu ? (
+                        <TableBody>
+                            <TableRow>
+                                <TableCell colSpan={10}>Các mặt hàng thêm tự động</TableCell>
+                            </TableRow>
 
-                        {autoRows.map((row, index) => (
-                            <AutoHangHoaRow
-                                index={index}
-                                key={row.ma}
-                                value={row}
-                                onChange={(value) => updateAutoRow(index, value)}
-                                onRemove={() => removeAutoRow(index)}
-                            />
-                        ))}
+                            {autoRows.map((row, index) => (
+                                <AutoHangHoaRow
+                                    index={index}
+                                    key={row.ma}
+                                    value={row}
+                                    onChange={(value) => updateAutoRow(index, value)}
+                                    onRemove={() => removeAutoRow(index)}
+                                />
+                            ))}
 
-                        <TableRow>
-                            <TableCell colSpan={10}>
-                                <Button
-                                    fullWidth
-                                    startIcon={<AutoFixHigh />}
-                                    size="small"
-                                    onClick={addAutoRow}
-                                >
-                                    Thêm tự động
-                                </Button>
-                            </TableCell>
-                        </TableRow>
+                            <TableRow>
+                                <TableCell colSpan={10}>
+                                    <Button
+                                        fullWidth
+                                        startIcon={<AutoFixHigh />}
+                                        size="small"
+                                        onClick={addAutoRow}
+                                    >
+                                        Thêm tự động
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
 
-                        <TableRow>
-                            <TableCell colSpan={10}>Các mặt hàng thêm thủ công</TableCell>
-                        </TableRow>
+                            <TableRow>
+                                <TableCell colSpan={10}>Các mặt hàng thêm thủ công</TableCell>
+                            </TableRow>
 
-                        {selectedManual.map((ma, index) => (
-                            <ManualRow
-                                key={ma}
-                                index={index}
-                                ma={ma}
-                                updateDongia={(dongia) => {
-                                    setManualDongia((prev) => {
-                                        return { ...prev, [ma]: dongia };
-                                    });
-                                }}
-                                dongia={manualDongia[ma]}
-                            />
-                        ))}
+                            {selectedManual.map((ma, index) => (
+                                <ManualRow
+                                    key={ma}
+                                    index={index}
+                                    ma={ma}
+                                    updateDongia={(dongia) => {
+                                        setManualDongia((prev) => {
+                                            return { ...prev, [ma]: dongia };
+                                        });
+                                    }}
+                                    dongia={manualDongia[ma]}
+                                />
+                            ))}
 
-                        <TableRow>
-                            <TableCell colSpan={10}>
-                                <Button
-                                    fullWidth
-                                    startIcon={<SwipeVertical />}
-                                    size="small"
-                                    onClick={handleOpenManualModal}
-                                >
-                                    Thêm thủ công
-                                </Button>
-                            </TableCell>
-                        </TableRow>
-                    </TableBody>
+                            <TableRow>
+                                <TableCell colSpan={10}>
+                                    <Button
+                                        fullWidth
+                                        startIcon={<SwipeVertical />}
+                                        size="small"
+                                        onClick={handleOpenManualModal}
+                                    >
+                                        Thêm thủ công
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+
+                            <TableRow>
+                                <TableCell colSpan={6}>Tổng</TableCell>
+                                <TableCell colSpan={2}>
+                                    {formatter.format(
+                                        autoRows.reduce(
+                                            (prev, current) =>
+                                                prev + current.giaban * current.soluong,
+                                            0
+                                        ) +
+                                            Object.keys(manualDongia).reduce(
+                                                (prev, current) => prev + manualDongia[current],
+                                                0
+                                            )
+                                    )}
+                                </TableCell>
+                            </TableRow>
+                        </TableBody>
+                    ) : (
+                        <TableBody>
+                            {phieuxuat.chitiet.map((value, index) => (
+                                <SavedRow index={index} key={index} value={value} />
+                            ))}
+
+                            <TableRow>
+                                <TableCell colSpan={6}>Tổng</TableCell>
+                                <TableCell colSpan={2}>
+                                    {formatter.format(phieuxuat.tongtien)}
+                                </TableCell>
+                            </TableRow>
+                        </TableBody>
+                    )}
                 </Table>
 
-                <Stack direction="row">
-                    <Button variant="contained" onClick={handleOpenSaveModal}>
+                <Stack direction="row" spacing={2}>
+                    <Button
+                        variant="contained"
+                        disabled={!!phieuxuat.daluu}
+                        startIcon={<Save />}
+                        onClick={handleOpenSaveModal}
+                    >
                         Lưu
                     </Button>
-                    <Button onClick={() => navigate(-1)}>Đóng</Button>
+                    <Button startIcon={<Close />} onClick={() => navigate(-1)}>
+                        Đóng
+                    </Button>
                 </Stack>
             </Stack>
 
