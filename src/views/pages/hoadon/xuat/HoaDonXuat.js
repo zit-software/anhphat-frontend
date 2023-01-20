@@ -1,4 +1,4 @@
-import { Delete, Edit } from '@mui/icons-material';
+import { Delete, Edit, Visibility } from '@mui/icons-material';
 import {
     Button,
     Checkbox,
@@ -14,6 +14,8 @@ import {
     LinearProgress,
     MenuItem,
     Select,
+    Tab,
+    Tabs,
     TextField,
 } from '@mui/material';
 import { DataGrid, GridActionsCellItem, GridToolbar, viVN } from '@mui/x-data-grid';
@@ -21,7 +23,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 
 import { DatePicker } from '@mui/x-date-pickers';
-import { IconFileUpload } from '@tabler/icons';
+import { IconFileUpload, IconGitPullRequestClosed, IconGitPullRequestDraft } from '@tabler/icons';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
@@ -30,6 +32,7 @@ import { useNavigate } from 'react-router';
 import HoaDonXuatService from 'services/hoadonxuat.service';
 import NppService from 'services/npp.service';
 import MainCard from 'ui-component/cards/MainCard';
+import { useSearchParams } from 'react-router-dom';
 
 const CreateModal = ({ open, onClose, onSubmit }) => {
     const { data: npps, isLoading } = useQuery(['npp'], () =>
@@ -180,12 +183,15 @@ function HoaDonXuat() {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [deletePayload, setDeletePayload] = useState(null);
 
+    const [searchParams, setSearchParams] = useSearchParams();
+    const daluu = JSON.parse(searchParams.get('daluu') || 'false');
+
     const {
         data: phieuxuat,
         isLoading,
         refetch,
-    } = useQuery([page, limit], () =>
-        HoaDonXuatService.layTatCa(page, limit).then((res) => res.data)
+    } = useQuery([page, limit, daluu], () =>
+        HoaDonXuatService.layTatCa({ page, limit, daluu }).then((res) => res.data)
     );
 
     const handleOpenCreateModal = () => setShowCreateModal(true);
@@ -230,6 +236,27 @@ function HoaDonXuat() {
                 </Button>
             }
         >
+            <Tabs
+                value={JSON.stringify(daluu)}
+                onChange={(_, daluu) =>
+                    setSearchParams({
+                        daluu,
+                    })
+                }
+            >
+                <Tab
+                    value="false"
+                    label="Chưa lưu"
+                    icon={<IconGitPullRequestDraft size={20} />}
+                    iconPosition="start"
+                />
+                <Tab
+                    value="true"
+                    label="Đã lưu"
+                    icon={<IconGitPullRequestClosed size={20} />}
+                    iconPosition="start"
+                />
+            </Tabs>
             <div style={{ height: '60vh' }}>
                 <DataGrid
                     localeText={viVN.components.MuiDataGrid.defaultProps.localeText}
@@ -290,7 +317,7 @@ function HoaDonXuat() {
                                 return [
                                     <GridActionsCellItem
                                         label="Chỉnh sửa"
-                                        icon={<Edit />}
+                                        icon={params.row.daluu ? <Visibility /> : <Edit />}
                                         onClick={() => navigate(`/hoadon/xuat/${params.row.ma}`)}
                                     />,
                                     <GridActionsCellItem

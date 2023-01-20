@@ -9,6 +9,24 @@ class ThongKeService {
             },
         });
     }
+
+    static async thongketheoloaihangban({ ngaybd, ngaykt }) {
+        return await request.get('thongke/loaihangban', {
+            params: {
+                ngaybd,
+                ngaykt,
+            },
+        });
+    }
+
+    static async thongketheoloaihangnhap({ ngaybd, ngaykt }) {
+        return await request.get('thongke/loaihangnhap', {
+            params: {
+                ngaybd,
+                ngaykt,
+            },
+        });
+    }
 }
 
 export default ThongKeService;
