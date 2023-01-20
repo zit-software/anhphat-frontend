@@ -9,7 +9,7 @@ import MainCard from 'ui-component/cards/MainCard';
 import SkeletonEarningCard from 'ui-component/cards/Skeleton/EarningCard';
 
 // assets
-import { IconWallet } from '@tabler/icons';
+import { IconTrendingDown, IconTrendingUp, IconWallet } from '@tabler/icons';
 import formatter from 'views/utilities/formatter';
 
 const CardWrapper = styled(MainCard)(({ theme }) => ({
@@ -74,6 +74,11 @@ const DoanhThuCard = ({ isLoading, doanhthu = 0 }) => {
                                             }}
                                         >
                                             {formatter.format(doanhthu)}
+                                            {doanhthu > 0 ? (
+                                                <IconTrendingUp />
+                                            ) : (
+                                                <IconTrendingDown />
+                                            )}
                                         </Typography>
                                     </Grid>
                                 </Grid>

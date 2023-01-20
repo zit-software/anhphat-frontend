@@ -1,6 +1,6 @@
 // material-ui
 
-import { Divider, Grid, MenuItem, Select, TextField } from '@mui/material';
+import { Grid, MenuItem, Select, TextField } from '@mui/material';
 import { Stack } from '@mui/system';
 import { DatePicker } from '@mui/x-date-pickers';
 import {
@@ -34,74 +34,29 @@ const Dashboard = () => {
     const [ngaybd, setNgaybd] = useState(startOfYear(new Date()));
     const [ngaykt, setNgaykt] = useState(endOfYear(new Date()));
 
-    const { data: thongke } = useQuery(['thongke', ngaybd, ngaykt], () =>
+    const { data: thongke } = useQuery(['thongketheongay', ngaybd, ngaykt], () =>
         ThongKeService.thongketheongay({ ngaybd, ngaykt }).then((res) => res.data)
     );
+
+    const { data: thongkeban } = useQuery(['thongkeban', ngaybd, ngaykt], () =>
+        ThongKeService.thongketheoloaihangban({ ngaybd, ngaykt }).then((res) => res.data)
+    );
+
+    const { data: thongkenhap } = useQuery(['thongkenhap', ngaybd, ngaykt], () =>
+        ThongKeService.thongketheoloaihangnhap({ ngaybd, ngaykt }).then((res) => res.data)
+    );
+
+    const fixedThongkeban = thongkeban || [];
+    const fixedThongkenhap = thongkenhap || [];
+
+    console.log(fixedThongkeban);
 
     const thongkeTheoNgay = thongke?.data || [];
 
     return (
-        <MainCard title="Thống kê">
-            <Grid container spacing={2}>
-                <Grid item sm={12} lg={8} xl={9}>
-                    <ReactApexChart
-                        options={{
-                            noData: {
-                                text: 'Chưa có dữ liệu',
-                            },
-                            title: {
-                                text: 'Thống kê thu chi',
-                            },
-                            dataLabels: {
-                                enabled: false,
-                            },
-                            chart: {
-                                toolbar: {
-                                    show: false,
-                                },
-                            },
-                            grid: {
-                                show: false,
-                            },
-                            stroke: {
-                                width: 1,
-                                curve: 'smooth',
-                            },
-                            xaxis: {
-                                categories: thongkeTheoNgay.map((e) => e.ngay),
-                                labels: {
-                                    formatter(value) {
-                                        return dayjs(value).format('DD/MM/YYYY');
-                                    },
-                                },
-                            },
-                            yaxis: {
-                                labels: {
-                                    formatter(value) {
-                                        return formatter.format(value);
-                                    },
-                                },
-                            },
-                        }}
-                        series={[
-                            {
-                                name: 'Thu',
-                                data: thongkeTheoNgay.map((e) => e.thu || 0),
-                            },
-                            {
-                                name: 'Chi',
-                                data: thongkeTheoNgay.map((e) => e.chi || 0),
-                            },
-                            {
-                                name: 'Doanh thu',
-                                data: thongkeTheoNgay.map((e) => e.conlai || 0),
-                            },
-                        ]}
-                        type="line"
-                    />
-                </Grid>
-
-                <Grid item sm={12} lg={4} xl={3}>
+        <Grid container spacing={2}>
+            <Grid item sm={12} lg={8} xl={9}>
+                <MainCard title="Thống kê thu chi">
                     <Grid container spacing={1}>
                         <Grid item>
                             <DatePicker
@@ -174,16 +129,130 @@ const Dashboard = () => {
                         </Grid>
                     </Grid>
 
-                    <Divider sx={{ mt: 2, mb: 2 }} />
+                    <ReactApexChart
+                        options={{
+                            noData: {
+                                text: 'Chưa có dữ liệu',
+                            },
+                            dataLabels: {
+                                enabled: false,
+                            },
 
-                    <Stack spacing={2}>
-                        <ThuCard tongthu={thongke?.tongthu} />
-                        <ChiCard tongchi={thongke?.tongchi} />
-                        <DoanhThuCard doanhthu={thongke?.doanhthu} />
-                    </Stack>
-                </Grid>
+                            stroke: {
+                                width: 2,
+                                curve: 'smooth',
+                            },
+                            xaxis: {
+                                categories: thongkeTheoNgay.map((e) => e.ngay),
+                                labels: {
+                                    formatter(value) {
+                                        return dayjs(value).format('HH:MM, DD/MM/YYYY');
+                                    },
+                                    show: false,
+                                },
+                            },
+                            yaxis: {
+                                labels: {
+                                    formatter(value) {
+                                        return formatter.format(value);
+                                    },
+                                },
+                            },
+                        }}
+                        series={[
+                            {
+                                name: 'Thu',
+                                data: thongkeTheoNgay.map((e) => e.thu || 0),
+                                color: '#00d950',
+                            },
+                            {
+                                name: 'Chi',
+                                data: thongkeTheoNgay.map((e) => e.chi || 0),
+                                color: '#e00026',
+                            },
+                            {
+                                name: 'Doanh thu',
+                                data: thongkeTheoNgay.map((e) => e.conlai || 0),
+                                color: '#007be6',
+                            },
+                        ]}
+                        type="line"
+                        height={350}
+                    />
+                </MainCard>
             </Grid>
-        </MainCard>
+
+            <Grid item sm={12} lg={4} xl={3}>
+                <Stack spacing={2}>
+                    <ThuCard tongthu={thongke?.tongthu} />
+                    <ChiCard tongchi={thongke?.tongchi} />
+                    <DoanhThuCard doanhthu={thongke?.doanhthu} />
+                </Stack>
+            </Grid>
+
+            <Grid item sm={12} lg={4}>
+                <MainCard title="Thống kê hàng nhập">
+                    <ReactApexChart
+                        options={{
+                            chart: {
+                                type: 'bar',
+                            },
+                            dataLabels: {
+                                enabled: false,
+                            },
+                            xaxis: {
+                                categories: fixedThongkenhap.map((e) => e.loaihang.ten),
+                            },
+                            plotOptions: {
+                                bar: {
+                                    distributed: true,
+                                },
+                            },
+                        }}
+                        type="bar"
+                        series={[
+                            {
+                                data: fixedThongkenhap.map((e) => e.soluong),
+                                name: 'Số lượng',
+                            },
+                        ]}
+                        height={350}
+                    />
+                </MainCard>
+            </Grid>
+
+            <Grid item sm={12} lg={4}>
+                <MainCard title="Thống kê hàng xuất">
+                    <ReactApexChart
+                        options={{
+                            chart: {
+                                type: 'bar',
+                                height: 350,
+                            },
+                            dataLabels: {
+                                enabled: false,
+                            },
+                            xaxis: {
+                                categories: fixedThongkeban.map((e) => e.loaihang.ten),
+                            },
+                            plotOptions: {
+                                bar: {
+                                    distributed: true,
+                                },
+                            },
+                        }}
+                        type="bar"
+                        series={[
+                            {
+                                data: fixedThongkeban.map((e) => e.soluong),
+                                name: 'Số lượng',
+                            },
+                        ]}
+                        height={350}
+                    />
+                </MainCard>
+            </Grid>
+        </Grid>
     );
 };
 
