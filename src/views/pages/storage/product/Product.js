@@ -297,14 +297,14 @@ const Product = () => {
                             columns={group ? columnsGroup : columnsChiTiet}
                             rows={rowsChiTiet ? rowsGroup : rowsChiTiet}
                             loading={isLoading}
-                            autoPageSize
                             localeText={viVN.components.MuiDataGrid.defaultProps.localeText}
                             density="compact"
                             components={{
                                 Toolbar: GridToolbar,
                             }}
                             paginationMode="server"
-                            rowCount={20}
+                            rowsPerPageOptions={[20]}
+                            rowCount={allMatHang.total}
                             onPageChange={(page) => {
                                 setCurrentPage(page);
                             }}
