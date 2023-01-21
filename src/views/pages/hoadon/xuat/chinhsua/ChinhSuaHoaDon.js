@@ -317,19 +317,11 @@ const ManualAddModal = ({ open, selecteds = [], onUpdate, onClose }) => {
     );
 };
 
-const ManualRow = ({ ma, index, dongia, updateDongia }) => {
-    const { data: mathang, isLoading } = useQuery(['mathang', ma], () =>
-        productcategoryservice.getMatHang(ma).then((res) => res.data)
-    );
-
+const ManualRow = ({ mathang, index, dongia, updateDongia }) => {
     useEffect(() => {
-        if (isLoading || dongia) return;
-
         updateDongia(mathang.giaban);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [mathang, isLoading]);
-
-    if (isLoading) return <RowSkeleton cols={10} />;
+    }, [mathang.giaban]);
 
     return (
         <TableRow>
@@ -391,6 +383,8 @@ function ChinhSuaHoaDon() {
         HoaDonXuatService.layMotHoaDon(params.ma, { chitiet }).then((res) => res.data)
     );
 
+    const { data: mathang } = useQuery(['tatcamathang'], productcategoryservice.getAllMatHang);
+
     const [autoRows, setAutoRows] = useState([]);
 
     const addAutoRow = () => {
@@ -444,6 +438,8 @@ function ChinhSuaHoaDon() {
             refetch();
         }
     };
+
+    const fixedMathang = mathang || { total: 0, data: [] };
 
     if (isLoading) return <LinearProgress />;
 
@@ -579,19 +575,21 @@ function ChinhSuaHoaDon() {
                                 <TableCell colSpan={10}>Các mặt hàng thêm thủ công</TableCell>
                             </TableRow>
 
-                            {selectedManual.map((ma, index) => (
-                                <ManualRow
-                                    key={ma}
-                                    index={index}
-                                    ma={ma}
-                                    updateDongia={(dongia) => {
-                                        setManualDongia((prev) => {
-                                            return { ...prev, [ma]: dongia };
-                                        });
-                                    }}
-                                    dongia={manualDongia[ma]}
-                                />
-                            ))}
+                            {fixedMathang.data
+                                .filter((e) => selectedManual.includes(e.ma))
+                                .map((mathang, index) => (
+                                    <ManualRow
+                                        key={mathang.ma}
+                                        index={index}
+                                        mathang={mathang}
+                                        updateDongia={(dongia) => {
+                                            setManualDongia((prev) => {
+                                                return { ...prev, [mathang.ma]: dongia };
+                                            });
+                                        }}
+                                        dongia={manualDongia[mathang.ma]}
+                                    />
+                                ))}
 
                             <TableRow>
                                 <TableCell colSpan={10}>
