@@ -49,8 +49,6 @@ const Dashboard = () => {
     const fixedThongkeban = thongkeban || [];
     const fixedThongkenhap = thongkenhap || [];
 
-    console.log(fixedThongkeban);
-
     const thongkeTheoNgay = thongke?.data || [];
 
     return (

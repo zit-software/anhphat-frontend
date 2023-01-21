@@ -78,10 +78,6 @@ const EditKhuyenMaiTang = () => {
     const handleSave = async () => {
         // Kiểm tra mã loại hàng có trùng trong rows không
         setIsSaving(true);
-        console.log(type);
-        console.log(kmt);
-        console.log(rows);
-        console.log(data);
         if (type === 'edit') {
             await khuyenmaitangService.chinhsuakmt(ma, kmt);
             await khuyenmaitangService.themchitiet(ma, {
