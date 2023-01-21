@@ -7,16 +7,8 @@ const productcategoryservice = {
     },
     async getAllCategoriesAndDonvi() {
         const res = await request.get('/loaihang');
-        // get DonVi
-        const result = [];
-        for (let loaihang of res.data) {
-            const allDonViRes = await request.get(`/donvi?loaihang=${loaihang.ma}`);
-            result.push({
-                ...loaihang,
-                donvi: allDonViRes.data,
-            });
-        }
-        return result;
+
+        return res.data;
     },
     async deleteCategory(ma) {
         await request.delete(`/loaihang/${ma}`);
@@ -59,7 +51,8 @@ const productcategoryservice = {
             const dv = params?.madv || '';
             const ngaynhap = params?.ngaynhap || '';
             const order = params?.order || '';
-            const page = params?.page || '';
+            const page = params?.page ? params?.page : params?.page === 0 ? 0 : '';
+            console.log(page);
             const group = params?.group ? 'true' : '';
             const res = await request.get(
                 `/mathang?loaihang=${lh}&donvi=${dv}&ngaynhap=${ngaynhap}&order=${order}&page=${page}&group=${group}`

@@ -101,6 +101,7 @@ const Product = () => {
             },
         },
     ];
+
     const columnsGroup = [
         {
             field: 'loaihang',
@@ -141,7 +142,6 @@ const Product = () => {
             field: 'giaxuat',
             headerName: 'Giá xuất',
             renderCell({ row }) {
-                console.log(row);
                 return formatter.format(row.donvi.giaban) || 0;
             },
         },
@@ -161,7 +161,6 @@ const Product = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPage, group]);
     const handleSearch = () => {
-        setCurrentPage(0);
         refetchAllMH();
     };
     const handleReset = () => {
@@ -173,6 +172,7 @@ const Product = () => {
         setCurrentPage(0);
     };
     if (isLoading) return <LinearProgress />;
+    console.log(allMatHang);
     return (
         <MainCard title="Mặt Hàng Tồn Kho">
             <Grid container spacing={2}>
@@ -262,6 +262,7 @@ const Product = () => {
                             variant="contained"
                             size="small"
                             onClick={() => {
+                                handleReset();
                                 setGroup(!group);
                             }}
                             color="secondary"
@@ -301,6 +302,19 @@ const Product = () => {
                             density="compact"
                             components={{
                                 Toolbar: GridToolbar,
+                            }}
+                            paginationMode="server"
+                            rowCount={20}
+                            onPageChange={(page) => {
+                                setCurrentPage(page);
+                            }}
+                            pageSize={20}
+                            page={currentPage}
+                            initialState={{
+                                pagination: {
+                                    page: currentPage,
+                                    pageSize: 20,
+                                },
                             }}
                         />
                     </Box>
