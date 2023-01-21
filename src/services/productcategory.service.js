@@ -52,6 +52,7 @@ const productcategoryservice = {
             const ngaynhap = params?.ngaynhap || '';
             const order = params?.order || '';
             const page = params?.page ? params?.page : params?.page === 0 ? 0 : '';
+            console.log(page);
             const group = params?.group ? 'true' : '';
             const res = await request.get(
                 `/mathang?loaihang=${lh}&donvi=${dv}&ngaynhap=${ngaynhap}&order=${order}&page=${page}&group=${group}`

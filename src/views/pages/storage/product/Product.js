@@ -5,6 +5,7 @@ import {
     FormControlLabel,
     Grid,
     InputLabel,
+    LinearProgress,
     MenuItem,
     Radio,
     RadioGroup,
@@ -39,10 +40,121 @@ const Product = () => {
         isLoading,
         refetch: refetchAllMH,
     } = useQuery(
-        ['allMH', { ...selected, order: selectedOrder, page: currentPage, group: 'true' }],
+        ['allMH', { ...selected, order: selectedOrder, page: currentPage, group }],
         productcategoryservice.getAllMatHang,
         { enabled: false, initialData: { data: [], total: 0 } }
     );
+    const columnsChiTiet = [
+        {
+            field: 'ma',
+            headerName: 'Mã mặt hàng',
+        },
+        {
+            field: 'loaihang',
+            headerName: 'Loại hàng',
+            flex: 1,
+            renderCell: ({ value: { ten } }) => ten,
+        },
+        {
+            field: 'donvi',
+            headerName: 'Đơn vị',
+            flex: 1,
+            renderCell: ({ value: { ten } }) => ten,
+        },
+        {
+            field: 'ngaynhap',
+            headerName: 'Ngày nhập',
+            flex: 1,
+            renderCell: ({ value }) => dayjs(value).format('DD/MM/YYYY'),
+        },
+        {
+            field: 'hsd',
+            headerName: 'Hạn sử dụng',
+            flex: 1,
+            renderCell: ({ value }) => dayjs(value).format('DD/MM/YYYY'),
+        },
+        {
+            field: 'gianhap',
+            headerName: 'Giá nhập',
+            flex: 1,
+            renderCell: ({ value }) => formatter.format(value),
+        },
+        {
+            field: 'giaxuat',
+            headerName: 'Giá xuất',
+            renderCell({ row }) {
+                return formatter.format(row.donvi.giaban);
+            },
+        },
+        {
+            field: 'actions',
+            type: 'actions',
+            headerName: 'Phân rã',
+            getActions(params) {
+                return [
+                    <GridActionsCellItem
+                        label="Phân rã"
+                        icon={<AutoFixNormalOutlined />}
+                        onClick={() => {}}
+                    />,
+                ];
+            },
+        },
+    ];
+
+    const columnsGroup = [
+        {
+            field: 'loaihang',
+            headerName: 'Loại hàng',
+            flex: 1,
+            renderCell: ({ value: { ten } }) => ten,
+        },
+        {
+            field: 'donvi',
+            headerName: 'Đơn vị',
+            flex: 1,
+            renderCell: ({ value: { ten } }) => ten,
+        },
+        {
+            field: 'ngaynhap',
+            headerName: 'Ngày nhập',
+            flex: 1,
+            renderCell: ({ value }) => dayjs(value).format('DD/MM/YYYY'),
+        },
+        {
+            field: 'hsd',
+            headerName: 'Hạn sử dụng',
+            flex: 1,
+            renderCell: ({ value }) => dayjs(value).format('DD/MM/YYYY'),
+        },
+        {
+            field: 'soluong',
+            headerName: 'Số Lượng',
+            flex: 1,
+        },
+        {
+            field: 'gianhap',
+            headerName: 'Giá nhập',
+            flex: 1,
+            renderCell: ({ row }) => formatter.format(row.donvi.gianhap) || 0,
+        },
+        {
+            field: 'giaxuat',
+            headerName: 'Giá xuất',
+            renderCell({ row }) {
+                return formatter.format(row.donvi.giaban) || 0;
+            },
+        },
+    ];
+    const rowsChiTiet = allMatHang.data.map((e) => ({
+        ...e,
+        id: e.ma,
+    }));
+
+    const rowsGroup = allMatHang.data.map((e) => ({
+        ...e,
+        id: parseInt(Math.random() * 100000000),
+    }));
 
     useEffect(() => {
         handleSearch();
@@ -59,6 +171,8 @@ const Product = () => {
         setSelectedOrder('');
         setCurrentPage(0);
     };
+    if (isLoading) return <LinearProgress />;
+    console.log(allMatHang);
     return (
         <MainCard title="Mặt Hàng Tồn Kho">
             <Grid container spacing={2}>
@@ -144,7 +258,17 @@ const Product = () => {
                                 />
                             </RadioGroup>
                         </FormControl>
-
+                        <Button
+                            variant="contained"
+                            size="small"
+                            onClick={() => {
+                                handleReset();
+                                setGroup(!group);
+                            }}
+                            color="secondary"
+                        >
+                            {!group ? 'Xem Gộp' : 'Xem Chi Tiết'}
+                        </Button>
                         <Button
                             size="small"
                             onClick={() => {
@@ -170,77 +294,17 @@ const Product = () => {
                 <Grid item md={10}>
                     <Box sx={{ height: '60vh', width: '100%' }}>
                         <DataGrid
-                            columns={[
-                                {
-                                    field: 'loaihang',
-                                    headerName: 'Loại hàng',
-                                    flex: 1,
-                                    renderCell: ({ value: { ten } }) => ten,
-                                },
-                                {
-                                    field: 'donvi',
-                                    headerName: 'Đơn vị',
-                                    flex: 1,
-                                    renderCell: ({ value: { ten } }) => ten,
-                                },
-                                {
-                                    field: 'ngaynhap',
-                                    headerName: 'Ngày nhập',
-                                    flex: 1,
-                                    renderCell: ({ value }) => dayjs(value).format('DD/MM/YYYY'),
-                                },
-                                {
-                                    field: 'hsd',
-                                    headerName: 'Hạn sử dụng',
-                                    flex: 1,
-                                    renderCell: ({ value }) => dayjs(value).format('DD/MM/YYYY'),
-                                },
-                                {
-                                    field: 'soluong',
-                                    headerName: 'Số lượng',
-                                    flex: 1,
-                                },
-                                {
-                                    field: 'gianhap',
-                                    headerName: 'Giá nhập',
-                                    flex: 1,
-                                    renderCell: ({ row }) => formatter.format(row.donvi.gianhap),
-                                },
-                                {
-                                    field: 'giaxuat',
-                                    headerName: 'Giá xuất',
-                                    renderCell({ row }) {
-                                        return formatter.format(row.donvi.giaban);
-                                    },
-                                },
-                                {
-                                    field: 'actions',
-                                    type: 'actions',
-                                    headerName: 'Phân rã',
-                                    getActions(params) {
-                                        return [
-                                            <GridActionsCellItem
-                                                label="Phân rã"
-                                                icon={<AutoFixNormalOutlined />}
-                                                onClick={() => {}}
-                                            />,
-                                        ];
-                                    },
-                                },
-                            ]}
-                            rows={allMatHang.data.map((e) => ({
-                                ...e,
-                                id: parseInt(Math.random() * 1000000),
-                            }))}
+                            columns={group ? columnsGroup : columnsChiTiet}
+                            rows={rowsChiTiet ? rowsGroup : rowsChiTiet}
                             loading={isLoading}
+                            autoPageSize
                             localeText={viVN.components.MuiDataGrid.defaultProps.localeText}
                             density="compact"
                             components={{
                                 Toolbar: GridToolbar,
                             }}
                             paginationMode="server"
-                            rowsPerPageOptions={[20]}
-                            rowCount={allMatHang.total}
+                            rowCount={20}
                             onPageChange={(page) => {
                                 setCurrentPage(page);
                             }}
