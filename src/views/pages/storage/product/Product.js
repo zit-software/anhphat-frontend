@@ -28,7 +28,7 @@ const Product = () => {
     const [donViToChoose, setDonViToChoose] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
-
+    const [group, setGroup] = useState(false);
     const { data: allcategories } = useQuery(
         ['allProductsCategory'],
         productcategoryservice.getAllCategoriesAndDonvi,
@@ -45,11 +45,10 @@ const Product = () => {
     );
 
     useEffect(() => {
-        refetchAllMH();
+        handleSearch();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentPage]);
+    }, [currentPage, group]);
     const handleSearch = () => {
-        setCurrentPage(0);
         refetchAllMH();
     };
     const handleReset = () => {
@@ -234,11 +233,24 @@ const Product = () => {
                                 id: parseInt(Math.random() * 1000000),
                             }))}
                             loading={isLoading}
-                            autoPageSize
                             localeText={viVN.components.MuiDataGrid.defaultProps.localeText}
                             density="compact"
                             components={{
                                 Toolbar: GridToolbar,
+                            }}
+                            paginationMode="server"
+                            rowsPerPageOptions={[20]}
+                            rowCount={allMatHang.total}
+                            onPageChange={(page) => {
+                                setCurrentPage(page);
+                            }}
+                            pageSize={20}
+                            page={currentPage}
+                            initialState={{
+                                pagination: {
+                                    page: currentPage,
+                                    pageSize: 20,
+                                },
                             }}
                         />
                     </Box>
