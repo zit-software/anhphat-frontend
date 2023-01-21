@@ -3,11 +3,9 @@ import { lazy } from 'react';
 // project imports
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
+import KhuyenMaiGiam from 'views/pages/khuyenmai/giam/KhuyenMaiGiam';
 import EditKhuyenMaiTang from 'views/pages/khuyenmai/tang/ChinhSua';
-import KhuyenMaiGiam from 'views/pages/khuyenmai/giam/KhuyenMaiGiam';
-
 import KhuyenMaiTang from 'views/pages/khuyenmai/tang/KhuyenMaiTang';
-import KhuyenMaiGiam from 'views/pages/khuyenmai/giam/KhuyenMaiGiam';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
