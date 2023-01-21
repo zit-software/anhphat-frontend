@@ -304,7 +304,7 @@ const Product = () => {
                                 Toolbar: GridToolbar,
                             }}
                             paginationMode="server"
-                            rowCount={20}
+                            rowCount={allMatHang.total}
                             onPageChange={(page) => {
                                 setCurrentPage(page);
                             }}
