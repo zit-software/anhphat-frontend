@@ -3,9 +3,6 @@ import { lazy } from 'react';
 // project imports
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
-import KhuyenMaiGiam from 'views/pages/khuyenmai/giam/KhuyenMaiGiam';
-import EditKhuyenMaiTang from 'views/pages/khuyenmai/tang/ChinhSua';
-import KhuyenMaiTang from 'views/pages/khuyenmai/tang/KhuyenMaiTang';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -24,6 +21,15 @@ const Product = Loadable(lazy(() => import('views/pages/storage/product/Product'
 const NhaPhanPhoi = Loadable(lazy(() => import('views/pages/manage/npp/NhaPhanphoi')));
 const ChinhSuaHoaDonXuat = Loadable(
     lazy(() => import('views/pages/hoadon/xuat/chinhsua/ChinhSuaHoaDon'))
+);
+
+const EditKhuyenMaiTang = Loadable(lazy(() => import('views/pages/khuyenmai/tang/ChinhSua')));
+const KhuyenMaiTang = Loadable(lazy(() => import('views/pages/khuyenmai/tang/KhuyenMaiTang')));
+const HoaDonThuHang = Loadable(lazy(() => import('views/pages/hoadon/thuhang/HoaDonThuHang')));
+const KhuyenMaiGiam = Loadable(lazy(() => import('views/pages/khuyenmai/giam/KhuyenMaiGiam')));
+
+const ChinhSuaHoaDonThuHang = Loadable(
+    lazy(() => import('views/pages/hoadon/thuhang/chinhsua/ChinhSuaHoaDon'))
 );
 
 const MainRoutes = {
@@ -91,6 +97,10 @@ const MainRoutes = {
                     path: 'xuat',
                     element: <HoaDonXuat />,
                 },
+                {
+                    path: 'thuhang',
+                    element: <HoaDonThuHang />,
+                },
             ],
         },
         {
@@ -105,17 +115,21 @@ const MainRoutes = {
                         },
                     ],
                 },
-            ],
-        },
-        {
-            path: 'hoadon',
-            children: [
                 {
                     path: 'xuat',
                     children: [
                         {
                             path: ':ma',
                             element: <ChinhSuaHoaDonXuat />,
+                        },
+                    ],
+                },
+                {
+                    path: 'thuhang',
+                    children: [
+                        {
+                            path: ':ma',
+                            element: <ChinhSuaHoaDonThuHang />,
                         },
                     ],
                 },

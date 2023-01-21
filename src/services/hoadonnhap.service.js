@@ -39,6 +39,14 @@ class HoaDonNhapService {
     static async xoa(ma) {
         return await request.delete(`nhaphang/phieunhap/${ma}`);
     }
+
+    static async layHoaDonThuHang({ page, limit, daluu }) {
+        return await (
+            await request.get('nhaphang/phieunhap', {
+                params: { page, limit, daluu, thuhang: true },
+            })
+        ).data;
+    }
 }
 
 export default HoaDonNhapService;
