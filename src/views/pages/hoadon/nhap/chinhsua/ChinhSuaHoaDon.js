@@ -7,6 +7,7 @@ import {
     DialogContentText,
     DialogTitle,
     FormControl,
+    FormControlLabel,
     FormHelperText,
     Grid,
     IconButton,
@@ -16,6 +17,7 @@ import {
     MenuItem,
     OutlinedInput,
     Select,
+    Switch,
     Table,
     TableBody,
     TableCell,
@@ -38,11 +40,11 @@ import MainCard from 'ui-component/cards/MainCard';
 import * as Yup from 'yup';
 
 import productcategoryservice from 'services/productcategory.service';
+import RowSkeleton from 'ui-component/skeletons/RowSkeleton';
 import dayjs from 'utils/dayjs';
 import formatter from 'views/utilities/formatter';
-import RowSkeleton from 'ui-component/skeletons/RowSkeleton';
 
-const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
+const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
     const { data: products, isLoading } = useQuery(
         ['products'],
         productcategoryservice.getAllCategoriesAndDonvi
@@ -51,22 +53,25 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
 
     const product = products?.find((e) => e.ma === value.malh) ||
         (products && products[0]) || { donvi: [] };
+
     const donvi = product?.donvi?.find((e) => e.ma === value.madv) || {};
 
     const handleSave = () => {
         setEdit(false);
     };
+
     if (isLoading) return <RowSkeleton cols={9} />;
 
     return edit ? (
         <Formik
+            enableReinitialize
             initialValues={{
-                ma: value.ma || '',
-                madv: value.madv || products[0]?.donvi[0]?.ma,
-                malh: value.malh || products[0]?.ma,
+                ma: value.ma || product.ma || '',
+                madv: value.madv || product.donvi[0]?.ma,
+                malh: value.malh || product.ma,
                 soluong: value.soluong || 1,
                 hsd: value.hsd || new Date(),
-                gianhap: value.gianhap || 0,
+                gianhap: value.gianhap || product.donvi[0].gianhap || 0,
             }}
             validationSchema={Yup.object().shape({
                 malh: Yup.string().required('Vui lòng chọn sản phẩm'),
@@ -78,7 +83,8 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
                     ),
                 soluong: Yup.number()
                     .required('Vui lòng nhập số lượng')
-                    .min(1, 'Số lượng phải từ 1'),
+                    .min(1, 'Số lượng phải từ 1')
+                    .integer('Số lượng sản phẩm phải là số nguyên'),
                 hsd: Yup.date().required('Vui lòng chọn hạn sử dụng'),
                 gianhap: Yup.number().required('Vui lòng nhập giá nhập').min(0, 'Giá phải từ 0'),
             })}
@@ -165,7 +171,7 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
                     </TableCell>
 
                     <TableCell>
-                        <FormControl variant="outlined" size="small">
+                        <FormControl variant="outlined" size="small" fullWidth>
                             <InputLabel>Đơn giá</InputLabel>
                             <OutlinedInput
                                 error={!!errors.gianhap}
@@ -178,17 +184,24 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
                                 onChange={handleChange}
                             />
                             <FormHelperText error>{errors.gianhap}</FormHelperText>
-                            {product.gianhap && values.gianhap !== product.gianhap && (
+                        </FormControl>
+
+                        {product.donvi.find((e) => e.ma === value.madv)?.gianhap &&
+                            product.donvi.find((e) => e.ma === value.madv)?.gianhap !==
+                                value.gianhap && (
                                 <Button
                                     size="small"
-                                    onClick={() => {
-                                        setFieldValue('gianhap', product.gianhap);
-                                    }}
+                                    fullWidth
+                                    onClick={() =>
+                                        setFieldValue(
+                                            'gianhap',
+                                            product.donvi.find((e) => e.ma === value.madv).gianhap
+                                        )
+                                    }
                                 >
-                                    {formatter.format(product.gianhap)}
+                                    {product.donvi.find((e) => e.ma === value.madv)?.gianhap}
                                 </Button>
                             )}
-                        </FormControl>
                     </TableCell>
                     <TableCell>
                         <Typography variant="subtitle2">
@@ -216,7 +229,7 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
             <TableCell>{dayjs(value.hsd).format('DD/MM/YYYY')}</TableCell>
             <TableCell>{value.soluong}</TableCell>
             <TableCell>{formatter.format(value.gianhap)}</TableCell>
-            <TableCell>{formatter.format(value.soluong * value.gianhap)}</TableCell>
+            <TableCell>{formatter.format((value.soluong || 1) * value.gianhap)}</TableCell>
             {!disabled && (
                 <>
                     <TableCell>
@@ -234,13 +247,16 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove, onSave }) => {
 function ChinhSuaHoaDon() {
     const params = useParams();
     const navigate = useNavigate();
+    const [chitiet, setChiTiet] = useState(false);
 
     const {
         data: phieunhap,
         isLoading,
         isError,
         refetch,
-    } = useQuery(['phieunhap', params.ma], () => HoaDonNhapService.layPhieuNhap(params.ma));
+    } = useQuery([params.ma, chitiet], () =>
+        HoaDonNhapService.layPhieuNhap(params.ma, { chitiet })
+    );
     const [saveModal, setSaveModal] = useState(null);
 
     const [rows, setRows] = useState([]);
@@ -426,6 +442,16 @@ function ChinhSuaHoaDon() {
 
                             <Typography variant="subtitle2">Thông tin chi tiết</Typography>
 
+                            {phieunhap.daluu && (
+                                <FormControlLabel
+                                    label="Hiện chi tiết mặt hàng"
+                                    control={<Switch checked={chitiet} />}
+                                    onChange={(event) => {
+                                        setChiTiet(event.target.checked);
+                                    }}
+                                />
+                            )}
+
                             <TableContainer>
                                 <Table size="small">
                                     <TableHead>
@@ -509,7 +535,8 @@ function ChinhSuaHoaDon() {
                                                 {formatter.format(
                                                     rows.reduce(
                                                         (prev, curent) =>
-                                                            curent.gianhap * curent.soluong + prev,
+                                                            curent.gianhap * (curent.soluong || 1) +
+                                                            prev,
                                                         0
                                                     )
                                                 )}
@@ -529,7 +556,6 @@ function ChinhSuaHoaDon() {
                                 >
                                     Lưu
                                 </Button>
-
                                 <Button
                                     type="button"
                                     startIcon={<IconX />}
@@ -543,23 +569,33 @@ function ChinhSuaHoaDon() {
                 )}
             </Formik>
 
-            <Dialog open={!!saveModal} onClick={() => setSaveModal(null)}>
-                <DialogTitle>Lưu hóa đơn</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Lưu ý: Bạn không thể chỉnh sửa hóa đơn sau khi lưu
-                    </DialogContentText>
-                </DialogContent>
-
-                <DialogActions>
-                    <Button onClick={handleSave} variant="contained">
-                        Lưu
-                    </Button>
-                    <Button onClick={() => setSaveModal(null)}>Hủy</Button>
-                </DialogActions>
-            </Dialog>
+            <SaveModal
+                open={!!saveModal}
+                onClose={() => setSaveModal(null)}
+                onSubmit={handleSave}
+            />
         </MainCard>
     );
 }
+
+const SaveModal = ({ open, onClose, onSubmit }) => {
+    return (
+        <Dialog open={open} onClick={onClose}>
+            <DialogTitle>Lưu hóa đơn</DialogTitle>
+            <DialogContent>
+                <DialogContentText>
+                    Lưu ý: Bạn không thể chỉnh sửa hóa đơn sau khi lưu
+                </DialogContentText>
+            </DialogContent>
+
+            <DialogActions>
+                <Button onClick={onSubmit} variant="contained">
+                    Lưu
+                </Button>
+                <Button onClick={onClose}>Hủy</Button>
+            </DialogActions>
+        </Dialog>
+    );
+};
 
 export default ChinhSuaHoaDon;

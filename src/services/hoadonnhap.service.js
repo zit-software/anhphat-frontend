@@ -5,9 +5,11 @@ class HoaDonNhapService {
         return await request.post('nhaphang/phieunhap', payload);
     }
 
-    static async layPhieuNhap(ma) {
+    static async layPhieuNhap(ma, params) {
         return await (
-            await request.get(`nhaphang/phieunhap/${ma}`)
+            await request.get(`nhaphang/phieunhap/${ma}`, {
+                params,
+            })
         ).data;
     }
 

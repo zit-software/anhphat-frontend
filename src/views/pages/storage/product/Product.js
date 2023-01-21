@@ -1,6 +1,6 @@
+import { AutoFixNormalOutlined } from '@mui/icons-material';
 import {
     Button,
-    CircularProgress,
     FormControl,
     FormControlLabel,
     Grid,
@@ -9,21 +9,16 @@ import {
     Radio,
     RadioGroup,
     Select,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TablePagination,
-    TableRow,
     Typography,
 } from '@mui/material';
-import { Stack } from '@mui/system';
+import { Box, Stack } from '@mui/system';
+import { DataGrid, GridActionsCellItem, GridToolbar, viVN } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import productcategoryservice from 'services/productcategory.service';
 import MainCard from 'ui-component/cards/MainCard';
+import formatter from 'views/utilities/formatter';
 
 const Product = () => {
     const [selected, setSelected] = useState({
@@ -65,14 +60,10 @@ const Product = () => {
         setSelectedOrder('');
         setCurrentPage(0);
     };
-    const handleChangePage = (event, page) => {
-        setCurrentPage(page);
-    };
-
     return (
         <MainCard title="Mặt Hàng Tồn Kho">
             <Grid container spacing={2}>
-                <Grid item md={4}>
+                <Grid item md={2}>
                     <Stack spacing={1}>
                         <Typography variant="subtitle1">Tìm kiếm</Typography>
 
@@ -177,53 +168,79 @@ const Product = () => {
                     </Stack>
                 </Grid>
 
-                <Grid item md={8}>
-                    <TablePagination
-                        size="small"
-                        component="div"
-                        count={allMatHang.total}
-                        rowsPerPageOptions={[10]}
-                        rowsPerPage={10}
-                        page={Math.min(currentPage, allMatHang.total)}
-                        onPageChange={handleChangePage}
-                        showLastButton
-                        showFirstButton
-                        labelDisplayedRows={({ from, to, count }) =>
-                            `${from}–${to} của ${count !== -1 ? count : `nhiều hơn ${to}`}`
-                        }
-                    />
-                    <TableContainer sx={{ maxHeight: '70vh' }}>
-                        <Table size="small" stickyHeader>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Loại Hàng</TableCell>
-                                    <TableCell>Đơn Vị</TableCell>
-                                    <TableCell>Số Lượng</TableCell>
-                                    <TableCell>Ngày Nhập</TableCell>
-                                    <TableCell>Hạn Sử Dụng</TableCell>
-                                    <TableCell>Giá Nhập</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {allMatHang.data.map((mh, index) => {
-                                    return (
-                                        <TableRow key={index} hover>
-                                            <TableCell>{mh.loaihang.ten}</TableCell>
-                                            <TableCell>{mh.donvi.ten}</TableCell>
-                                            <TableCell>{mh.soluong}</TableCell>
-                                            <TableCell>
-                                                {dayjs(mh.ngaynhap).format('DD-MM-YYYY')}
-                                            </TableCell>
-                                            <TableCell>
-                                                {dayjs(mh.hsd).format('DD-MM-YYYY')}
-                                            </TableCell>
-                                            <TableCell>{mh.gianhap}</TableCell>
-                                        </TableRow>
-                                    );
-                                })}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                <Grid item md={10}>
+                    <Box sx={{ height: '60vh', width: '100%' }}>
+                        <DataGrid
+                            columns={[
+                                {
+                                    field: 'ma',
+                                    headerName: 'Mã mặt hàng',
+                                },
+                                {
+                                    field: 'loaihang',
+                                    headerName: 'Loại hàng',
+                                    flex: 1,
+                                    renderCell: ({ value: { ten } }) => ten,
+                                },
+                                {
+                                    field: 'donvi',
+                                    headerName: 'Đơn vị',
+                                    flex: 1,
+                                    renderCell: ({ value: { ten } }) => ten,
+                                },
+                                {
+                                    field: 'ngaynhap',
+                                    headerName: 'Ngày nhập',
+                                    flex: 1,
+                                    renderCell: ({ value }) => dayjs(value).format('DD/MM/YYYY'),
+                                },
+                                {
+                                    field: 'hsd',
+                                    headerName: 'Hạn sử dụng',
+                                    flex: 1,
+                                    renderCell: ({ value }) => dayjs(value).format('DD/MM/YYYY'),
+                                },
+                                {
+                                    field: 'gianhap',
+                                    headerName: 'Giá nhập',
+                                    flex: 1,
+                                    renderCell: ({ value }) => formatter.format(value),
+                                },
+                                {
+                                    field: 'giaxuat',
+                                    headerName: 'Giá xuất',
+                                    renderCell({ row }) {
+                                        return formatter.format(row.donvi.giaban);
+                                    },
+                                },
+                                {
+                                    field: 'actions',
+                                    type: 'actions',
+                                    headerName: 'Phân rã',
+                                    getActions(params) {
+                                        return [
+                                            <GridActionsCellItem
+                                                label="Phân rã"
+                                                icon={<AutoFixNormalOutlined />}
+                                                onClick={() => {}}
+                                            />,
+                                        ];
+                                    },
+                                },
+                            ]}
+                            rows={allMatHang.data.map((e) => ({
+                                ...e,
+                                id: e.ma,
+                            }))}
+                            loading={isLoading}
+                            autoPageSize
+                            localeText={viVN.components.MuiDataGrid.defaultProps.localeText}
+                            density="compact"
+                            components={{
+                                Toolbar: GridToolbar,
+                            }}
+                        />
+                    </Box>
                 </Grid>
             </Grid>
         </MainCard>

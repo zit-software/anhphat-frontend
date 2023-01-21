@@ -26,6 +26,7 @@ const ManageUserForm = ({
                 laAdmin: user.laAdmin,
                 sdt: user.sdt || '',
             }}
+            validateOnMount
             validationSchema={Yup.object().shape({
                 ten: Yup.string().required('Vui lòng nhập tên'),
                 mk: requiredPassword
@@ -47,7 +48,7 @@ const ManageUserForm = ({
             })}
             onSubmit={onSubmit}
         >
-            {({ values, errors, handleChange, handleSubmit }) => (
+            {({ values, errors, isValid, handleChange, handleSubmit }) => (
                 <form noValidate style={{ padding: '20px 0' }} onSubmit={handleSubmit}>
                     <FormControl fullWidth sx={{ mb: 2 }} error={!!errors.ten}>
                         <InputLabel htmlFor="ten">Tên nhân viên</InputLabel>
@@ -121,7 +122,12 @@ const ManageUserForm = ({
 
                     <Divider />
 
-                    <Button style={{ marginTop: 10 }} type="submit" variant="outlined">
+                    <Button
+                        disabled={!isValid}
+                        style={{ marginTop: 10 }}
+                        type="submit"
+                        variant="outlined"
+                    >
                         {buttonText}
                     </Button>
                 </form>

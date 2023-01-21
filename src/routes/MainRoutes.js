@@ -3,12 +3,10 @@ import { lazy } from 'react';
 // project imports
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
-import Product from 'views/pages/storage/product/Product';
-import NhaPhanPhoi from 'views/pages/manage/npp/NhaPhanphoi';
-import KhuyenMaiTang from 'views/pages/khuyenmai/tang/KhuyenMaiTang';
 import EditKhuyenMaiTang from 'views/pages/khuyenmai/tang/ChinhSua';
 import KhuyenMaiGiam from 'views/pages/khuyenmai/giam/KhuyenMaiGiam';
 
+import KhuyenMaiTang from 'views/pages/khuyenmai/tang/KhuyenMaiTang';
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 
@@ -18,8 +16,14 @@ const ProductCategory = Loadable(
     lazy(() => import('views/pages/storage/productCategory/ProductCategory'))
 );
 const HoaDonNhap = Loadable(lazy(() => import('views/pages/hoadon/nhap/HoaDonNhap')));
-const ChinhSuaHoaDon = Loadable(
+const ChinhSuaHoaDonNhap = Loadable(
     lazy(() => import('views/pages/hoadon/nhap/chinhsua/ChinhSuaHoaDon'))
+);
+const HoaDonXuat = Loadable(lazy(() => import('views/pages/hoadon/xuat/HoaDonXuat')));
+const Product = Loadable(lazy(() => import('views/pages/storage/product/Product')));
+const NhaPhanPhoi = Loadable(lazy(() => import('views/pages/manage/npp/NhaPhanphoi')));
+const ChinhSuaHoaDonXuat = Loadable(
+    lazy(() => import('views/pages/hoadon/xuat/chinhsua/ChinhSuaHoaDon'))
 );
 
 const MainRoutes = {
@@ -70,7 +74,48 @@ const MainRoutes = {
                     children: [
                         {
                             path: ':ma',
-                            element: <ChinhSuaHoaDon />,
+                            element: <ChinhSuaHoaDonNhap />,
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            path: 'hoadon',
+            children: [
+                {
+                    path: 'nhap',
+                    element: <HoaDonNhap />,
+                },
+                {
+                    path: 'xuat',
+                    element: <HoaDonXuat />,
+                },
+            ],
+        },
+        {
+            path: 'hoadon',
+            children: [
+                {
+                    path: 'nhap',
+                    children: [
+                        {
+                            path: ':ma',
+                            element: <ChinhSuaHoaDonNhap />,
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            path: 'hoadon',
+            children: [
+                {
+                    path: 'xuat',
+                    children: [
+                        {
+                            path: ':ma',
+                            element: <ChinhSuaHoaDonXuat />,
                         },
                     ],
                 },

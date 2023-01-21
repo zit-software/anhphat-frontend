@@ -8,20 +8,20 @@ import {
     DialogTitle,
     FormControlLabel,
     FormHelperText,
-    IconButton,
 } from '@mui/material';
-import { DataGrid, GridToolbar, viVN } from '@mui/x-data-grid';
-import { IconCirclePlus, IconPencil, IconX } from '@tabler/icons';
+import { DataGrid, GridActionsCellItem, GridToolbar, viVN } from '@mui/x-data-grid';
+import { IconCirclePlus } from '@tabler/icons';
 import { Formik } from 'formik';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import * as Yup from 'yup';
 
+import { Delete, Edit } from '@mui/icons-material';
+import dayjs from 'dayjs';
 import NppService from 'services/npp.service';
+import ProvinceService from 'services/province.service';
 import MainCard from 'ui-component/cards/MainCard';
 import ManageNppForm from '../manage-forms/ManageNppForm';
-import ProvinceService from 'services/province.service';
-import dayjs from 'dayjs';
 
 const CreateModal = ({ open, onClose, onSubmit }) => {
     return (
@@ -61,9 +61,11 @@ function NhaPhanPhoi() {
     const handleOpenUpdateModal = (value) => setUpdatePayload(value);
     const handleCloseUpdateModal = () => setUpdatePayload(null);
 
-    const { data: npps, refetch } = useQuery(['npp'], () =>
-        NppService.layTatCa().then((res) => res.data)
-    );
+    const {
+        data: npps,
+        refetch,
+        isLoading,
+    } = useQuery(['npp'], () => NppService.layTatCa().then((res) => res.data));
 
     const handleCreate = async (values) => {
         try {
@@ -105,60 +107,64 @@ function NhaPhanPhoi() {
         {
             field: 'ten',
             headerName: 'Tên nhà phân phối',
-            flex: 1,
+            flex: 2,
         },
         {
             field: 'sdt',
             headerName: 'Số điện thoại',
-            flex: 1,
+            flex: 2,
         },
         {
             field: 'chietkhau',
             headerName: 'Chiết khấu',
-            flex: 1,
-            renderCell: (params) => `${params.row.chietkhau * 100}%`,
+            flex: 2,
+            renderCell: ({ value }) => `${value * 100}%`,
+        },
+        {
+            field: 'diem',
+            headerName: 'Điểm',
+            flex: 2,
         },
         {
             field: 'tinh',
             headerName: 'Tỉnh / thành phố',
-            flex: 1,
-            renderCell: (params) => ProvinceService.findByCode(params.row.tinh)?.name,
+            flex: 2,
+            renderCell: ({ value }) => ProvinceService.findByCode(value)?.name,
         },
         {
             field: 'createdAt',
             headerName: 'Tạo vào',
-            flex: 1,
-            renderCell: (params) => dayjs(params.row.createdAt).format('DD/MM/YYYY'),
+            flex: 2,
+            renderCell: ({ value }) => dayjs(value).format('DD/MM/YYYY'),
         },
         {
             field: 'updatedAt',
             headerName: 'Chỉnh sửa lần cuối',
-            flex: 1,
-            renderCell: (params) => dayjs(params.row.updatedAt).format('DD/MM/YYYY'),
+            flex: 2,
+            renderCell: ({ value }) => dayjs(value).format('DD/MM/YYYY'),
         },
         {
-            field: 'edit',
-            headerName: '',
-            flex: 1,
-            renderCell(params) {
-                return (
-                    <IconButton onClick={() => handleOpenUpdateModal(params.row)}>
-                        <IconPencil />
-                    </IconButton>
-                );
+            field: 'actions',
+            type: 'actions',
+            headerName: 'Hành động',
+            getActions(params) {
+                return [
+                    <GridActionsCellItem
+                        icon={<Edit />}
+                        label="Chỉnh sửa"
+                        size="small"
+                        onClick={() => handleOpenUpdateModal(params.row)}
+                    />,
+                    <GridActionsCellItem
+                        icon={<Delete />}
+                        label="Xóa"
+                        size="small"
+                        color="error"
+                        onClick={() => setDeleteId(params.row.ma)}
+                    />,
+                ];
             },
-        },
-        {
-            field: 'delete',
-            headerName: '',
-            flex: 1,
-            renderCell(params) {
-                return (
-                    <IconButton onClick={() => setDeleteId(params.row.ma)}>
-                        <IconX />
-                    </IconButton>
-                );
-            },
+            flex: 2,
         },
     ];
 
@@ -186,6 +192,7 @@ function NhaPhanPhoi() {
                     columns={columns}
                     rows={rows}
                     density="compact"
+                    loading={isLoading}
                 />
             </div>
             <CreateModal

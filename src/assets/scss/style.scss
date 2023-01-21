@@ -133,32 +133,17 @@ a {
 }
 
 .milk-box {
-    animation: milk-box 1s ease infinite;
     width: 100%;
     margin: 0 auto;
     position: relative;
-    height: 200px;
+    height: 150px;
 }
 
 .milk-box img {
-    max-width: 300px;
+    max-width: 200px;
     width: 100%;
     position: absolute;
     left: 50%;
     transform: translate(-50%);
     transition: 0.4s ease;
-}
-
-@keyframes milk-box {
-    0%,
-    100% {
-        transform: translate(1px, 1px) rotate(10deg);
-    }
-    50% {
-    }
-
-    25%,
-    75% {
-        transform: translate(-1px, -1px) rotate(-10deg);
-    }
 }

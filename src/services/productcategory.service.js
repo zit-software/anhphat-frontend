@@ -35,7 +35,7 @@ const productcategoryservice = {
         const res = await request.get(`/donvi`);
         return res.data;
     },
-    async getAllDonVisByLoaiHang({ queryKey: [_, malh] }) {
+    async getAllDonVisByLoaiHang({ queryKey: [malh] }) {
         if (!malh) return;
         const res = await request.get(`/donvi?loaihang=${malh}`);
         return res.data;
@@ -55,11 +55,11 @@ const productcategoryservice = {
     },
     async getAllMatHang({ queryKey: [_, params] }) {
         try {
-            const lh = params.malh || '';
-            const dv = params.madv || '';
-            const ngaynhap = params.ngaynhap || '';
-            const order = params.order || '';
-            const page = params.page || '';
+            const lh = params?.malh || '';
+            const dv = params?.madv || '';
+            const ngaynhap = params?.ngaynhap || '';
+            const order = params?.order || '';
+            const page = params?.page || '';
             const res = await request.get(
                 `/mathang?loaihang=${lh}&donvi=${dv}&ngaynhap=${ngaynhap}&order=${order}&page=${page}`
             );
@@ -67,6 +67,12 @@ const productcategoryservice = {
         } catch (error) {
             console.log(error);
         }
+    },
+    async getSoluongMathang(madv) {
+        return await request.get(`mathang/soluong/${madv}`);
+    },
+    async getMatHang(ma) {
+        return await request.get(`mathang/${ma}`);
     },
 };
 

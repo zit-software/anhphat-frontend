@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { CssBaseline, StyledEngineProvider } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 
+import 'dayjs/locale/vi';
 // routing
 import Routes from 'routes';
 
@@ -48,7 +49,7 @@ const App = () => {
     return (
         <StyledEngineProvider injectFirst>
             <ThemeProvider theme={themes(customization)}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="vi">
                     <QueryClientProvider client={queryClient}>
                         <CssBaseline />
                         <NavigationScroll>

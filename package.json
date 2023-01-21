@@ -18,6 +18,7 @@
         "@tabler/icons": "^1.72.0",
         "apexcharts": "^3.35.3",
         "axios": "^1.2.2",
+        "date-fns": "^2.29.3",
         "dayjs": "^1.11.7",
         "formik": "^2.2.9",
         "framer-motion": "^6.3.16",
@@ -37,7 +38,7 @@
         "yup": "^0.32.11"
     },
     "scripts": {
-        "start": "react-scripts start --verbose",
+        "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",

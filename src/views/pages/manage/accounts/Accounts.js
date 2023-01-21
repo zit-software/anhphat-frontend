@@ -1,70 +1,82 @@
 // material-ui
 
 // project imports
+import { Delete, Edit, Person, Shield } from '@mui/icons-material';
 import {
     AppBar,
     Button,
+    Checkbox,
     Dialog,
     DialogActions,
     DialogContent,
     DialogContentText,
     DialogTitle,
+    FormControlLabel,
+    FormHelperText,
     IconButton,
-    Skeleton,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
     Toolbar,
     Tooltip,
     Typography,
 } from '@mui/material';
-import { IconPencil, IconShield, IconTrash, IconUser, IconUserPlus, IconX } from '@tabler/icons';
+import { DataGrid, GridActionsCellItem, GridToolbar, viVN } from '@mui/x-data-grid';
+import { IconUserPlus, IconX } from '@tabler/icons';
+import { Formik } from 'formik';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
+import * as Yup from 'yup';
 
 import usernamangeService from 'services/usermanage.service';
 import MainCard from 'ui-component/cards/MainCard';
 
-import dayjs from 'utils/dayjs';
+import dayjs from 'dayjs';
 import ManageUserForm from '../manage-forms/ManageUserForm';
-
-const RowSkeleton = () => (
-    <TableRow>
-        <TableCell>
-            <Skeleton />
-        </TableCell>
-        <TableCell>
-            <Skeleton />
-        </TableCell>
-        <TableCell>
-            <Skeleton />
-        </TableCell>
-        <TableCell>
-            <Skeleton />
-        </TableCell>
-        <TableCell>
-            <Skeleton />
-        </TableCell>
-    </TableRow>
-);
 
 const DeleteAccountModal = ({ open, onClose, accountName, onSubmit }) => (
     <Dialog open={open} onClose={onClose}>
-        <DialogTitle>Xóa tài khoản</DialogTitle>
-        <DialogContent>
-            <DialogContentText>
-                Bạn muốn xóa tài khoản <strong>{accountName}</strong>?
-            </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-            <Button onClick={onClose}>Hủy</Button>
-            <Button color="error" onClick={onSubmit}>
-                Xóa
-            </Button>
-        </DialogActions>
+        <Formik
+            validateOnMount
+            initialValues={{
+                accept: false,
+            }}
+            validationSchema={Yup.object().shape({
+                accept: Yup.bool().required().equals([true], 'Vui lòng xác nhận hành động này'),
+            })}
+            onSubmit={onSubmit}
+        >
+            {({ values, errors, handleChange, handleSubmit }) => (
+                <form onSubmit={handleSubmit}>
+                    <DialogTitle>Xóa tài khoản</DialogTitle>
+                    <DialogContent sx={{ maxWidth: 360 }}>
+                        <DialogContentText>
+                            Bạn muốn xóa tài khoản <strong>{accountName}</strong>?
+                        </DialogContentText>
+
+                        <DialogContentText>
+                            Việc này có thể làm ảnh hưởng đến dữ liệu của hệ thống mà người dùng này
+                            đã tạo
+                        </DialogContentText>
+
+                        <FormControlLabel
+                            value={values.accept}
+                            name="accept"
+                            onChange={handleChange}
+                            label="Xác nhận xóa tài khoản"
+                            control={<Checkbox />}
+                        />
+
+                        <FormHelperText error>{errors.accept}</FormHelperText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button type="button" onClick={onClose}>
+                            Hủy
+                        </Button>
+                        <Button color="error" type="submit">
+                            Xóa
+                        </Button>
+                    </DialogActions>
+                </form>
+            )}
+        </Formik>
     </Dialog>
 );
 
@@ -167,70 +179,73 @@ const Accounts = () => {
                 </Tooltip>
             }
         >
-            <TableContainer sx={{ maxHeight: '70vh' }}>
-                <Table stickyHeader size="small">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Mã số</TableCell>
-                            <TableCell>Tên tài khoản</TableCell>
-                            <TableCell>Số điện thoại</TableCell>
-                            <TableCell>Quyền</TableCell>
-                            <TableCell>Ngày tạo</TableCell>
-                            <TableCell>Chỉnh sửa lần cuối</TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {isLoading ? (
-                            <>
-                                <RowSkeleton />
-                                <RowSkeleton />
-                                <RowSkeleton />
-                                <RowSkeleton />
-                                <RowSkeleton />
-                            </>
-                        ) : (
-                            fixedAccounts.map((user, index) => (
-                                <TableRow key={user.ma} hover>
-                                    <TableCell>{user.ma}</TableCell>
-                                    <TableCell>{user.ten}</TableCell>
-                                    <TableCell>{user.sdt}</TableCell>
-                                    <TableCell>
-                                        {user.laAdmin ? <IconShield /> : <IconUser />}
-                                    </TableCell>
-                                    <TableCell>
-                                        {dayjs(user.createdAt).format('DD/MM/YYYY')}
-                                    </TableCell>
-                                    <TableCell>
-                                        {dayjs(user.updatedAt).format('DD/MM/YYYY')}
-                                    </TableCell>
-                                    <TableCell>
-                                        <Tooltip title="Chỉnh sửa">
-                                            <IconButton
-                                                color="primary"
-                                                onClick={() => setEditAccount(user)}
-                                            >
-                                                <IconPencil />
-                                            </IconButton>
-                                        </Tooltip>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Tooltip
-                                            title="Xóa tài khoản"
-                                            onClick={() => handleOpenDeleteDialog(index)}
-                                        >
-                                            <IconButton color="error">
-                                                <IconTrash />
-                                            </IconButton>
-                                        </Tooltip>
-                                    </TableCell>
-                                </TableRow>
-                            ))
-                        )}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <div style={{ height: '60vh' }}>
+                <DataGrid
+                    editMode="row"
+                    columns={[
+                        { field: 'ma', headerName: 'Mã số', flex: 1 },
+                        { field: 'ten', headerName: 'Tên tài khoản', flex: 2 },
+                        { field: 'sdt', headerName: 'Số điện thoại', flex: 2 },
+                        {
+                            field: 'laAdmin',
+                            headerName: 'Quyền',
+                            flex: 2,
+                            renderCell({ value }) {
+                                return value ? <Shield fontSize="20" /> : <Person fontSize="20" />;
+                            },
+                        },
+                        {
+                            field: 'createdAt',
+                            headerName: 'Tạo vào',
+                            flex: 2,
+                            renderCell({ value }) {
+                                return dayjs(value).format('DD/MM/YYYY');
+                            },
+                        },
+                        {
+                            field: 'updatedAt',
+                            headerName: 'Chỉnh sửa lần cuối',
+                            flex: 2,
+                            renderCell({ value }) {
+                                return dayjs(value).format('DD/MM/YYYY');
+                            },
+                        },
+                        {
+                            field: 'actions',
+                            type: 'actions',
+                            headerName: 'Hành động',
+                            flex: 2,
+                            getActions(props) {
+                                return [
+                                    <GridActionsCellItem
+                                        icon={<Edit />}
+                                        label="Chỉnh sửa"
+                                        onClick={() => setEditAccount(props.row)}
+                                    />,
+                                    <GridActionsCellItem
+                                        color="error"
+                                        icon={<Delete />}
+                                        label="Xóa"
+                                        onClick={() => handleOpenDeleteDialog(props.row.index)}
+                                    />,
+                                ];
+                            },
+                        },
+                    ]}
+                    rows={fixedAccounts.map((e, index) => ({
+                        ...e,
+                        id: e.ma,
+                        index,
+                    }))}
+                    components={{
+                        Toolbar: GridToolbar,
+                    }}
+                    density="compact"
+                    localeText={viVN.components.MuiDataGrid.defaultProps.localeText}
+                    autoPageSize
+                    loading={isLoading}
+                />
+            </div>
             <DeleteAccountModal
                 open={showDeleteDialog}
                 onClose={handleCloseDeleteDialog}

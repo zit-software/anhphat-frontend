@@ -19,11 +19,11 @@ import dayjs from 'dayjs';
 import { useQuery } from 'react-query';
 import khuyenmaitangService from 'services/khuyenmaitang.service';
 
-import { useSearchParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { IconPlus } from '@tabler/icons';
 import SaveIcon from '@mui/icons-material/Save';
+import { IconPlus } from '@tabler/icons';
 import { Formik } from 'formik';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import ChiTietChinhSua from './ChiTietChinhSua';
 
@@ -36,11 +36,7 @@ const EditKhuyenMaiTang = () => {
     const [isSaving, setIsSaving] = useState(false);
     const ma = searchParams.get('ma');
     const type = searchParams.get('type');
-    const {
-        data,
-        refetch: refetchKMT,
-        isLoading,
-    } = useQuery(['kmt', type], () => {
+    const { data, isLoading } = useQuery(['kmt', type], () => {
         if (type === 'view' || type === 'edit') {
             return khuyenmaitangService.getKMT(ma);
         }
