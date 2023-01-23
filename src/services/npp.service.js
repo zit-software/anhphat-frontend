@@ -16,6 +16,17 @@ class NppService {
     static async xoa(ma) {
         return await request.delete(`npp/${ma}`);
     }
+    static async capnhatdiem(manpp, diemLog) {
+        console.log(manpp, diemLog);
+        return await request.put(`npp/diem/${manpp}`, diemLog);
+    }
+    static async getAllLogsDiem(page) {
+        const pageQuery = page >= 0 ? page : '';
+
+        return await (
+            await request.get(`/npp/diem?page=${pageQuery}`)
+        ).data;
+    }
 }
 
 export default NppService;

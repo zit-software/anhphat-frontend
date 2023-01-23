@@ -16,12 +16,14 @@ import { useState } from 'react';
 import { useQuery } from 'react-query';
 import * as Yup from 'yup';
 
-import { Delete, Edit } from '@mui/icons-material';
+import { Delete, Edit, Payment } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import NppService from 'services/npp.service';
 import ProvinceService from 'services/province.service';
 import MainCard from 'ui-component/cards/MainCard';
 import ManageNppForm from '../manage-forms/ManageNppForm';
+import ManageNPPPointForm from '../manage-forms/ManageNppPointForm';
+import LogDiem from './LogDiem';
 
 const CreateModal = ({ open, onClose, onSubmit }) => {
     return (
@@ -50,15 +52,38 @@ const UpdateModal = ({ value, open, onClose, onSubmit }) => {
     );
 };
 
+const PointModal = ({ value, open, onClose, onSubmit }) => {
+    return (
+        <Dialog fullWidth open={open} onClose={onClose}>
+            <DialogTitle>Điểm nhà phân phối</DialogTitle>
+            <DialogContent>
+                <ManageNPPPointForm
+                    value={value || {}}
+                    buttonText="Lưu"
+                    onSubmit={onSubmit}
+                    onClose={onClose}
+                />
+            </DialogContent>
+        </Dialog>
+    );
+};
+
 function NhaPhanPhoi() {
     const [openCreateModal, setOpenCreateModal] = useState(false);
     const [updatePayload, setUpdatePayload] = useState(null);
+    const [pointPayload, setPointPayload] = useState(null);
     const [deleteId, setDeleteId] = useState(null);
 
     const handleOpenCreateModal = () => setOpenCreateModal(true);
     const handleCloseCreateModal = () => setOpenCreateModal(false);
 
     const handleOpenUpdateModal = (value) => setUpdatePayload(value);
+    const handleOpenPointsModal = (value) =>
+        setPointPayload({
+            ...value,
+            ghichu: '',
+        });
+    const handleClosePointsModal = () => setPointPayload(null);
     const handleCloseUpdateModal = () => setUpdatePayload(null);
 
     const {
@@ -83,6 +108,17 @@ function NhaPhanPhoi() {
         } catch (error) {
         } finally {
             handleCloseUpdateModal();
+            refetch();
+        }
+    };
+
+    const handleUpdatePoint = async (values) => {
+        try {
+            const { ma: manpp, diem, ghichu } = values;
+            await NppService.capnhatdiem(manpp, { diem, ghichu });
+        } catch (error) {
+        } finally {
+            handleClosePointsModal();
             refetch();
         }
     };
@@ -150,6 +186,14 @@ function NhaPhanPhoi() {
             getActions(params) {
                 return [
                     <GridActionsCellItem
+                        icon={<Payment />}
+                        label="Điểm"
+                        size="small"
+                        onClick={() => {
+                            handleOpenPointsModal(params.row);
+                        }}
+                    />,
+                    <GridActionsCellItem
                         icon={<Edit />}
                         label="Chỉnh sửa"
                         size="small"
@@ -195,6 +239,9 @@ function NhaPhanPhoi() {
                     loading={isLoading}
                 />
             </div>
+            <div style={{ marginTop: '24px' }}>
+                <LogDiem />
+            </div>
             <CreateModal
                 open={openCreateModal}
                 onClose={handleCloseCreateModal}
@@ -206,6 +253,12 @@ function NhaPhanPhoi() {
                 value={updatePayload}
                 onClose={handleCloseUpdateModal}
                 onSubmit={handleUpdate}
+            />
+            <PointModal
+                open={!!pointPayload}
+                value={pointPayload}
+                onClose={handleClosePointsModal}
+                onSubmit={handleUpdatePoint}
             />
 
             <Dialog open={deleteId !== null} onClose={() => setDeleteId(null)}>
