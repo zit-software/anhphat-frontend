@@ -1,6 +1,18 @@
 // material-ui
 
-import { Grid, MenuItem, Select, TextField } from '@mui/material';
+import {
+    Grid,
+    LinearProgress,
+    MenuItem,
+    Select,
+    Tab,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    Tabs,
+    TextField,
+} from '@mui/material';
 import { Stack } from '@mui/system';
 import { DatePicker } from '@mui/x-date-pickers';
 import {
@@ -18,9 +30,12 @@ import dayjs from 'dayjs';
 import { useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { useQuery } from 'react-query';
+import productcategoryservice from 'services/productcategory.service';
+import ProvinceService from 'services/province.service';
 
 import ThongKeService from 'services/thongke.service';
 import MainCard from 'ui-component/cards/MainCard';
+import ProductCategory from 'views/pages/storage/productCategory/ProductCategory';
 import formatter from 'views/utilities/formatter';
 import ChiCard from './ChiCard';
 import DoanhThuCard from './DoanhThuCard';
@@ -33,6 +48,7 @@ import ThuCard from './ThuCard';
 const Dashboard = () => {
     const [ngaybd, setNgaybd] = useState(startOfYear(new Date()));
     const [ngaykt, setNgaykt] = useState(endOfYear(new Date()));
+    const [currentTinh, setCurrentTinh] = useState(84);
 
     const { data: thongke } = useQuery(['thongketheongay', ngaybd, ngaykt], () =>
         ThongKeService.thongketheongay({ ngaybd, ngaykt }).then((res) => res.data)
@@ -46,13 +62,29 @@ const Dashboard = () => {
         ThongKeService.thongketheoloaihangnhap({ ngaybd, ngaykt }).then((res) => res.data)
     );
 
+    const { data: allTinhs, isLoading: isLoadingAllTinh } = useQuery(['allTinh'], () =>
+        ThongKeService.laytatcatinh()
+    );
+
+    const { data: thongkeTinh, isLoading: isLoadingThongKeTinh } = useQuery(
+        ['thongketinh', currentTinh, ngaybd, ngaykt],
+        () => ThongKeService.thongketinh(currentTinh, ngaybd, ngaykt)
+    );
+    const { data: allLoaiHang, isLoading: isLoadingLH } = useQuery(
+        ['loaihang'],
+        productcategoryservice.getAllCategories()
+    );
+
     const fixedThongkeban = thongkeban || [];
     const fixedThongkenhap = thongkenhap || [];
 
-    console.log(fixedThongkeban);
-
     const thongkeTheoNgay = thongke?.data || [];
 
+    let thongkeTinhRow = [];
+    if (!isLoadingLH && !isLoadingThongKeTinh) {
+        thongkeTinhRow = [...allLoaiHang];
+        console.log(thongkeTinhRow);
+    }
     return (
         <Grid container spacing={2}>
             <Grid item sm={12} lg={8} xl={9}>
@@ -188,6 +220,34 @@ const Dashboard = () => {
                     <ChiCard tongchi={thongke?.tongchi} />
                     <DoanhThuCard doanhthu={thongke?.doanhthu} />
                 </Stack>
+            </Grid>
+
+            <Grid item xs={12}>
+                <MainCard title="Thống kê theo tỉnh">
+                    {isLoadingAllTinh || isLoadingThongKeTinh ? (
+                        <LinearProgress />
+                    ) : (
+                        <TableContainer>
+                            <TableHead>
+                                {thongkeTinh.npp.map((npp) => (
+                                    <TableCell key={npp.ma}>{npp.ten}</TableCell>
+                                ))}
+                            </TableHead>
+                            <TableBody></TableBody>
+                            <Grid container justifyContent="flex-end">
+                                <Tabs value={currentTinh} aria-label="basic tabs example">
+                                    {allTinhs.map((tinh) => (
+                                        <Tab
+                                            label={ProvinceService.findByCode(tinh).name}
+                                            key={tinh}
+                                            value={tinh}
+                                        ></Tab>
+                                    ))}
+                                </Tabs>
+                            </Grid>
+                        </TableContainer>
+                    )}
+                </MainCard>
             </Grid>
 
             <Grid item xs={12}>

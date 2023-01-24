@@ -27,6 +27,21 @@ class ThongKeService {
             },
         });
     }
+    static async laytatcatinh() {
+        return await (
+            await request.get('thongke/alltinh')
+        ).data;
+    }
+    static async thongketinh(tinh, ngaybd, ngaykt) {
+        return await (
+            await request.get(`thongke/tinh/${tinh}`, {
+                params: {
+                    ngaybd,
+                    ngaykt,
+                },
+            })
+        ).data;
+    }
 }
 
 export default ThongKeService;

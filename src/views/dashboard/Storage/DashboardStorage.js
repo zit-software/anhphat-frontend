@@ -48,7 +48,18 @@ const DashboardStorage = () => {
                                         </Typography>
                                         <Typography>
                                             <b style={{ marginRight: '4px' }}>Hạn Sử Dụng</b>
-                                            {dayjs(mh.hsd).format('DD/MM/YYYY')}
+                                            {
+                                                <span
+                                                    style={{
+                                                        padding: '1px 3px',
+                                                        borderRadius: '4px',
+                                                        backgroundColor: 'red',
+                                                        color: 'white',
+                                                    }}
+                                                >
+                                                    {dayjs(mh.hsd).format('DD/MM/YYYY')}
+                                                </span>
+                                            }
                                         </Typography>
                                     </Card>
                                 </Grid>
@@ -64,7 +75,7 @@ const DashboardStorage = () => {
                 </MainCard>
             </Grid>
             <Grid xs={12} item>
-                <MainCard title="Các mặt hàng còn ít số lượng">
+                <MainCard title="Các loại hàng còn ít số lượng">
                     <ReactApexChart
                         options={{
                             chart: {

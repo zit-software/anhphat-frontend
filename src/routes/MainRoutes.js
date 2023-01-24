@@ -3,10 +3,10 @@ import { lazy } from 'react';
 // project imports
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
-import DashboardStorage from 'views/dashboard/Storage/DashboardStorage';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
+const DashboardStorage = Loadable(lazy(() => import('views/dashboard/Storage/DashboardStorage')));
 
 // utilities routing
 const Accounts = Loadable(lazy(() => import('views/pages/manage/accounts/Accounts')));
