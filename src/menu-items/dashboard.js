@@ -1,22 +1,30 @@
 // assets
-import { IconDashboard } from '@tabler/icons';
+import { IconDashboard, IconPackages } from '@tabler/icons';
 
 // constant
-const icons = { IconDashboard };
+const icons = { IconDashboard, IconPackages };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
 const dashboard = {
     id: 'dashboard',
-    title: 'Dashboard',
+    title: 'Thống Kê',
     type: 'group',
     children: [
         {
-            id: 'default',
-            title: 'Dashboard',
+            id: 'statistic',
+            title: 'Thống Kê',
             type: 'item',
-            url: 'dashboard/default',
+            url: 'dashboard/statistic',
             icon: icons.IconDashboard,
+            breadcrumbs: true,
+        },
+        {
+            id: 'storage',
+            title: 'Thống Kê Tồn Kho',
+            type: 'item',
+            url: 'dashboard/storage',
+            icon: icons.IconPackages,
             breadcrumbs: true,
         },
     ],

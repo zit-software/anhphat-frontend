@@ -190,7 +190,7 @@ const Dashboard = () => {
                 </Stack>
             </Grid>
 
-            <Grid item sm={12} lg={4}>
+            <Grid item xs={12}>
                 <MainCard title="Thống kê hàng nhập">
                     <ReactApexChart
                         options={{
@@ -221,7 +221,7 @@ const Dashboard = () => {
                 </MainCard>
             </Grid>
 
-            <Grid item sm={12} lg={4}>
+            <Grid item xs={12}>
                 <MainCard title="Thống kê hàng xuất">
                     <ReactApexChart
                         options={{
