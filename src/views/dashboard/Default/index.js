@@ -6,10 +6,12 @@ import {
     MenuItem,
     Select,
     Tab,
+    Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
+    TableRow,
     Tabs,
     TextField,
 } from '@mui/material';
@@ -70,8 +72,7 @@ const Dashboard = () => {
         ['thongketinh', currentTinh, ngaybd, ngaykt],
         () => ThongKeService.thongketinh(currentTinh, ngaybd, ngaykt)
     );
-    const { data: allLoaiHang, isLoading: isLoadingLH } = useQuery(
-        ['loaihang'],
+    const { data: allLoaiHang, isLoading: isLoadingLH } = useQuery(['loaihang'], () =>
         productcategoryservice.getAllCategories()
     );
 
@@ -80,10 +81,25 @@ const Dashboard = () => {
 
     const thongkeTheoNgay = thongke?.data || [];
 
-    let thongkeTinhRow = [];
+    let thongkeTinhRows = [];
     if (!isLoadingLH && !isLoadingThongKeTinh) {
-        thongkeTinhRow = [...allLoaiHang];
-        console.log(thongkeTinhRow);
+        thongkeTinhRows = allLoaiHang.map((lh) => [
+            {
+                ma: lh.ma,
+                ten: lh.ten,
+            },
+        ]);
+        for (let npp of thongkeTinh.npp) {
+            for (let row of thongkeTinhRows) {
+                row.push(0);
+            }
+            for (let lh of npp.loaihang) {
+                const findIndex = thongkeTinhRows.findIndex((row) => row[0].ma === lh.ma);
+                const lastIndex = thongkeTinhRows[findIndex].length - 1;
+                thongkeTinhRows[findIndex][lastIndex] = lh.soluong;
+            }
+        }
+        console.log(thongkeTinhRows);
     }
     return (
         <Grid container spacing={2}>
@@ -228,23 +244,42 @@ const Dashboard = () => {
                         <LinearProgress />
                     ) : (
                         <TableContainer>
-                            <TableHead>
-                                {thongkeTinh.npp.map((npp) => (
-                                    <TableCell key={npp.ma}>{npp.ten}</TableCell>
-                                ))}
-                            </TableHead>
-                            <TableBody></TableBody>
-                            <Grid container justifyContent="flex-end">
-                                <Tabs value={currentTinh} aria-label="basic tabs example">
-                                    {allTinhs.map((tinh) => (
-                                        <Tab
-                                            label={ProvinceService.findByCode(tinh).name}
-                                            key={tinh}
-                                            value={tinh}
-                                        ></Tab>
+                            <Table>
+                                <TableHead>
+                                    <TableCell>Loại Hàng</TableCell>
+                                    {thongkeTinh.npp.map((npp) => (
+                                        <TableCell key={npp.ma}>{npp.ten}</TableCell>
                                     ))}
-                                </Tabs>
-                            </Grid>
+                                </TableHead>
+                                <TableBody>
+                                    {thongkeTinhRows.map((thongke) => {
+                                        return (
+                                            <TableRow>
+                                                {thongke.map((col, index) => {
+                                                    if (index === 0)
+                                                        return <TableCell>{col.ten}</TableCell>;
+                                                    return <TableCell>{col}</TableCell>;
+                                                })}
+                                            </TableRow>
+                                        );
+                                    })}
+                                </TableBody>
+                                <Grid container justifyContent="flex-end">
+                                    <Tabs
+                                        onChange={(e, value) => setCurrentTinh(value)}
+                                        value={currentTinh}
+                                        aria-label="basic tabs example"
+                                    >
+                                        {allTinhs.map((tinh) => (
+                                            <Tab
+                                                label={ProvinceService.findByCode(tinh).name}
+                                                key={tinh}
+                                                value={tinh}
+                                            ></Tab>
+                                        ))}
+                                    </Tabs>
+                                </Grid>
+                            </Table>
                         </TableContainer>
                     )}
                 </MainCard>
