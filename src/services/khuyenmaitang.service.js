@@ -46,6 +46,9 @@ class KhuyenMaiTangService {
             console.log(error);
         }
     }
+    async xoakmt(ma) {
+        await request.delete(`/khuyenmaitang/${ma}`);
+    }
 }
 
 export default new KhuyenMaiTangService();

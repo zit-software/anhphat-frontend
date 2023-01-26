@@ -63,11 +63,6 @@ const KhuyenMaiGiam = () => {
             flex: 1,
         },
         {
-            field: 'tenlh',
-            headerName: 'Tên Loại Hàng',
-            flex: 1,
-        },
-        {
             field: 'tile',
             headerName: 'Tỉ Lệ Giảm (%)',
             flex: 1,
@@ -167,8 +162,6 @@ const KhuyenMaiGiam = () => {
                     columns={columns}
                     rows={data.map((kmg) => ({
                         id: kmg.ma,
-                        malh: kmg.lh.ma,
-                        tenlh: kmg.lh.ten,
                         ...kmg,
                     }))}
                 />
