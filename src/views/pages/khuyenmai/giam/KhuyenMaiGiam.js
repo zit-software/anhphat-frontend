@@ -83,7 +83,6 @@ const KhuyenMaiGiam = () => {
                 return (
                     <IconButton
                         onClick={() => {
-                            console.log(params.row);
                             handleOpenUpdateModal(params.row);
                         }}
                         size="small"

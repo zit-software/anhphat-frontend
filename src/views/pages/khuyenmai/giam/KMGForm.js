@@ -31,7 +31,6 @@ function KMGForm({ value = {}, buttonText, onSubmit, onClose }) {
             onSubmit={onSubmit}
         >
             {({ values, errors, handleChange, handleSubmit }) => {
-                console.log(values);
                 return (
                     <form onSubmit={handleSubmit} style={{ padding: '10px 0' }}>
                         <Stack spacing={1}>
