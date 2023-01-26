@@ -158,11 +158,6 @@ const MainRoutes = {
                             path: 'tang',
                             element: <KhuyenMaiTang />,
                         },
-                    ],
-                },
-                {
-                    path: 'khuyenmai',
-                    children: [
                         {
                             path: 'giam',
                             element: <KhuyenMaiGiam />,
@@ -170,8 +165,18 @@ const MainRoutes = {
                     ],
                 },
                 {
-                    path: 'khuyenmai/tang/edit',
-                    element: <EditKhuyenMaiTang />,
+                    path: 'khuyenmai',
+                    children: [
+                        {
+                            path: 'tang',
+                            children: [
+                                {
+                                    path: 'edit',
+                                    element: <EditKhuyenMaiTang />,
+                                },
+                            ],
+                        },
+                    ],
                 },
             ],
         },

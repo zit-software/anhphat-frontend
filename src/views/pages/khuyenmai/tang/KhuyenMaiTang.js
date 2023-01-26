@@ -1,4 +1,16 @@
-import { IconButton, Tooltip } from '@mui/material';
+import {
+    Button,
+    Checkbox,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    FormControlLabel,
+    FormHelperText,
+    IconButton,
+    Tooltip,
+} from '@mui/material';
 import { DataGrid, viVN } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import { useQuery } from 'react-query';
@@ -9,11 +21,21 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from 'react-router';
 import { createSearchParams } from 'react-router-dom';
 import { IconFilePlus } from '@tabler/icons';
+import { useState } from 'react';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import { set } from 'date-fns';
 const { default: MainCard } = require('ui-component/cards/MainCard');
 
 const KhuyenMaiTang = () => {
-    const { data: allKMT } = useQuery('getAllKMT', khuyenmaitangService.getAllKMT);
+    const { data: allKMT, refetch } = useQuery('getAllKMT', khuyenmaitangService.getAllKMT);
     const navigate = useNavigate();
+    const [deleteID, setDeleteId] = useState(null);
+    const handleDelete = async () => {
+        await khuyenmaitangService.xoakmt(deleteID);
+        refetch();
+        setDeleteId(null);
+    };
 
     const columns = [
         {
@@ -80,9 +102,13 @@ const KhuyenMaiTang = () => {
             field: 'delete',
             headerName: '',
             flex: 0.2,
-            renderCell: () => {
+            renderCell: (params) => {
                 return (
-                    <IconButton onClick={() => {}}>
+                    <IconButton
+                        onClick={() => {
+                            setDeleteId(params.row.ma);
+                        }}
+                    >
                         <DeleteIcon color="error" />
                     </IconButton>
                 );
@@ -96,7 +122,7 @@ const KhuyenMaiTang = () => {
         <MainCard
             title="Các Khuyến Mãi Tặng"
             secondary={
-                <Tooltip title="Tạo hóa đơn">
+                <Tooltip title="Tạo khuyến mãi">
                     <IconButton
                         onClick={() => {
                             navigate({
@@ -121,6 +147,41 @@ const KhuyenMaiTang = () => {
                     density="compact"
                 />
             </div>
+            <Dialog open={deleteID !== null} onClose={() => setDeleteId(null)}>
+                <Formik
+                    initialValues={{
+                        accept: false,
+                    }}
+                    validationSchema={Yup.object().shape({
+                        accept: Yup.boolean().equals([true], 'Vui lòng xác nhận để xóa'),
+                    })}
+                    onSubmit={handleDelete}
+                >
+                    {({ values, errors, handleSubmit, handleChange }) => (
+                        <form onSubmit={handleSubmit}>
+                            <DialogTitle>Xóa khuyến mãi tặng</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText maxWidth={360}>
+                                    Bạn có chắc chắn muốn xóa khuyến mãi tặng này không?
+                                </DialogContentText>
+
+                                <FormControlLabel
+                                    label="Xác nhận xóa khuyến mãi giảm"
+                                    name="accept"
+                                    value={values.accept}
+                                    control={<Checkbox />}
+                                    onChange={handleChange}
+                                />
+
+                                <FormHelperText error>{errors.accept}</FormHelperText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button type="submit">Xóa</Button>
+                            </DialogActions>
+                        </form>
+                    )}
+                </Formik>
+            </Dialog>
         </MainCard>
     );
 };

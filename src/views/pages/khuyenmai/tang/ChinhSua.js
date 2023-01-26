@@ -18,12 +18,12 @@ import {
 import dayjs from 'dayjs';
 import { useQuery } from 'react-query';
 import khuyenmaitangService from 'services/khuyenmaitang.service';
-
+import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import SaveIcon from '@mui/icons-material/Save';
 import { IconPlus } from '@tabler/icons';
 import { Formik } from 'formik';
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import ChiTietChinhSua from './ChiTietChinhSua';
 
@@ -31,9 +31,8 @@ const { default: MainCard } = require('ui-component/cards/MainCard');
 
 const EditKhuyenMaiTang = () => {
     const [searchParams] = useSearchParams();
-    const [currentEditing, setCurrentEditing] = useState(-1);
-    const [kmt, setKMT] = useState({});
-    const [isSaving, setIsSaving] = useState(false);
+    const navigate = useNavigate();
+
     const ma = searchParams.get('ma');
     const type = searchParams.get('type');
     const { data, isLoading } = useQuery(['kmt', type], () => {
@@ -41,6 +40,12 @@ const EditKhuyenMaiTang = () => {
             return khuyenmaitangService.getKMT(ma);
         }
     });
+
+    const [currentEditing, setCurrentEditing] = useState(-1);
+    const [kmt, setKMT] = useState({
+        ten: data?.ten || '',
+    });
+    const [isSaving, setIsSaving] = useState(false);
 
     const [rows, setRows] = useState([]);
     useEffect(() => {
@@ -78,10 +83,6 @@ const EditKhuyenMaiTang = () => {
     const handleSave = async () => {
         // Kiểm tra mã loại hàng có trùng trong rows không
         setIsSaving(true);
-        console.log(type);
-        console.log(kmt);
-        console.log(rows);
-        console.log(data);
         if (type === 'edit') {
             await khuyenmaitangService.chinhsuakmt(ma, kmt);
             await khuyenmaitangService.themchitiet(ma, {
@@ -112,8 +113,6 @@ const EditKhuyenMaiTang = () => {
             const newKMT = {
                 kmt: {
                     ten: kmt.ten,
-                    ngaybd: '2023-01-07T10:18:19.220Z',
-                    ngaykt: '2023-01-16T10:18:19.220Z',
                 },
                 chitiet: rows.map((row) => ({
                     soluongmua: row.soluongmua,
@@ -198,7 +197,11 @@ const EditKhuyenMaiTang = () => {
                                                 value={values.ten}
                                                 fullWidth
                                                 onChange={(e) => {
-                                                    handleChange(e);
+                                                    handleChange(e, {
+                                                        target: {
+                                                            ten: e.target.value,
+                                                        },
+                                                    });
                                                     setKMT({
                                                         ten: e.target.value,
                                                     });
@@ -260,26 +263,38 @@ const EditKhuyenMaiTang = () => {
                                 <IconPlus />
                             </IconButton>
                         </Grid>
-                        <Grid container justifyContent="flex-start">
-                            <Button
-                                disabled={currentEditing >= 0}
-                                onClick={() => {
-                                    handleSave();
-                                }}
-                                variant="contained"
-                            >
-                                {isSaving ? (
-                                    <CircularProgress
-                                        size={30}
-                                        sx={{ color: 'white', backGroundColor: 'white' }}
-                                    />
-                                ) : (
-                                    <>
-                                        <SaveIcon />
-                                        Lưu
-                                    </>
-                                )}
-                            </Button>
+                        <Grid gap={[1, 1]} container justifyContent="flex-start">
+                            <Grid item>
+                                <Button
+                                    disabled={currentEditing >= 0 || !kmt.ten}
+                                    onClick={() => {
+                                        handleSave();
+                                    }}
+                                    variant="contained"
+                                >
+                                    {isSaving ? (
+                                        <CircularProgress
+                                            size={30}
+                                            sx={{ color: 'white', backGroundColor: 'white' }}
+                                        />
+                                    ) : (
+                                        <>
+                                            <SaveIcon />
+                                            Lưu
+                                        </>
+                                    )}
+                                </Button>
+                            </Grid>
+                            <Grid item>
+                                <Button
+                                    variant="contained"
+                                    onClick={() => {
+                                        navigate(-1);
+                                    }}
+                                >
+                                    <KeyboardReturnIcon /> Quay Lại
+                                </Button>
+                            </Grid>
                         </Grid>
                     </>
                 )}

@@ -16,29 +16,21 @@ import productcategoryservice from 'services/productcategory.service';
 import * as Yup from 'yup';
 
 function KMGForm({ value = {}, buttonText, onSubmit, onClose }) {
-    const { data: products, isLoading } = useQuery(
-        ['products'],
-        productcategoryservice.getAllCategoriesAndDonvi
-    );
-    if (isLoading) return <></>;
     return (
         <Formik
             initialValues={{
                 ten: value.ten || '',
                 tile: value.tile || 0,
-                malh: value.malh || '',
             }}
             validationSchema={Yup.object().shape({
                 ten: Yup.string().required('Vui lòng nhập tên khuyến mãi giảm'),
                 tile: Yup.number()
                     .required('Vui lòng nhập tỉ lệ khuyến mãi')
                     .test('valid', 'Tỉ Lệ giảm phải từ 0 - 100%', (v) => v >= 0 && v <= 1),
-                malh: Yup.string().required('Vui lòng chọn loại hàng'),
             })}
             onSubmit={onSubmit}
         >
             {({ values, errors, handleChange, handleSubmit }) => {
-                console.log(values);
                 return (
                     <form onSubmit={handleSubmit} style={{ padding: '10px 0' }}>
                         <Stack spacing={1}>
@@ -77,21 +69,6 @@ function KMGForm({ value = {}, buttonText, onSubmit, onClose }) {
                                 />
                                 <FormHelperText error>{errors.tile}</FormHelperText>
                             </FormControl>
-                            <Select
-                                error={!!errors.malh}
-                                value={values.malh || ''}
-                                name="malh"
-                                fullWidth
-                                size="small"
-                                onChange={handleChange}
-                            >
-                                {products.map((product) => (
-                                    <MenuItem key={product.ma} value={product.ma}>
-                                        {product.ten}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                            <FormHelperText error>{errors.malh}</FormHelperText>
 
                             <Button variant="contained" color="primary" type="submit">
                                 {buttonText || 'Thêm'}
