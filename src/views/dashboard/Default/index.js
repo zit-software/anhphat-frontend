@@ -29,8 +29,7 @@ import {
     subYears,
 } from 'date-fns';
 import dayjs from 'dayjs';
-import { useCallback } from 'react';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { useQuery } from 'react-query';
 import productcategoryservice from 'services/productcategory.service';
@@ -38,7 +37,6 @@ import ProvinceService from 'services/province.service';
 
 import ThongKeService from 'services/thongke.service';
 import MainCard from 'ui-component/cards/MainCard';
-import ProductCategory from 'views/pages/storage/productCategory/ProductCategory';
 import formatter from 'views/utilities/formatter';
 import ChiCard from './ChiCard';
 import DoanhThuCard from './DoanhThuCard';
@@ -103,9 +101,10 @@ const Dashboard = () => {
             return thongkeTinhRows;
         }
         return [];
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentTinh, ngaybd, ngaykt, isLoadingThongKeTinh]);
+
     let thongkeTinhRows = updateThongKeTinh();
-    console.log(thongkeTinhRows);
     return (
         <Grid container spacing={2}>
             <Grid item sm={12} lg={8} xl={9}>
@@ -249,41 +248,47 @@ const Dashboard = () => {
                         <LinearProgress />
                     ) : (
                         <TableContainer>
+                            <Grid container justifyContent="flex-end">
+                                <Tabs
+                                    onChange={(e, value) => setCurrentTinh(value)}
+                                    value={currentTinh}
+                                    aria-label="basic tabs example"
+                                >
+                                    {allTinhs.map((tinh) => (
+                                        <Tab
+                                            label={ProvinceService.findByCode(tinh).name}
+                                            key={tinh}
+                                            value={tinh}
+                                        ></Tab>
+                                    ))}
+                                </Tabs>
+                            </Grid>
                             <Table>
                                 <TableHead>
-                                    <TableCell>Loại Hàng</TableCell>
-                                    {thongkeTinh.npp.map((npp) => (
-                                        <TableCell key={npp.ma}>{npp.ten}</TableCell>
-                                    ))}
+                                    <TableRow>
+                                        <TableCell>Loại Hàng</TableCell>
+                                        {thongkeTinh.npp.map((npp) => (
+                                            <TableCell key={npp.ma}>{npp.ten}</TableCell>
+                                        ))}
+                                    </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {thongkeTinhRows.map((thongke) => {
+                                    {thongkeTinhRows.map((thongke, index) => {
                                         return (
-                                            <TableRow>
+                                            <TableRow key={index}>
                                                 {thongke.map((col, index) => {
                                                     if (index === 0)
-                                                        return <TableCell>{col.ten}</TableCell>;
-                                                    return <TableCell>{col}</TableCell>;
+                                                        return (
+                                                            <TableCell key={index}>
+                                                                {col.ten}
+                                                            </TableCell>
+                                                        );
+                                                    return <TableCell key={index}>{col}</TableCell>;
                                                 })}
                                             </TableRow>
                                         );
                                     })}
                                 </TableBody>
-                                <Grid container justifyContent="flex-end">
-                                    <Tabs
-                                        onChange={(e, value) => setCurrentTinh(value)}
-                                        value={currentTinh}
-                                        aria-label="basic tabs example"
-                                    >
-                                        {allTinhs.map((tinh) => (
-                                            <Tab
-                                                label={ProvinceService.findByCode(tinh).name}
-                                                key={tinh}
-                                                value={tinh}
-                                            ></Tab>
-                                        ))}
-                                    </Tabs>
-                                </Grid>
                             </Table>
                         </TableContainer>
                     )}

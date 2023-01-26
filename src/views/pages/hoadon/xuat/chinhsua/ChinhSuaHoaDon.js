@@ -1,4 +1,13 @@
-import { AutoFixHigh, Close, DeleteOutline, Edit, Save, SwipeVertical } from '@mui/icons-material';
+import {
+    AutoFixHigh,
+    Close,
+    DeleteOutline,
+    Edit,
+    LocalOffer,
+    PanToolAlt,
+    Save,
+    SwipeVertical,
+} from '@mui/icons-material';
 import {
     Badge,
     Button,
@@ -10,6 +19,7 @@ import {
     FormControl,
     FormControlLabel,
     FormHelperText,
+    Grid,
     IconButton,
     InputAdornment,
     InputLabel,
@@ -27,13 +37,15 @@ import {
     Typography,
 } from '@mui/material';
 import { Stack } from '@mui/system';
-import { DataGrid, GridToolbar, viVN } from '@mui/x-data-grid';
+import { DataGrid, GridActionsCellItem, GridToolbar, viVN } from '@mui/x-data-grid';
+import { IconX } from '@tabler/icons';
 import dayjs from 'dayjs';
 import { Formik } from 'formik';
 import { useEffect, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useNavigate, useParams } from 'react-router';
 import HoaDonXuatService from 'services/hoadonxuat.service';
+import khuyenmaigiamService from 'services/khuyenmaigiam.service';
 import productcategoryservice from 'services/productcategory.service';
 import ProvinceService from 'services/province.service';
 import MainCard from 'ui-component/cards/MainCard';
@@ -370,10 +382,75 @@ const SavedRow = ({ value, index }) => {
     );
 };
 
+const AddKhuyenMaiGiamModal = ({ open, onClose, onSubmit }) => {
+    const { data: khuyenmaigiam, isLoading } = useQuery([], khuyenmaigiamService.getAllKMG);
+
+    const fixedKhuyenmaigiam = khuyenmaigiam || [];
+
+    return (
+        <Dialog open={open} fullWidth onClose={onClose}>
+            <DialogTitle>Thêm khuyến mãi giảm</DialogTitle>
+
+            <DialogContent>
+                <DataGrid
+                    sx={{ height: 400 }}
+                    loading={isLoading}
+                    columns={[
+                        {
+                            field: 'ma',
+                            headerName: 'Mã khuyến mãi',
+                            flex: 1,
+                        },
+                        {
+                            field: 'ten',
+                            headerName: 'Tên khuyến mãi',
+                            flex: 1,
+                        },
+                        {
+                            field: 'tile',
+                            headerName: 'Tỷ lệ giảm',
+                            flex: 1,
+                            renderCell({ value }) {
+                                return `${value * 100}%`;
+                            },
+                        },
+                        {
+                            field: 'select',
+                            type: 'actions',
+                            headerName: 'Chọn',
+                            flex: 1,
+                            getActions(params) {
+                                return [
+                                    <GridActionsCellItem
+                                        label="select"
+                                        icon={<PanToolAlt />}
+                                        onClick={() => {
+                                            onSubmit(params.row.ma);
+                                            onClose();
+                                        }}
+                                    />,
+                                ];
+                            },
+                        },
+                    ]}
+                    rows={fixedKhuyenmaigiam.map((e) => ({
+                        ...e,
+                        id: e.ma,
+                    }))}
+                    localeText={viVN.components.MuiDataGrid.defaultProps.localeText}
+                    hideFooter
+                    density="compact"
+                />
+            </DialogContent>
+        </Dialog>
+    );
+};
+
 function ChinhSuaHoaDon() {
     const navigate = useNavigate();
     const params = useParams();
     const [chitiet, setChitiet] = useState(false);
+    const [kmg, setKmg] = useState(null);
 
     const {
         data: phieuxuat,
@@ -383,7 +460,9 @@ function ChinhSuaHoaDon() {
         HoaDonXuatService.layMotHoaDon(params.ma, { chitiet }).then((res) => res.data)
     );
 
-    const { data: mathang } = useQuery(['tatcamathang'], productcategoryservice.getAllMatHang);
+    const { data: chitietKMG } = useQuery([kmg], () => khuyenmaigiamService.layKMG(kmg));
+
+    const { data: mathang } = useQuery(['tatcamathang', {}], productcategoryservice.getAllMatHang);
 
     const [autoRows, setAutoRows] = useState([]);
 
@@ -430,6 +509,7 @@ function ChinhSuaHoaDon() {
                     mh: e,
                     giaban: manualDongia[e],
                 })),
+                kmg,
             });
         } catch (error) {
             alert(error.response.data.message);
@@ -438,6 +518,11 @@ function ChinhSuaHoaDon() {
             refetch();
         }
     };
+
+    const [showAddKhuyenmaigiam, setShowAddKhuyenmaigiam] = useState(false);
+
+    const handleOpenAddKhuyenmaigiam = () => setShowAddKhuyenmaigiam(true);
+    const handleCloseAddOpenKhuyenmaigiam = () => setShowAddKhuyenmaigiam(false);
 
     const fixedMathang = mathang || { total: 0, data: [] };
 
@@ -637,6 +722,37 @@ function ChinhSuaHoaDon() {
                     )}
                 </Table>
 
+                <Typography variant="subtitle2">Khuyến mãi</Typography>
+
+                <Grid container>
+                    {!chitietKMG ? (
+                        <></>
+                    ) : (
+                        <Grid item xs={12} sm={6} md={4} lg={3}>
+                            <MainCard
+                                shadow
+                                title={chitietKMG.ten}
+                                secondary={
+                                    <IconButton onClick={() => setKmg(null)}>
+                                        <IconX />
+                                    </IconButton>
+                                }
+                            >
+                                <Typography variant="subtitle1">
+                                    Mã khuyến mãi: {chitietKMG.ma}
+                                </Typography>
+                                <Typography variant="subtitle1">
+                                    Tỷ lệ giảm: {chitietKMG.tile * 100}%
+                                </Typography>
+                            </MainCard>
+                        </Grid>
+                    )}
+                </Grid>
+
+                <Button startIcon={<LocalOffer />} onClick={handleOpenAddKhuyenmaigiam}>
+                    Thêm khuyến mãi giảm
+                </Button>
+
                 <Stack direction="row" spacing={2}>
                     <Button
                         variant="contained"
@@ -657,6 +773,12 @@ function ChinhSuaHoaDon() {
                 selecteds={selectedManual}
                 onClose={handleCloseManualModal}
                 onUpdate={setSelectedManual}
+            />
+
+            <AddKhuyenMaiGiamModal
+                open={showAddKhuyenmaigiam}
+                onClose={handleCloseAddOpenKhuyenmaigiam}
+                onSubmit={setKmg}
             />
 
             <SaveModal open={showSaveModal} onClose={handleCloseSaveModal} onSubmit={handleSave} />

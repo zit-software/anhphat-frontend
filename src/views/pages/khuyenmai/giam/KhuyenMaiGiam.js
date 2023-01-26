@@ -1,3 +1,4 @@
+import { Delete, Edit } from '@mui/icons-material';
 import {
     Button,
     Checkbox,
@@ -8,10 +9,9 @@ import {
     DialogTitle,
     FormControlLabel,
     FormHelperText,
-    IconButton,
 } from '@mui/material';
-import { DataGrid, viVN } from '@mui/x-data-grid';
-import { IconCirclePlus, IconPencil, IconX } from '@tabler/icons';
+import { DataGrid, GridActionsCellItem, viVN } from '@mui/x-data-grid';
+import { IconCirclePlus } from '@tabler/icons';
 import dayjs from 'dayjs';
 import { Formik } from 'formik';
 import { useState } from 'react';
@@ -82,31 +82,22 @@ const KhuyenMaiGiam = () => {
             flex: 2,
         },
         {
-            field: 'edit',
-            headerName: '',
-            renderCell(params) {
-                return (
-                    <IconButton
-                        onClick={() => {
-                            console.log(params.row);
-                            handleOpenUpdateModal(params.row);
-                        }}
-                        size="small"
-                    >
-                        <IconPencil />
-                    </IconButton>
-                );
-            },
-        },
-        {
-            field: 'delete',
-            headerName: '',
-            renderCell(params) {
-                return (
-                    <IconButton onClick={() => setDeleteId(params.row.ma)} size="small">
-                        <IconX />
-                    </IconButton>
-                );
+            field: 'actions',
+            type: 'actions',
+            headerName: 'Hành động',
+            getActions(params) {
+                return [
+                    <GridActionsCellItem
+                        icon={<Edit />}
+                        label="edit"
+                        onClick={() => handleOpenUpdateModal(params.row)}
+                    />,
+                    <GridActionsCellItem
+                        icon={<Delete />}
+                        label="edit"
+                        onClick={() => setDeleteId(params.row.ma)}
+                    />,
+                ];
             },
         },
     ];

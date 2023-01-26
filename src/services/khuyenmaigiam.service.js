@@ -31,6 +31,10 @@ class KhuyenMaiGiam {
             console.log(error);
         }
     }
+    async layKMG(ma) {
+        if (!ma) return;
+        return await request.get(`/khuyenmaigiam/${ma}`).then((res) => res.data);
+    }
 }
 
 export default new KhuyenMaiGiam();
