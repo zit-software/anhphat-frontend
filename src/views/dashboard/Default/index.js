@@ -29,6 +29,7 @@ import {
     subYears,
 } from 'date-fns';
 import dayjs from 'dayjs';
+import { useCallback } from 'react';
 import { useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { useQuery } from 'react-query';
@@ -81,26 +82,30 @@ const Dashboard = () => {
 
     const thongkeTheoNgay = thongke?.data || [];
 
-    let thongkeTinhRows = [];
-    if (!isLoadingLH && !isLoadingThongKeTinh) {
-        thongkeTinhRows = allLoaiHang.map((lh) => [
-            {
-                ma: lh.ma,
-                ten: lh.ten,
-            },
-        ]);
-        for (let npp of thongkeTinh.npp) {
-            for (let row of thongkeTinhRows) {
-                row.push(0);
+    const updateThongKeTinh = useCallback(() => {
+        if (!isLoadingLH && !isLoadingThongKeTinh) {
+            let thongkeTinhRows = allLoaiHang.map((lh) => [
+                {
+                    ma: lh.ma,
+                    ten: lh.ten,
+                },
+            ]);
+            for (let npp of thongkeTinh.npp) {
+                for (let row of thongkeTinhRows) {
+                    row.push(0);
+                }
+                for (let lh of npp.loaihang) {
+                    const findIndex = thongkeTinhRows.findIndex((row) => row[0].ma === lh.ma);
+                    const lastIndex = thongkeTinhRows[findIndex].length - 1;
+                    thongkeTinhRows[findIndex][lastIndex] = lh.soluong;
+                }
             }
-            for (let lh of npp.loaihang) {
-                const findIndex = thongkeTinhRows.findIndex((row) => row[0].ma === lh.ma);
-                const lastIndex = thongkeTinhRows[findIndex].length - 1;
-                thongkeTinhRows[findIndex][lastIndex] = lh.soluong;
-            }
+            return thongkeTinhRows;
         }
-        console.log(thongkeTinhRows);
-    }
+        return [];
+    }, [currentTinh, ngaybd, ngaykt, isLoadingThongKeTinh]);
+    let thongkeTinhRows = updateThongKeTinh();
+    console.log(thongkeTinhRows);
     return (
         <Grid container spacing={2}>
             <Grid item sm={12} lg={8} xl={9}>
