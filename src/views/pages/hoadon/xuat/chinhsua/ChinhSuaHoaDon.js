@@ -526,6 +526,8 @@ function ChinhSuaHoaDon() {
 
     const fixedMathang = mathang || { total: 0, data: [] };
 
+    const fixedChitietKMG = phieuxuat?.kmg || chitietKMG;
+
     if (isLoading) return <LinearProgress />;
 
     return (
@@ -693,15 +695,18 @@ function ChinhSuaHoaDon() {
                                 <TableCell colSpan={6}>Tổng</TableCell>
                                 <TableCell colSpan={2}>
                                     {formatter.format(
-                                        autoRows.reduce(
-                                            (prev, current) =>
-                                                prev + current.giaban * current.soluong,
-                                            0
-                                        ) +
-                                            Object.keys(manualDongia).reduce(
-                                                (prev, current) => prev + manualDongia[current],
-                                                0
-                                            )
+                                        phieuxuat.daluu
+                                            ? phieuxuat.tongtien
+                                            : autoRows.reduce(
+                                                  (prev, current) =>
+                                                      prev + current.giaban * current.soluong,
+                                                  0
+                                              ) +
+                                                  Object.keys(manualDongia).reduce(
+                                                      (prev, current) =>
+                                                          prev + manualDongia[current],
+                                                      0
+                                                  )
                                     )}
                                 </TableCell>
                             </TableRow>
@@ -725,33 +730,35 @@ function ChinhSuaHoaDon() {
                 <Typography variant="subtitle2">Khuyến mãi</Typography>
 
                 <Grid container>
-                    {!chitietKMG ? (
-                        <></>
-                    ) : (
+                    {fixedChitietKMG && (
                         <Grid item xs={12} sm={6} md={4} lg={3}>
                             <MainCard
                                 shadow
-                                title={chitietKMG.ten}
+                                title={fixedChitietKMG.ten}
                                 secondary={
-                                    <IconButton onClick={() => setKmg(null)}>
-                                        <IconX />
-                                    </IconButton>
+                                    !phieuxuat.daluu && (
+                                        <IconButton onClick={() => setKmg(null)}>
+                                            <IconX />
+                                        </IconButton>
+                                    )
                                 }
                             >
                                 <Typography variant="subtitle1">
-                                    Mã khuyến mãi: {chitietKMG.ma}
+                                    Mã khuyến mãi: {fixedChitietKMG.ma}
                                 </Typography>
                                 <Typography variant="subtitle1">
-                                    Tỷ lệ giảm: {chitietKMG.tile * 100}%
+                                    Tỷ lệ giảm: {fixedChitietKMG.tile * 100}%
                                 </Typography>
                             </MainCard>
                         </Grid>
                     )}
                 </Grid>
 
-                <Button startIcon={<LocalOffer />} onClick={handleOpenAddKhuyenmaigiam}>
-                    Thêm khuyến mãi giảm
-                </Button>
+                {!phieuxuat.daluu && (
+                    <Button startIcon={<LocalOffer />} onClick={handleOpenAddKhuyenmaigiam}>
+                        Thêm khuyến mãi giảm
+                    </Button>
+                )}
 
                 <Stack direction="row" spacing={2}>
                     <Button
