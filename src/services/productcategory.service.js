@@ -83,6 +83,11 @@ const productcategoryservice = {
             madvphanra,
         });
     },
+    async xoamathang(ma) {
+        return await (
+            await request.delete(`mathang/${ma}`)
+        ).data;
+    },
 };
 
 export default productcategoryservice;

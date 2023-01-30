@@ -66,7 +66,7 @@ const TaoHoaDonModal = ({ open, onClose }) => {
                                     mauser: currentUser.ma,
                                 })
                             ).data;
-                            navigate(`/hoadon/nhap/${data.ma}`);
+                            navigate(`/hoadon/thuhang/${data.ma}`);
                         } catch (error) {
                             console.log(error);
                         }
@@ -275,7 +275,7 @@ const HoaDonThuHang = () => {
                                     <GridActionsCellItem
                                         icon={params.row.daluu ? <Visibility /> : <Edit />}
                                         label="Chỉnh sửa"
-                                        onClick={() => navigate(`/hoadon/nhap/${params.row.ma}`)}
+                                        onClick={() => navigate(`/hoadon/thuhang/${params.row.ma}`)}
                                         size="small"
                                     />,
                                     <GridActionsCellItem

@@ -29,6 +29,7 @@ import {
     subYears,
 } from 'date-fns';
 import dayjs from 'dayjs';
+import { useEffect } from 'react';
 import { useCallback, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { useQuery } from 'react-query';
@@ -47,9 +48,17 @@ import ThuCard from './ThuCard';
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
 const Dashboard = () => {
+    const { data: allTinhs, isLoading: isLoadingAllTinh } = useQuery(['allTinh'], () =>
+        ThongKeService.laytatcatinh()
+    );
     const [ngaybd, setNgaybd] = useState(startOfYear(new Date()));
     const [ngaykt, setNgaykt] = useState(endOfYear(new Date()));
-    const [currentTinh, setCurrentTinh] = useState(84);
+    const [currentTinh, setCurrentTinh] = useState(null);
+    useEffect(() => {
+        if (allTinhs) {
+            setCurrentTinh(allTinhs[0]);
+        }
+    }, [allTinhs]);
 
     const { data: thongke } = useQuery(['thongketheongay', ngaybd, ngaykt], () =>
         ThongKeService.thongketheongay({ ngaybd, ngaykt }).then((res) => res.data)
@@ -61,10 +70,6 @@ const Dashboard = () => {
 
     const { data: thongkenhap } = useQuery(['thongkenhap', ngaybd, ngaykt], () =>
         ThongKeService.thongketheoloaihangnhap({ ngaybd, ngaykt }).then((res) => res.data)
-    );
-
-    const { data: allTinhs, isLoading: isLoadingAllTinh } = useQuery(['allTinh'], () =>
-        ThongKeService.laytatcatinh()
     );
 
     const { data: thongkeTinh, isLoading: isLoadingThongKeTinh } = useQuery(
@@ -105,6 +110,7 @@ const Dashboard = () => {
     }, [currentTinh, ngaybd, ngaykt, isLoadingThongKeTinh]);
 
     let thongkeTinhRows = updateThongKeTinh();
+    if (isLoadingAllTinh) return <LinearProgress />;
     return (
         <Grid container spacing={2}>
             <Grid item sm={12} lg={8} xl={9}>
@@ -242,58 +248,62 @@ const Dashboard = () => {
                 </Stack>
             </Grid>
 
-            <Grid item xs={12}>
-                <MainCard title="Thống kê theo tỉnh">
-                    {isLoadingAllTinh || isLoadingThongKeTinh ? (
-                        <LinearProgress />
-                    ) : (
-                        <TableContainer>
-                            <Grid container justifyContent="flex-end">
-                                <Tabs
-                                    onChange={(e, value) => setCurrentTinh(value)}
-                                    value={currentTinh}
-                                    aria-label="basic tabs example"
-                                >
-                                    {allTinhs.map((tinh) => (
-                                        <Tab
-                                            label={ProvinceService.findByCode(tinh).name}
-                                            key={tinh}
-                                            value={tinh}
-                                        ></Tab>
-                                    ))}
-                                </Tabs>
-                            </Grid>
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>Loại Hàng</TableCell>
-                                        {thongkeTinh.npp.map((npp) => (
-                                            <TableCell key={npp.ma}>{npp.ten}</TableCell>
+            {currentTinh && (
+                <Grid item xs={12}>
+                    <MainCard title="Thống kê theo tỉnh">
+                        {isLoadingAllTinh || isLoadingThongKeTinh ? (
+                            <LinearProgress />
+                        ) : (
+                            <TableContainer>
+                                <Grid container justifyContent="flex-end">
+                                    <Tabs
+                                        onChange={(e, value) => setCurrentTinh(value)}
+                                        value={currentTinh}
+                                        aria-label="basic tabs example"
+                                    >
+                                        {allTinhs.map((tinh) => (
+                                            <Tab
+                                                label={ProvinceService.findByCode(tinh).name}
+                                                key={tinh}
+                                                value={tinh}
+                                            ></Tab>
                                         ))}
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {thongkeTinhRows.map((thongke, index) => {
-                                        return (
-                                            <TableRow key={index}>
-                                                {thongke.map((col, index) => {
-                                                    if (index === 0)
+                                    </Tabs>
+                                </Grid>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>Loại Hàng</TableCell>
+                                            {thongkeTinh.npp.map((npp) => (
+                                                <TableCell key={npp.ma}>{npp.ten}</TableCell>
+                                            ))}
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {thongkeTinhRows.map((thongke, index) => {
+                                            return (
+                                                <TableRow key={index}>
+                                                    {thongke.map((col, index) => {
+                                                        if (index === 0)
+                                                            return (
+                                                                <TableCell key={index}>
+                                                                    {col.ten}
+                                                                </TableCell>
+                                                            );
                                                         return (
-                                                            <TableCell key={index}>
-                                                                {col.ten}
-                                                            </TableCell>
+                                                            <TableCell key={index}>{col}</TableCell>
                                                         );
-                                                    return <TableCell key={index}>{col}</TableCell>;
-                                                })}
-                                            </TableRow>
-                                        );
-                                    })}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    )}
-                </MainCard>
-            </Grid>
+                                                    })}
+                                                </TableRow>
+                                            );
+                                        })}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        )}
+                    </MainCard>
+                </Grid>
+            )}
 
             <Grid item xs={12}>
                 <MainCard title="Thống kê hàng nhập">

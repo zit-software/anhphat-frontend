@@ -33,6 +33,7 @@ class ThongKeService {
         ).data;
     }
     static async thongketinh(tinh, ngaybd, ngaykt) {
+        if (!tinh) return;
         return await (
             await request.get(`thongke/tinh/${tinh}`, {
                 params: {

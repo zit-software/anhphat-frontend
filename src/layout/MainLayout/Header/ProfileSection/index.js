@@ -103,7 +103,7 @@ const ProfileSection = () => {
                 }}
                 icon={
                     <Avatar
-                        src="http://www.gravatar.com/avatar/?d=identicon"
+                        src="http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
                         sx={{
                             ...theme.typography.mediumAvatar,
                             margin: '8px 0 8px 8px !important',

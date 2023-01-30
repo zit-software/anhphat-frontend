@@ -1,8 +1,15 @@
-import { AutoFixNormalOutlined } from '@mui/icons-material';
+import { AutoFixNormalOutlined, DeleteOutline } from '@mui/icons-material';
 import {
     Button,
+    Checkbox,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
     FormControl,
     FormControlLabel,
+    FormHelperText,
     Grid,
     InputLabel,
     LinearProgress,
@@ -15,13 +22,14 @@ import {
 import { Box, Stack } from '@mui/system';
 import { DataGrid, GridActionsCellItem, GridToolbar, viVN } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
+import { Formik } from 'formik';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import productcategoryservice from 'services/productcategory.service';
 import MainCard from 'ui-component/cards/MainCard';
 import formatter from 'views/utilities/formatter';
 import PhanRaModal from './PhanRaModal';
-
+import * as Yup from 'yup';
 const Product = () => {
     const [selected, setSelected] = useState({
         malh: '',
@@ -30,6 +38,7 @@ const Product = () => {
     const [donViToChoose, setDonViToChoose] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState('');
     const [selectedMHToPhanRa, setSelectedMHToPhanRa] = useState(null);
+    const [selectedMHToPDelete, setSelectedMHToPDelete] = useState(null);
     const [currentPage, setCurrentPage] = useState(0);
     const [group, setGroup] = useState(false);
     const { data: allcategories } = useQuery(
@@ -50,6 +59,7 @@ const Product = () => {
         {
             field: 'ma',
             headerName: 'Mã mặt hàng',
+            flex: 0.5,
         },
         {
             field: 'loaihang',
@@ -60,7 +70,7 @@ const Product = () => {
         {
             field: 'donvi',
             headerName: 'Đơn vị',
-            flex: 1,
+            flex: 0.4,
             renderCell: ({ value: { ten } }) => ten,
         },
         {
@@ -89,20 +99,38 @@ const Product = () => {
             },
         },
         {
-            field: 'actions',
+            field: 'unpack',
             type: 'actions',
             headerName: 'Phân rã',
             getActions(params) {
                 return [
                     <GridActionsCellItem
                         label="Phân rã"
-                        icon={<AutoFixNormalOutlined />}
+                        icon={<AutoFixNormalOutlined color="info" />}
                         onClick={() => {
                             setSelectedMHToPhanRa(params.row);
                         }}
                     />,
                 ];
             },
+            flex: 0.5,
+        },
+        {
+            field: 'delete',
+            type: 'actions',
+            headerName: 'Xóa Bỏ',
+            getActions(params) {
+                return [
+                    <GridActionsCellItem
+                        label="Xóa Bỏ"
+                        icon={<DeleteOutline color="error" />}
+                        onClick={() => {
+                            setSelectedMHToPDelete(params.row);
+                        }}
+                    />,
+                ];
+            },
+            flex: 0.5,
         },
     ];
 
@@ -163,7 +191,7 @@ const Product = () => {
     useEffect(() => {
         handleSearch();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentPage, group]);
+    }, [currentPage, group, selectedOrder, selected]);
     const handleSearch = () => {
         refetchAllMH();
     };
@@ -182,6 +210,12 @@ const Product = () => {
         await productcategoryservice.phanra(value);
         alert(`Phân rã thành công mặt hàng với mã ${value.ma}`);
         handleClosePhanRa();
+    };
+    const handleDelete = async (value) => {
+        const data = await productcategoryservice.xoamathang(selectedMHToPDelete.ma);
+        setSelectedMHToPDelete(null);
+        alert(data.msg);
+        refetchAllMH();
     };
     if (isLoading) return <LinearProgress />;
     return (
@@ -247,6 +281,7 @@ const Product = () => {
                             <RadioGroup
                                 onChange={(e) => {
                                     setSelectedOrder(e.target.value);
+                                    if (e.target.value === 'soluong') setGroup(true);
                                 }}
                                 value={selectedOrder}
                                 row
@@ -276,19 +311,9 @@ const Product = () => {
                                 handleReset();
                                 setGroup(!group);
                             }}
-                            color="secondary"
-                        >
-                            {!group ? 'Xem Gộp' : 'Xem Chi Tiết'}
-                        </Button>
-                        <Button
-                            size="small"
-                            onClick={() => {
-                                handleSearch();
-                            }}
-                            variant="contained"
                             color="primary"
                         >
-                            Tìm Kiếm
+                            {!group ? 'Xem Gộp' : 'Xem Chi Tiết'}
                         </Button>
                         <Button
                             size="small"
@@ -337,6 +362,53 @@ const Product = () => {
                 onClose={handleClosePhanRa}
                 onSubmit={handleSubmitPhanRa}
             />
+            <Dialog open={!!selectedMHToPDelete} onClose={() => setSelectedMHToPDelete(null)}>
+                <Formik
+                    initialValues={{ accept: false }}
+                    validationSchema={Yup.object().shape({
+                        accept: Yup.bool().equals([true], 'Vui lòng xác nhận để xóa hóa đơn'),
+                    })}
+                    onSubmit={handleDelete}
+                >
+                    {({ values, handleChange, errors, handleSubmit }) => (
+                        <form onSubmit={handleSubmit}>
+                            <DialogTitle>Tiêu hủy mặt hàng</DialogTitle>
+                            <DialogContent sx={{ maxWidth: 360 }}>
+                                <DialogContentText>
+                                    Bạn chắc chắn muốn tiêu hủy mặt hàng này?
+                                </DialogContentText>
+                                <DialogContentText>
+                                    Điều này có thể ảnh hưởng tới các mặt hàng cũng như dữ liệu tồn
+                                    kho của cửa hàng.
+                                </DialogContentText>
+
+                                <FormControlLabel
+                                    label="Xác nhận tiêu hủy mặt hàng này"
+                                    name="accept"
+                                    value={values.accept}
+                                    control={<Checkbox />}
+                                    onChange={handleChange}
+                                />
+
+                                <FormHelperText error>{errors.accept}</FormHelperText>
+                            </DialogContent>
+
+                            <DialogActions>
+                                <Button type="submit" variant="contained" color="error">
+                                    Tiêu hủy
+                                </Button>
+                                <Button
+                                    type="button"
+                                    color="inherit"
+                                    onClick={() => setSelectedMHToPDelete(null)}
+                                >
+                                    Hủy
+                                </Button>
+                            </DialogActions>
+                        </form>
+                    )}
+                </Formik>
+            </Dialog>
         </MainCard>
     );
 };

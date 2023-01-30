@@ -85,7 +85,6 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                     .min(1, 'Số lượng phải từ 1')
                     .integer('Số lượng sản phẩm phải là số nguyên'),
                 hsd: Yup.date().required('Vui lòng chọn hạn sử dụng'),
-                gianhap: Yup.number().required('Vui lòng nhập giá nhập').min(0, 'Giá phải từ 0'),
             })}
             validateOnChange
             validate={onChange}
@@ -173,6 +172,7 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                         <FormControl variant="outlined" size="small" fullWidth>
                             <InputLabel>Đơn giá</InputLabel>
                             <OutlinedInput
+                                disabled
                                 error={!!errors.gianhap}
                                 placeholder="Đơn giá"
                                 type="number"
@@ -180,7 +180,6 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                                 value={values.gianhap}
                                 name="gianhap"
                                 endAdornment={<InputAdornment position="end">vnđ</InputAdornment>}
-                                onChange={handleChange}
                             />
                             <FormHelperText error>{errors.gianhap}</FormHelperText>
                         </FormControl>

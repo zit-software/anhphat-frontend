@@ -278,7 +278,7 @@ function ChinhSuaHoaDon() {
 
     useEffect(() => {
         if (isLoading || !phieunhap.daluu) return;
-
+        console.log(phieunhap);
         setRows(
             phieunhap.chitiet.map((row) => ({
                 ...row,

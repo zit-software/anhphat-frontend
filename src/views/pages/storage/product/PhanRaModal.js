@@ -38,7 +38,6 @@ function PhanRaForm({ value = {}, onClose, onSubmit }) {
     );
 
     const fixedDonvi = donvis || [];
-    if (loadingQuyCach || loadingDonvi) return <LinearProgress />;
     return (
         <Formik
             initialValues={{
