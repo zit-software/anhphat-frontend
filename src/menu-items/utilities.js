@@ -72,6 +72,13 @@ const utilities = {
                     url: 'hoadon/thuhang',
                     breadcrumbs: true,
                 },
+                {
+                    id: 'hoadon-trahang',
+                    title: 'Hóa đơn trả hàng',
+                    type: 'item',
+                    url: 'hoadon/trahang',
+                    breadcrumbs: true,
+                },
             ],
         },
     ],

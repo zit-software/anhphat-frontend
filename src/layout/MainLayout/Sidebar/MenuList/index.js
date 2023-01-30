@@ -14,6 +14,8 @@ const MenuList = () => {
     const navItems = menuItem.items.map((item) => {
         if (item.id === 'quantri' && !currentUser.laAdmin) return null;
 
+        if (item.id === 'dashboard' && !currentUser.laAdmin) return null;
+
         switch (item.type) {
             case 'group':
                 return <NavGroup key={item.id} item={item} />;

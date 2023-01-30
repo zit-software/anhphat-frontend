@@ -116,7 +116,14 @@ const ManageUserForm = ({
                         control={<Checkbox />}
                         name="laAdmin"
                         checked={values.laAdmin}
-                        onChange={handleChange}
+                        onChange={(event, checked) => {
+                            handleChange({
+                                target: {
+                                    name: 'laAdmin',
+                                    values: checked,
+                                },
+                            });
+                        }}
                     />
                     <FormHelperText error>{errors.laAdmin}</FormHelperText>
 

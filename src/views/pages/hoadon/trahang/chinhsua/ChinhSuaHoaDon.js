@@ -3,7 +3,6 @@ import {
     Close,
     DeleteOutline,
     Edit,
-    LocalOffer,
     PanToolAlt,
     Save,
     SwipeVertical,
@@ -19,7 +18,6 @@ import {
     FormControl,
     FormControlLabel,
     FormHelperText,
-    Grid,
     IconButton,
     InputAdornment,
     InputLabel,
@@ -38,7 +36,6 @@ import {
 } from '@mui/material';
 import { Stack } from '@mui/system';
 import { DataGrid, GridActionsCellItem, GridToolbar, viVN } from '@mui/x-data-grid';
-import { IconX } from '@tabler/icons';
 import dayjs from 'dayjs';
 import { Formik } from 'formik';
 import { useEffect, useRef, useState } from 'react';
@@ -93,7 +90,7 @@ const AutoHangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                 madv: value.madv || product.donvi[0]?.ma,
                 malh: value.malh || product.ma,
                 soluong: value.soluong || 1,
-                giaban: value.giaban || product.donvi[0].giaban || 0,
+                giaban: 0,
             }}
             validationSchema={Yup.object().shape({
                 malh: Yup.string().required('Vui lòng chọn sản phẩm'),
@@ -180,27 +177,11 @@ const AutoHangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                                 value={values.giaban}
                                 name="giaban"
                                 endAdornment={<InputAdornment position="end">vnđ</InputAdornment>}
+                                disabled
                                 onChange={handleChange}
                             />
                             <FormHelperText error>{errors.giaban}</FormHelperText>
                         </FormControl>
-
-                        {product.donvi.find((e) => e.ma === value.madv)?.giaban &&
-                            product.donvi.find((e) => e.ma === value.madv)?.giaban !==
-                                value.giaban && (
-                                <Button
-                                    size="small"
-                                    fullWidth
-                                    onClick={() =>
-                                        setFieldValue(
-                                            'giaban',
-                                            product.donvi.find((e) => e.ma === value.madv).giaban
-                                        )
-                                    }
-                                >
-                                    {product.donvi.find((e) => e.ma === value.madv)?.giaban}
-                                </Button>
-                            )}
                     </TableCell>
                     <TableCell>
                         <Typography variant="subtitle2">
@@ -331,7 +312,7 @@ const ManualAddModal = ({ open, selecteds = [], onUpdate, onClose }) => {
 
 const ManualRow = ({ mathang, index, dongia, updateDongia }) => {
     useEffect(() => {
-        updateDongia(mathang.giaban);
+        updateDongia(0);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [mathang.giaban]);
 
@@ -350,16 +331,11 @@ const ManualRow = ({ mathang, index, dongia, updateDongia }) => {
                     value={dongia || '0'}
                     required
                     type="number"
+                    disabled
                     onChange={(event) => {
                         updateDongia(event.target.value);
                     }}
                 />
-
-                {parseInt(dongia) !== mathang.giaban && (
-                    <Button size="small" onClick={() => updateDongia(mathang.giaban)}>
-                        {formatter.format(mathang.giaban)}
-                    </Button>
-                )}
             </TableCell>
             <TableCell>{formatter.format(dongia)}</TableCell>
             <TableCell></TableCell>
@@ -460,8 +436,6 @@ function ChinhSuaHoaDon() {
         HoaDonXuatService.layMotHoaDon(params.ma, { chitiet }).then((res) => res.data)
     );
 
-    const { data: chitietKMG } = useQuery([kmg], () => khuyenmaigiamService.layKMG(kmg));
-
     const { data: mathang } = useQuery(['tatcamathang', {}], productcategoryservice.getAllMatHang);
 
     const [autoRows, setAutoRows] = useState([]);
@@ -521,12 +495,9 @@ function ChinhSuaHoaDon() {
 
     const [showAddKhuyenmaigiam, setShowAddKhuyenmaigiam] = useState(false);
 
-    const handleOpenAddKhuyenmaigiam = () => setShowAddKhuyenmaigiam(true);
     const handleCloseAddOpenKhuyenmaigiam = () => setShowAddKhuyenmaigiam(false);
 
     const fixedMathang = mathang || { total: 0, data: [] };
-
-    const fixedChitietKMG = phieuxuat?.kmg || chitietKMG;
 
     if (isLoading) return <LinearProgress />;
 
@@ -535,7 +506,7 @@ function ChinhSuaHoaDon() {
             title={
                 <Badge>
                     <Typography variant="h2">
-                        Hóa đơn xuất{' '}
+                        Hóa đơn trả hàng{' '}
                         <span
                             style={{
                                 color: '#aaa',
@@ -726,39 +697,6 @@ function ChinhSuaHoaDon() {
                         </TableBody>
                     )}
                 </Table>
-
-                <Typography variant="subtitle2">Khuyến mãi</Typography>
-
-                <Grid container>
-                    {fixedChitietKMG && (
-                        <Grid item xs={12} sm={6} md={4} lg={3}>
-                            <MainCard
-                                shadow
-                                title={fixedChitietKMG.ten}
-                                secondary={
-                                    !phieuxuat.daluu && (
-                                        <IconButton onClick={() => setKmg(null)}>
-                                            <IconX />
-                                        </IconButton>
-                                    )
-                                }
-                            >
-                                <Typography variant="subtitle1">
-                                    Mã khuyến mãi: {fixedChitietKMG.ma}
-                                </Typography>
-                                <Typography variant="subtitle1">
-                                    Tỷ lệ giảm: {fixedChitietKMG.tile * 100}%
-                                </Typography>
-                            </MainCard>
-                        </Grid>
-                    )}
-                </Grid>
-
-                {!phieuxuat.daluu && (
-                    <Button startIcon={<LocalOffer />} onClick={handleOpenAddKhuyenmaigiam}>
-                        Thêm khuyến mãi giảm
-                    </Button>
-                )}
 
                 <Stack direction="row" spacing={2}>
                     <Button

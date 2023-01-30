@@ -32,6 +32,10 @@ const KhuyenMaiGiam = Loadable(lazy(() => import('views/pages/khuyenmai/giam/Khu
 const ChinhSuaHoaDonThuHang = Loadable(
     lazy(() => import('views/pages/hoadon/thuhang/chinhsua/ChinhSuaHoaDon'))
 );
+const HoaDonTra = Loadable(lazy(() => import('views/pages/hoadon/trahang/HoaDonTra')));
+const ChinhSuaHoaDonTra = Loadable(
+    lazy(() => import('views/pages/hoadon/trahang/chinhsua/ChinhSuaHoaDon'))
+);
 
 const MainRoutes = {
     path: '/',
@@ -106,6 +110,10 @@ const MainRoutes = {
                     path: 'thuhang',
                     element: <HoaDonThuHang />,
                 },
+                {
+                    path: 'trahang',
+                    element: <HoaDonTra />,
+                },
             ],
         },
         {
@@ -135,6 +143,15 @@ const MainRoutes = {
                         {
                             path: ':ma',
                             element: <ChinhSuaHoaDonThuHang />,
+                        },
+                    ],
+                },
+                {
+                    path: 'trahang',
+                    children: [
+                        {
+                            path: ':ma',
+                            element: <ChinhSuaHoaDonTra />,
                         },
                     ],
                 },
