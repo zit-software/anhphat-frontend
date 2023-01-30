@@ -23,9 +23,14 @@ const productcategoryservice = {
     async updateDonVi(ma, newDonvi) {
         await request.put(`/donvi/${ma}`, newDonvi);
     },
-    async getAllDonVis() {
-        const res = await request.get(`/donvi`);
-        return res.data;
+    async getAllDonVis({ madv1 }) {
+        return await (
+            await request.get(`/donvi`, {
+                params: {
+                    madv1,
+                },
+            })
+        ).data;
     },
     async getAllDonVisByLoaiHang({ queryKey: [malh] }) {
         if (!malh) return;
@@ -66,6 +71,17 @@ const productcategoryservice = {
     },
     async getMatHang(ma) {
         return await request.get(`mathang/${ma}`);
+    },
+    async laymotquycach({ madv1, madv2 }) {
+        if (!madv1 || !madv2) return;
+        return await (
+            await request.get(`quycach/laymot?madv1=${madv1}&madv2=${madv2}`)
+        ).data;
+    },
+    async phanra({ ma, madvphanra }) {
+        return await request.post(`mathang/phanra/${ma}`, {
+            madvphanra,
+        });
     },
 };
 

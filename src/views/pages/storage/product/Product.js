@@ -20,6 +20,7 @@ import { useQuery } from 'react-query';
 import productcategoryservice from 'services/productcategory.service';
 import MainCard from 'ui-component/cards/MainCard';
 import formatter from 'views/utilities/formatter';
+import PhanRaModal from './PhanRaModal';
 
 const Product = () => {
     const [selected, setSelected] = useState({
@@ -28,6 +29,7 @@ const Product = () => {
     });
     const [donViToChoose, setDonViToChoose] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState('');
+    const [selectedMHToPhanRa, setSelectedMHToPhanRa] = useState(null);
     const [currentPage, setCurrentPage] = useState(0);
     const [group, setGroup] = useState(false);
     const { data: allcategories } = useQuery(
@@ -95,7 +97,9 @@ const Product = () => {
                     <GridActionsCellItem
                         label="Phân rã"
                         icon={<AutoFixNormalOutlined />}
-                        onClick={() => {}}
+                        onClick={() => {
+                            setSelectedMHToPhanRa(params.row);
+                        }}
                     />,
                 ];
             },
@@ -171,8 +175,15 @@ const Product = () => {
         setSelectedOrder('');
         setCurrentPage(0);
     };
+    const handleClosePhanRa = () => {
+        setSelectedMHToPhanRa(null);
+    };
+    const handleSubmitPhanRa = async (value) => {
+        await productcategoryservice.phanra(value);
+        alert(`Phân rã thành công mặt hàng với mã ${value.ma}`);
+        handleClosePhanRa();
+    };
     if (isLoading) return <LinearProgress />;
-    console.log(allMatHang);
     return (
         <MainCard title="Mặt Hàng Tồn Kho">
             <Grid container spacing={2}>
@@ -320,6 +331,12 @@ const Product = () => {
                     </Box>
                 </Grid>
             </Grid>
+            <PhanRaModal
+                value={selectedMHToPhanRa}
+                open={!!selectedMHToPhanRa}
+                onClose={handleClosePhanRa}
+                onSubmit={handleSubmitPhanRa}
+            />
         </MainCard>
     );
 };
