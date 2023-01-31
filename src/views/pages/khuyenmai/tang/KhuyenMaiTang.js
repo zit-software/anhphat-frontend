@@ -25,11 +25,14 @@ import { useState } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { set } from 'date-fns';
+import { useSelector } from 'react-redux';
 const { default: MainCard } = require('ui-component/cards/MainCard');
 
 const KhuyenMaiTang = () => {
-    const { data: allKMT, refetch } = useQuery('getAllKMT', khuyenmaitangService.getAllKMT);
     const navigate = useNavigate();
+    const currentUser = useSelector((state) => state.auth.user);
+    if (!currentUser.laAdmin) navigate('/');
+    const { data: allKMT, refetch } = useQuery('getAllKMT', khuyenmaitangService.getAllKMT);
     const [deleteID, setDeleteId] = useState(null);
     const handleDelete = async () => {
         await khuyenmaitangService.xoakmt(deleteID);

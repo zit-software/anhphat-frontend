@@ -33,6 +33,8 @@ import { useEffect } from 'react';
 import { useCallback, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { useQuery } from 'react-query';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 import productcategoryservice from 'services/productcategory.service';
 import ProvinceService from 'services/province.service';
 
@@ -48,6 +50,9 @@ import ThuCard from './ThuCard';
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
 const Dashboard = () => {
+    const currentUser = useSelector((state) => state.auth.user);
+    const navigate = useNavigate();
+    if (!currentUser.laAdmin) navigate('/');
     const { data: allTinhs, isLoading: isLoadingAllTinh } = useQuery(['allTinh'], () =>
         ThongKeService.laytatcatinh()
     );
@@ -110,6 +115,7 @@ const Dashboard = () => {
     }, [currentTinh, ngaybd, ngaykt, isLoadingThongKeTinh]);
 
     let thongkeTinhRows = updateThongKeTinh();
+
     if (isLoadingAllTinh) return <LinearProgress />;
     return (
         <Grid container spacing={2}>

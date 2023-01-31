@@ -167,7 +167,7 @@ const QuyCach = () => {
                         },
                     },
                     {
-                        field: 'edit',
+                        field: 'actions',
                         type: 'actions',
                         getActions({ row }) {
                             return [
@@ -180,7 +180,7 @@ const QuyCach = () => {
                         },
                     },
                     {
-                        field: 'delete',
+                        field: 'actions',
                         type: 'actions',
                         getActions({ row }) {
                             return [
