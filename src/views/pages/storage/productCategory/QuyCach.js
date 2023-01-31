@@ -167,7 +167,7 @@ const QuyCach = () => {
                         },
                     },
                     {
-                        field: 'actions',
+                        field: 'edit',
                         type: 'actions',
                         getActions({ row }) {
                             return [
@@ -175,21 +175,6 @@ const QuyCach = () => {
                                     icon={<Edit />}
                                     label="Chỉnh sửa"
                                     onClick={() => handleOpenUpdateModal(row)}
-                                />,
-                            ];
-                        },
-                    },
-                    {
-                        field: 'actions',
-                        type: 'actions',
-                        getActions({ row }) {
-                            return [
-                                <GridActionsCellItem
-                                    icon={<Delete />}
-                                    label="Xóa"
-                                    onClick={() => {
-                                        setSelectedDelete(row.ma);
-                                    }}
                                 />,
                             ];
                         },
