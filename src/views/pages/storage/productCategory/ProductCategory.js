@@ -7,11 +7,11 @@ const ProductCategory = () => {
     return (
         <MainCard title="Quản Lý Loại Hàng">
             <Grid container spacing={2}>
-                <Grid item md={12} lg={6}>
+                <Grid item xs={12}>
                     <Category />
                 </Grid>
 
-                <Grid md={12} item lg={6}>
+                <Grid item xs={12}>
                     <QuyCach />
                 </Grid>
             </Grid>

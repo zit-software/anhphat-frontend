@@ -53,7 +53,7 @@ const Dashboard = () => {
     );
     const [ngaybd, setNgaybd] = useState(startOfYear(new Date()));
     const [ngaykt, setNgaykt] = useState(endOfYear(new Date()));
-    const [currentTinh, setCurrentTinh] = useState(null);
+    const [currentTinh, setCurrentTinh] = useState(allTinhs?.length > 0 ? allTinhs[0] : null);
     useEffect(() => {
         if (allTinhs) {
             setCurrentTinh(allTinhs[0]);
