@@ -50,6 +50,9 @@ const productcategoryservice = {
     async updateQuyCach(ma, newQuyCach) {
         await request.put(`/quycach/${ma}`, newQuyCach);
     },
+    async xoaQuyCach(ma) {
+        await request.delete(`/quycach/${ma}`);
+    },
     async getAllMatHang({ queryKey: [_, params] }) {
         try {
             const lh = params?.malh || '';
