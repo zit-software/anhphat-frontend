@@ -343,11 +343,13 @@ const ManualRow = ({ mathang, index, dongia, updateDongia }) => {
     );
 };
 
-const SavedRow = ({ value, index }) => {
+const SavedRow = ({ chitiet, value, index }) => {
     return (
         <TableRow hover>
             <TableCell>{index + 1}</TableCell>
-            <TableCell>{value.mathang.loaihang.ten}</TableCell>
+            <TableCell>
+                {value.mathang.loaihang.ten} {chitiet && value.mathang.ma}
+            </TableCell>
             <TableCell>{value.mathang.donvi.ten}</TableCell>
             <TableCell>{dayjs(value.mathang.hsd).format('DD/MM/YYYY')}</TableCell>
             <TableCell>{value.soluong || 1}</TableCell>
@@ -685,7 +687,12 @@ function ChinhSuaHoaDon() {
                     ) : (
                         <TableBody>
                             {phieuxuat.chitiet.map((value, index) => (
-                                <SavedRow index={index} key={index} value={value} />
+                                <SavedRow
+                                    chitiet={chitiet}
+                                    index={index}
+                                    key={index}
+                                    value={value}
+                                />
                             ))}
 
                             <TableRow>
