@@ -30,6 +30,7 @@ import MainCard from 'ui-component/cards/MainCard';
 import formatter from 'views/utilities/formatter';
 import PhanRaModal from './PhanRaModal';
 import * as Yup from 'yup';
+import { useSelector } from 'react-redux';
 const Product = () => {
     const [selected, setSelected] = useState({
         malh: '',
@@ -217,6 +218,9 @@ const Product = () => {
         alert(data.msg);
         refetchAllMH();
     };
+
+    const currentUser = useSelector((state) => state.auth.user);
+
     if (isLoading) return <LinearProgress />;
     return (
         <MainCard title="Mặt Hàng Tồn Kho">
@@ -341,6 +345,10 @@ const Product = () => {
                             }}
                             paginationMode="server"
                             rowCount={allMatHang.total}
+                            columnVisibilityModel={{
+                                unpack: currentUser.laAdmin,
+                                delete: currentUser.laAdmin,
+                            }}
                             onPageChange={(page) => {
                                 setCurrentPage(page);
                             }}

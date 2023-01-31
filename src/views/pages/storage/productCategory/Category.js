@@ -20,6 +20,7 @@ import dayjs from 'dayjs';
 import { Formik } from 'formik';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
+import { useSelector } from 'react-redux';
 import productcategoryservice from 'services/productcategory.service';
 import * as Yup from 'yup';
 import ProductCategoryForm from '../forms/ProductCategotyForm';
@@ -99,6 +100,8 @@ function Category() {
         refetch,
     } = useQuery([], () => productcategoryservice.getAllCategoriesAndDonvi());
 
+    const currentUser = useSelector((state) => state.auth.user);
+
     const handleOpenCreateModal = () => setOpenCreateModal(true);
     const handleCloseCreateModal = () => setOpenCreateModal(false);
 
@@ -159,9 +162,11 @@ function Category() {
             <CardHeader
                 title="Loại hàng"
                 action={
-                    <IconButton onClick={handleOpenCreateModal}>
-                        <IconFileUpload />
-                    </IconButton>
+                    currentUser.laAdmin && (
+                        <IconButton onClick={handleOpenCreateModal}>
+                            <IconFileUpload />
+                        </IconButton>
+                    )
                 }
             />
 
@@ -211,6 +216,9 @@ function Category() {
                             },
                         },
                     ]}
+                    columnVisibilityModel={{
+                        actions: currentUser.laAdmin,
+                    }}
                     hideFooterPagination
                     localeText={viVN.components.MuiDataGrid.defaultProps.localeText}
                     components={{

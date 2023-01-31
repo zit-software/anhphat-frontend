@@ -4,6 +4,7 @@ import { DataGrid, GridActionsCellItem, GridToolbar, viVN } from '@mui/x-data-gr
 import { IconFileUpload } from '@tabler/icons';
 import { memo, useState } from 'react';
 import { useQuery } from 'react-query';
+import { useSelector } from 'react-redux';
 
 import productcategoryservice from 'services/productcategory.service';
 import QuyCachForm from '../forms/QuyCachForm';
@@ -37,6 +38,8 @@ const QuyCach = () => {
     );
 
     const { data: products } = useQuery([], productcategoryservice.getAllCategoriesAndDonvi);
+
+    const currentUser = useSelector((state) => state.auth.user);
 
     // THÊM QUY CÁCH
     const [openInputModal, setOpenInputModal] = useState(false);
@@ -78,9 +81,11 @@ const QuyCach = () => {
             <CardHeader
                 title="Quy cách"
                 action={
-                    <IconButton onClick={handleOpenInputModal}>
-                        <IconFileUpload />
-                    </IconButton>
+                    currentUser.laAdmin && (
+                        <IconButton onClick={handleOpenInputModal}>
+                            <IconFileUpload />
+                        </IconButton>
+                    )
                 }
             />
 
@@ -157,6 +162,9 @@ const QuyCach = () => {
                         },
                     },
                 ]}
+                columnVisibilityModel={{
+                    actions: currentUser.laAdmin,
+                }}
                 rows={quycachs.map((e) => ({
                     ...e,
                     id: e.ma,
