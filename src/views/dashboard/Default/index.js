@@ -98,6 +98,7 @@ const Dashboard = () => {
                     ten: lh.ten,
                 },
             ]);
+            if (!thongkeTinh?.npp) return;
             for (let npp of thongkeTinh.npp) {
                 for (let row of thongkeTinhRows) {
                     row.push(0);
