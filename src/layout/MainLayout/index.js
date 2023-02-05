@@ -96,6 +96,7 @@ const MainLayout = () => {
                 sx={{
                     bgcolor: theme.palette.background.default,
                     transition: leftDrawerOpened ? theme.transitions.create('width') : 'none',
+                    zIndex: leftDrawerOpened ? theme.zIndex.drawer : theme.zIndex.drawer + 1,
                 }}
             >
                 <Toolbar>
