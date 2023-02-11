@@ -3,12 +3,25 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 
 // material-ui
-import { AppBar, Box, CssBaseline, Toolbar, useMediaQuery } from '@mui/material';
+import {
+    AppBar,
+    Box,
+    Button,
+    CssBaseline,
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    Divider,
+    FormHelperText,
+    Toolbar,
+    useMediaQuery,
+} from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
+import * as Yup from 'yup';
 
 // project imports
 import navigation from 'menu-items';
-import { SET_MENU } from 'store/actions';
+import { setPin, SET_MENU } from 'store/actions';
 import { drawerWidth } from 'store/constant';
 import Breadcrumbs from 'ui-component/extended/Breadcrumbs';
 import Header from './Header';
@@ -16,6 +29,9 @@ import Sidebar from './Sidebar';
 
 // assets
 import { IconChevronRight } from '@tabler/icons';
+import { Formik } from 'formik';
+import PinInput from 'react-pin-input';
+import AuthService from 'services/auth.service';
 
 // styles
 const Main = styled('main', {
@@ -71,6 +87,7 @@ const MainLayout = () => {
 
     // Handle left drawer
     const leftDrawerOpened = useSelector((state) => state.customization.opened);
+    const pin = useSelector((state) => state.auth.pin);
     const dispatch = useDispatch();
     const handleLeftDrawerToggle = () => {
         dispatch({
@@ -119,6 +136,72 @@ const MainLayout = () => {
                 />
                 <Outlet />
             </Main>
+
+            <Dialog
+                sx={{
+                    backdropFilter: 'blur(20px)',
+                }}
+                open={!pin}
+            >
+                <Formik
+                    initialValues={{
+                        pin: '',
+                    }}
+                    validationSchema={Yup.object().shape({
+                        pin: Yup.string()
+                            .length(6, 'Độ dài mã pin là 6')
+                            .required('Vui lòng nhập mã pin'),
+                    })}
+                    onSubmit={async (values) => {
+                        try {
+                            await AuthService.kiemtrapin(values);
+                            dispatch(setPin(values.pin));
+                        } catch (error) {
+                            alert(error.response?.data.message);
+                        }
+                    }}
+                >
+                    {({ errors, handleChange, handleSubmit }) => (
+                        <form onSubmit={handleSubmit}>
+                            <DialogTitle>Mã pin</DialogTitle>
+                            <DialogContent>
+                                <p>Vui lòng nhập mã pin để tiếp tục</p>
+                                <PinInput
+                                    length={6}
+                                    type="numeric"
+                                    secret
+                                    autoSelect
+                                    focus
+                                    inputStyle={{
+                                        borderRadius: 10,
+                                        borderColor: !!errors.pin ? 'red' : '#ddd',
+                                    }}
+                                    onChange={(value) => {
+                                        handleChange({
+                                            target: { name: 'pin', value },
+                                        });
+                                    }}
+                                />
+
+                                <FormHelperText error={!!errors.pin}>{errors.pin}</FormHelperText>
+
+                                <Button
+                                    sx={{ mt: 2, mb: 2 }}
+                                    variant="contained"
+                                    type="submit"
+                                    fullWidth
+                                >
+                                    Xác nhận
+                                </Button>
+                                <Divider>Hoặc</Divider>
+                                <Button type="submit" fullWidth>
+                                    Đăng xuất
+                                </Button>
+                            </DialogContent>
+                        </form>
+                    )}
+                </Formik>
+            </Dialog>
         </Box>
     );
 };
