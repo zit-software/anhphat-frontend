@@ -375,7 +375,7 @@ const Product = () => {
                 <Formik
                     initialValues={{ accept: false }}
                     validationSchema={Yup.object().shape({
-                        accept: Yup.bool().equals([true], 'Vui lòng xác nhận để xóa hóa đơn'),
+                        accept: Yup.bool().equals([true], 'Vui lòng xác nhận để xóa mặt hàng'),
                     })}
                     onSubmit={handleDelete}
                 >
