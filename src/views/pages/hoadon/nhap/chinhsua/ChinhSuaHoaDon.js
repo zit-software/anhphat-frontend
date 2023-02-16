@@ -43,6 +43,7 @@ import productcategoryservice from 'services/productcategory.service';
 import RowSkeleton from 'ui-component/skeletons/RowSkeleton';
 import dayjs from 'utils/dayjs';
 import formatter from 'views/utilities/formatter';
+import { useSelector } from 'react-redux';
 
 const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
     const { data: products, isLoading } = useQuery(
@@ -50,6 +51,7 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
         productcategoryservice.getAllCategoriesAndDonvi
     );
     const [edit, setEdit] = useState(true && !disabled);
+    const currentUser = useSelector((state) => state.auth.user);
 
     const product = products?.find((e) => e.ma === value.malh) ||
         (products && products[0]) || { donvi: [] };
@@ -69,7 +71,7 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                 ma: value.ma || product.ma || '',
                 madv: value.madv || product.donvi[0]?.ma,
                 malh: value.malh || product.ma,
-                soluong: value.soluong || 1,
+                soluong: value.soluong || 0,
                 hsd: value.hsd || new Date(),
                 gianhap: value.gianhap || product.donvi[0].gianhap || 0,
             }}
@@ -120,7 +122,15 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                                 fullWidth
                                 value={values.madv || ''}
                                 name="madv"
-                                onChange={handleChange}
+                                onChange={(event) => {
+                                    handleChange({
+                                        target: { name: 'madv', value: event.target.value },
+                                    });
+
+                                    handleChange({
+                                        target: { name: 'gianhap', value: donvi.gianhap },
+                                    });
+                                }}
                             >
                                 {product.donvi.map((donvi) => (
                                     <MenuItem key={donvi.ma} value={donvi.ma}>
@@ -170,44 +180,54 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                         <FormHelperText error>{errors.soluong}</FormHelperText>
                     </TableCell>
 
-                    <TableCell>
-                        <FormControl variant="outlined" size="small" fullWidth>
-                            <InputLabel>Đơn giá</InputLabel>
-                            <OutlinedInput
-                                error={!!errors.gianhap}
-                                placeholder="Đơn giá"
-                                type="number"
-                                label="Đơn giá"
-                                value={values.gianhap}
-                                name="gianhap"
-                                endAdornment={<InputAdornment position="end">vnđ</InputAdornment>}
-                                onChange={handleChange}
-                            />
-                            <FormHelperText error>{errors.gianhap}</FormHelperText>
-                        </FormControl>
+                    {currentUser.laAdmin && (
+                        <>
+                            <TableCell>
+                                <FormControl variant="outlined" size="small" fullWidth>
+                                    <InputLabel>Đơn giá</InputLabel>
+                                    <OutlinedInput
+                                        error={!!errors.gianhap}
+                                        placeholder="Đơn giá"
+                                        type="number"
+                                        label="Đơn giá"
+                                        value={values.gianhap}
+                                        name="gianhap"
+                                        endAdornment={
+                                            <InputAdornment position="end">vnđ</InputAdornment>
+                                        }
+                                        onChange={handleChange}
+                                    />
+                                    <FormHelperText error>{errors.gianhap}</FormHelperText>
+                                </FormControl>
 
-                        {product.donvi.find((e) => e.ma === value.madv)?.gianhap &&
-                            product.donvi.find((e) => e.ma === value.madv)?.gianhap !==
-                                value.gianhap && (
-                                <Button
-                                    size="small"
-                                    fullWidth
-                                    onClick={() =>
-                                        setFieldValue(
-                                            'gianhap',
-                                            product.donvi.find((e) => e.ma === value.madv).gianhap
-                                        )
-                                    }
-                                >
-                                    {product.donvi.find((e) => e.ma === value.madv)?.gianhap}
-                                </Button>
-                            )}
-                    </TableCell>
-                    <TableCell>
-                        <Typography variant="subtitle2">
-                            {formatter.format(values.gianhap * values.soluong)}
-                        </Typography>
-                    </TableCell>
+                                {product.donvi.find((e) => e.ma === value.madv)?.gianhap &&
+                                    product.donvi.find((e) => e.ma === value.madv)?.gianhap !==
+                                        value.gianhap && (
+                                        <Button
+                                            size="small"
+                                            fullWidth
+                                            onClick={() =>
+                                                setFieldValue(
+                                                    'gianhap',
+                                                    product.donvi.find((e) => e.ma === value.madv)
+                                                        .gianhap
+                                                )
+                                            }
+                                        >
+                                            {
+                                                product.donvi.find((e) => e.ma === value.madv)
+                                                    ?.gianhap
+                                            }
+                                        </Button>
+                                    )}
+                            </TableCell>
+                            <TableCell>
+                                <Typography variant="subtitle2">
+                                    {formatter.format(values.gianhap * values.soluong)}
+                                </Typography>
+                            </TableCell>
+                        </>
+                    )}
                     <TableCell>
                         <IconButton color="primary" onClick={handleSubmit}>
                             <IconDeviceFloppy />
@@ -228,8 +248,12 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
             <TableCell>{donvi.ten}</TableCell>
             <TableCell>{dayjs(value.hsd).format('DD/MM/YYYY')}</TableCell>
             <TableCell>{value.soluong}</TableCell>
-            <TableCell>{formatter.format(value.gianhap)}</TableCell>
-            <TableCell>{formatter.format((value.soluong || 1) * value.gianhap)}</TableCell>
+            {currentUser.laAdmin && (
+                <>
+                    <TableCell>{formatter.format(value.gianhap)}</TableCell>
+                    <TableCell>{formatter.format((value.soluong || 1) * value.gianhap)}</TableCell>
+                </>
+            )}
             {!disabled && (
                 <>
                     <TableCell>
@@ -248,6 +272,8 @@ function ChinhSuaHoaDon() {
     const params = useParams();
     const navigate = useNavigate();
     const [chitiet, setChiTiet] = useState(false);
+
+    const currentUser = useSelector((state) => state.auth.user);
 
     const {
         data: phieunhap,
@@ -410,6 +436,7 @@ function ChinhSuaHoaDon() {
 
                                         <FormHelperText error>{errors.nguoigiao}</FormHelperText>
                                     </Grid>
+
                                     <Grid xs={12} md={4} item>
                                         <DatePicker
                                             inputFormat="DD/MM/YY"
@@ -461,8 +488,12 @@ function ChinhSuaHoaDon() {
                                             <TableCell>Đơn vị tính</TableCell>
                                             <TableCell>Hạn sử dụng</TableCell>
                                             <TableCell>Số lượng</TableCell>
-                                            <TableCell>Đơn giá</TableCell>
-                                            <TableCell>Thành tiền</TableCell>
+                                            {currentUser.laAdmin && (
+                                                <>
+                                                    <TableCell>Đơn giá</TableCell>
+                                                    <TableCell>Thành tiền</TableCell>
+                                                </>
+                                            )}
 
                                             {!phieunhap.daluu && (
                                                 <>
@@ -477,8 +508,12 @@ function ChinhSuaHoaDon() {
                                             <TableCell>3</TableCell>
                                             <TableCell>4</TableCell>
                                             <TableCell>5</TableCell>
-                                            <TableCell>6</TableCell>
-                                            <TableCell>7 = 5 x 6</TableCell>
+                                            {currentUser.laAdmin && (
+                                                <>
+                                                    <TableCell>6</TableCell>
+                                                    <TableCell>7 = 5 x 6</TableCell>
+                                                </>
+                                            )}
                                             {!phieunhap.daluu && (
                                                 <>
                                                     <TableCell></TableCell>
@@ -525,24 +560,26 @@ function ChinhSuaHoaDon() {
                                         )}
                                     </TableBody>
 
-                                    <TableFooter>
-                                        <TableRow>
-                                            <TableCell colSpan={6}>
-                                                <Typography>Tổng cộng</Typography>
-                                            </TableCell>
-
-                                            <TableCell colSpan={3}>
-                                                {formatter.format(
-                                                    rows.reduce(
-                                                        (prev, curent) =>
-                                                            curent.gianhap * (curent.soluong || 1) +
-                                                            prev,
-                                                        0
-                                                    )
-                                                )}
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableFooter>
+                                    {currentUser.laAdmin && (
+                                        <TableFooter>
+                                            <TableRow>
+                                                <TableCell colSpan={6}>
+                                                    <Typography>Tổng cộng</Typography>
+                                                </TableCell>
+                                                <TableCell colSpan={3}>
+                                                    {formatter.format(
+                                                        rows.reduce(
+                                                            (prev, curent) =>
+                                                                curent.gianhap *
+                                                                    (curent.soluong || 1) +
+                                                                prev,
+                                                            0
+                                                        )
+                                                    )}
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableFooter>
+                                    )}
                                 </Table>
                             </TableContainer>
 

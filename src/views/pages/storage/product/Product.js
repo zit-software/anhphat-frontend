@@ -348,6 +348,7 @@ const Product = () => {
                             columnVisibilityModel={{
                                 unpack: currentUser.laAdmin,
                                 delete: currentUser.laAdmin,
+                                gianhap: currentUser.laAdmin,
                             }}
                             onPageChange={(page) => {
                                 setCurrentPage(page);

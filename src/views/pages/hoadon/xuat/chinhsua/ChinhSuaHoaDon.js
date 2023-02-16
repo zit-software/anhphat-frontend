@@ -558,6 +558,7 @@ function ChinhSuaHoaDon() {
     const [openManualModal, setOpenManualModal] = useState(false);
     const [selectedManual, setSelectedManual] = useState([]);
     const [manualDongia, setManualDongia] = useState({});
+    const [thue, setThue] = useState(0);
 
     const handleOpenManualModal = () => setOpenManualModal(true);
     const handleCloseManualModal = () => setOpenManualModal(false);
@@ -577,6 +578,7 @@ function ChinhSuaHoaDon() {
                 })),
                 kmg,
                 kmt,
+                thue,
             });
         } catch (error) {
             alert(error.response.data.message);
@@ -600,7 +602,6 @@ function ChinhSuaHoaDon() {
     const fixedChitietKMT = phieuxuat?.kmt || chitietKMT;
 
     if (isLoading) return <LinearProgress />;
-    console.log(fixedChitietKMT);
     return (
         <MainCard
             title={
@@ -763,12 +764,27 @@ function ChinhSuaHoaDon() {
                             </TableRow>
 
                             <TableRow>
+                                <TableCell colSpan={6}>Thuế</TableCell>
+                                <TableCell colSpan={2}>
+                                    <TextField
+                                        fullWidth
+                                        size="small"
+                                        label="Thuế (%)"
+                                        placeholder="Thuế (%)"
+                                        type="number"
+                                        value={thue * 100}
+                                        onChange={(event) => setThue(+event.target.value / 100)}
+                                    />
+                                </TableCell>
+                            </TableRow>
+
+                            <TableRow>
                                 <TableCell colSpan={6}>Tổng</TableCell>
                                 <TableCell colSpan={2}>
                                     {formatter.format(
                                         phieuxuat.daluu
                                             ? phieuxuat.tongtien
-                                            : autoRows.reduce(
+                                            : (autoRows.reduce(
                                                   (prev, current) =>
                                                       prev + current.giaban * current.soluong,
                                                   0
@@ -777,7 +793,8 @@ function ChinhSuaHoaDon() {
                                                       (prev, current) =>
                                                           prev + manualDongia[current],
                                                       0
-                                                  )
+                                                  )) *
+                                                  (1 + thue)
                                     )}
                                 </TableCell>
                             </TableRow>
@@ -803,6 +820,11 @@ function ChinhSuaHoaDon() {
                                     value={value}
                                 />
                             ))}
+
+                            <TableRow>
+                                <TableCell colSpan={6}>Thuế</TableCell>
+                                <TableCell colSpan={2}>{phieuxuat.thue * 100}%</TableCell>
+                            </TableRow>
 
                             <TableRow>
                                 <TableCell colSpan={6}>Tổng</TableCell>
