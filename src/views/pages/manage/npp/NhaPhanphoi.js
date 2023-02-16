@@ -94,6 +94,7 @@ function NhaPhanPhoi() {
 
     const handleCreate = async (values) => {
         try {
+            console.log(values);
             await NppService.them(values);
         } catch (error) {
         } finally {
