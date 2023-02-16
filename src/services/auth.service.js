@@ -8,6 +8,10 @@ class AuthService {
     static async auth() {
         return await request.get('/auth');
     }
+
+    static async kiemtrapin(payload) {
+        return await request.post('/auth/pin', payload);
+    }
 }
 
 export default AuthService;

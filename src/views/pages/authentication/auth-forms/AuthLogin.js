@@ -27,8 +27,6 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import AuthService from 'services/auth.service';
 import accessToken from 'utils/access-token';
 
-import config from '../../../../config';
-
 // ============================|| FIREBASE - LOGIN ||============================ //
 
 const FirebaseLogin = ({ ...others }) => {
@@ -57,13 +55,13 @@ const FirebaseLogin = ({ ...others }) => {
                     ma: Yup.string().max(255).required('Mã số là bắt buộc'),
                     matkhau: Yup.string().max(255).required('Mật khẩu là bắt buộc'),
                 })}
-                onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+                onSubmit={async (values, { setErrors, setSubmitting }) => {
                     try {
                         const res = await AuthService.login(values);
 
                         accessToken.set(res.data.accessToken);
 
-                        window.location = config.defaultPath;
+                        window.location = '/';
                     } catch (err) {
                         setErrors({
                             submit: 'Tên đăng nhập hoặc mật khẩu không chính xác',

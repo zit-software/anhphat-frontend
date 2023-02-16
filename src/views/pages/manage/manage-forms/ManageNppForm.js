@@ -2,11 +2,16 @@ import {
     Autocomplete,
     Button,
     FormControl,
+    FormControlLabel,
+    FormGroup,
     FormHelperText,
+    Grid,
     InputAdornment,
     InputLabel,
     OutlinedInput,
+    Switch,
     TextField,
+    Typography,
 } from '@mui/material';
 import { Stack } from '@mui/system';
 import { Formik } from 'formik';
@@ -24,6 +29,7 @@ function ManageNppForm({ value = {}, buttonText, onSubmit, onClose }) {
                 chietkhau: value.chietkhau || 0,
                 tinh: value.tinh || 92,
                 sdt: value.sdt || '',
+                truocthue: value.truocthue,
             }}
             validationSchema={Yup.object().shape({
                 ten: Yup.string().required('Vui lòng nhập tên nhà phân phối'),
@@ -119,6 +125,32 @@ function ManageNppForm({ value = {}, buttonText, onSubmit, onClose }) {
                             />
                             <FormHelperText error>{errors.chietkhau}</FormHelperText>
                         </FormControl>
+
+                        <FormGroup>
+                            <Grid container alignItems="center" gap={[2, 2]}>
+                                <Grid item>
+                                    <Typography variant="h5" fontSize={20}>
+                                        Cách tính thuế
+                                    </Typography>
+                                </Grid>
+                                <Grid item>
+                                    <FormControlLabel
+                                        name="truocthue"
+                                        value={values.truocthue}
+                                        onChange={(e, check) => {
+                                            handleChange({
+                                                target: {
+                                                    name: 'truocthue',
+                                                    value: check,
+                                                },
+                                            });
+                                        }}
+                                        control={<Switch checked={values.truocthue} />}
+                                        label={values.truocthue ? 'Trước thuế' : 'Sau thuế'}
+                                    />
+                                </Grid>
+                            </Grid>
+                        </FormGroup>
 
                         <div style={{ position: 'relative' }} className="milk-box">
                             <img src={MilkBox2} alt="milk-box" width="100%" />

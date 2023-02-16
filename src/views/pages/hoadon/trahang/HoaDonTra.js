@@ -52,6 +52,7 @@ const CreateModal = ({ open, onClose, onSubmit }) => {
                     manpp: '',
                     ngayxuat: new Date(),
                     mauser: currentUser.ma,
+                    istrahang: true,
                 }}
                 validationSchema={Yup.object().shape({
                     manpp: Yup.string().required('Vui lòng chọn nhà phân phối'),
@@ -173,7 +174,7 @@ const DeleteModal = ({ open, onClose, onSubmit }) => {
     );
 };
 
-function HoaDonXuat() {
+function HoaDonTra() {
     const navigate = useNavigate();
 
     // pagination
@@ -191,7 +192,12 @@ function HoaDonXuat() {
         isLoading,
         refetch,
     } = useQuery([page, limit, daluu], () =>
-        HoaDonXuatService.layTatCa({ page, limit, daluu }).then((res) => res.data)
+        HoaDonXuatService.layTatCa({
+            page,
+            limit,
+            daluu,
+            trahang: true,
+        }).then((res) => res.data)
     );
 
     const handleOpenCreateModal = () => setShowCreateModal(true);
@@ -201,7 +207,7 @@ function HoaDonXuat() {
         try {
             const res = await HoaDonXuatService.taoHoaDon(values);
 
-            navigate(`/hoadon/xuat/${res.data.ma}`);
+            navigate(`/hoadon/trahang/${res.data.ma}`);
         } catch (error) {
         } finally {
             handleCloseCreateModal();
@@ -225,7 +231,7 @@ function HoaDonXuat() {
 
     return (
         <MainCard
-            title="Quản lý hóa đơn xuất"
+            title="Quản lý hóa đơn trả hàng"
             secondary={
                 <Button
                     variant="outlined"
@@ -318,7 +324,7 @@ function HoaDonXuat() {
                                     <GridActionsCellItem
                                         label="Chỉnh sửa"
                                         icon={params.row.daluu ? <Visibility /> : <Edit />}
-                                        onClick={() => navigate(`/hoadon/xuat/${params.row.ma}`)}
+                                        onClick={() => navigate(`/hoadon/trahang/${params.row.ma}`)}
                                     />,
                                     <GridActionsCellItem
                                         label="Xóa"
@@ -365,4 +371,4 @@ function HoaDonXuat() {
     );
 }
 
-export default HoaDonXuat;
+export default HoaDonTra;

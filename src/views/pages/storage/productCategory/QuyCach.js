@@ -1,13 +1,30 @@
-import { Edit } from '@mui/icons-material';
-import { CardHeader, Dialog, IconButton, MenuItem, Select, Typography } from '@mui/material';
+import { Delete, Edit } from '@mui/icons-material';
+import {
+    Button,
+    CardHeader,
+    Checkbox,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    FormControlLabel,
+    FormHelperText,
+    IconButton,
+    MenuItem,
+    Select,
+    Typography,
+} from '@mui/material';
 import { DataGrid, GridActionsCellItem, GridToolbar, viVN } from '@mui/x-data-grid';
 import { IconFileUpload } from '@tabler/icons';
+import { Formik } from 'formik';
 import { memo, useState } from 'react';
 import { useQuery } from 'react-query';
+import { useSelector } from 'react-redux';
 
 import productcategoryservice from 'services/productcategory.service';
 import QuyCachForm from '../forms/QuyCachForm';
-
+import * as Yup from 'yup';
 // INPUT MODAL
 const _InputModal = ({ open, onClose, onSubmit }) => {
     return (
@@ -29,6 +46,7 @@ const UpdateModal = ({ open, value, onClose, onSubmit }) => {
 
 const QuyCach = () => {
     // State là mã của quy cách đang chỉnh sửa, nếu đang không chỉnh sửa thì state là null
+    const [selectedDelete, setSelectedDelete] = useState(null);
 
     const { data: quycachs, refetch: refetchAllQuyCachs } = useQuery(
         'allQuyCachs',
@@ -37,6 +55,8 @@ const QuyCach = () => {
     );
 
     const { data: products } = useQuery([], productcategoryservice.getAllCategoriesAndDonvi);
+
+    const currentUser = useSelector((state) => state.auth.user);
 
     // THÊM QUY CÁCH
     const [openInputModal, setOpenInputModal] = useState(false);
@@ -73,14 +93,21 @@ const QuyCach = () => {
         }
     };
 
+    const handleDelete = async () => {
+        await productcategoryservice.xoaQuyCach(selectedDelete);
+        refetchAllQuyCachs();
+    };
+
     return (
         <>
             <CardHeader
                 title="Quy cách"
                 action={
-                    <IconButton onClick={handleOpenInputModal}>
-                        <IconFileUpload />
-                    </IconButton>
+                    currentUser.laAdmin && (
+                        <IconButton onClick={handleOpenInputModal}>
+                            <IconFileUpload />
+                        </IconButton>
+                    )
                 }
             />
 
@@ -88,13 +115,9 @@ const QuyCach = () => {
                 sx={{ height: '60vh' }}
                 columns={[
                     {
-                        field: 'ma',
-                        headerName: 'Mã',
-                    },
-                    {
                         field: 'lh',
                         headerName: 'Loại hàng',
-                        flex: 1,
+                        flex: 0.7,
                         renderCell({ value }) {
                             return value.ten;
                         },
@@ -102,7 +125,7 @@ const QuyCach = () => {
                     {
                         field: 'dv1',
                         headerName: 'Đơn vị lớn',
-                        flex: 1,
+                        flex: 0.2,
                         renderCell({ value }) {
                             return value.ten;
                         },
@@ -121,7 +144,7 @@ const QuyCach = () => {
                     {
                         field: 'dv2',
                         headerName: 'Đơn vị bé',
-                        flex: 1,
+                        flex: 0.2,
                         renderCell({ value }) {
                             return value.ten;
                         },
@@ -144,7 +167,7 @@ const QuyCach = () => {
                         },
                     },
                     {
-                        field: 'actions',
+                        field: 'edit',
                         type: 'actions',
                         getActions({ row }) {
                             return [
@@ -157,6 +180,9 @@ const QuyCach = () => {
                         },
                     },
                 ]}
+                columnVisibilityModel={{
+                    actions: currentUser.laAdmin,
+                }}
                 rows={quycachs.map((e) => ({
                     ...e,
                     id: e.ma,
@@ -182,6 +208,48 @@ const QuyCach = () => {
                 onClose={handleCloseUpdateModal}
                 onSubmit={handleUpdate}
             />
+            <Dialog open={!!selectedDelete} onClose={() => setSelectedDelete(null)}>
+                <Formik
+                    initialValues={{ accept: false }}
+                    validationSchema={Yup.object().shape({
+                        accept: Yup.bool().equals([true], 'Vui lòng xác nhận để xóa quy cách'),
+                    })}
+                    onSubmit={handleDelete}
+                >
+                    {({ values, handleChange, errors, handleSubmit }) => (
+                        <form onSubmit={handleSubmit}>
+                            <DialogTitle>Xóa quy cách</DialogTitle>
+                            <DialogContent sx={{ maxWidth: 360 }}>
+                                <DialogContentText>
+                                    Bạn chắc chắn muốn xóa quy cách này?
+                                </DialogContentText>
+                                <DialogContentText>
+                                    Vui lòng kiểm tra lại trước khi xóa
+                                </DialogContentText>
+
+                                <FormControlLabel
+                                    label="Xác nhận xóa quy cách này"
+                                    name="accept"
+                                    value={values.accept}
+                                    control={<Checkbox />}
+                                    onChange={handleChange}
+                                />
+
+                                <FormHelperText error>{errors.accept}</FormHelperText>
+                            </DialogContent>
+
+                            <DialogActions>
+                                <Button type="submit" variant="contained">
+                                    Xóa
+                                </Button>
+                                <Button type="button" onClick={() => setSelectedDelete(null)}>
+                                    Hủy
+                                </Button>
+                            </DialogActions>
+                        </form>
+                    )}
+                </Formik>
+            </Dialog>
         </>
     );
 };

@@ -16,6 +16,8 @@ import dayjs from 'dayjs';
 import { Formik } from 'formik';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 import khuyenmaigiamService from 'services/khuyenmaigiam.service';
 import MainCard from 'ui-component/cards/MainCard';
 import * as Yup from 'yup';
@@ -49,6 +51,9 @@ const UpdateModal = ({ value, open, onClose, onSubmit }) => {
 };
 
 const KhuyenMaiGiam = () => {
+    const currentUser = useSelector((state) => state.auth.user);
+    const navigate = useNavigate();
+    if (!currentUser.laAdmin) navigate('/');
     let { data, isLoading, refetch } = useQuery('allKMG', () => khuyenmaigiamService.getAllKMG());
     data = data || [];
     const columns = [

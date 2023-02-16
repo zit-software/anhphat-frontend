@@ -33,6 +33,8 @@ import { useEffect } from 'react';
 import { useCallback, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { useQuery } from 'react-query';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 import productcategoryservice from 'services/productcategory.service';
 import ProvinceService from 'services/province.service';
 
@@ -48,12 +50,15 @@ import ThuCard from './ThuCard';
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
 const Dashboard = () => {
+    const currentUser = useSelector((state) => state.auth.user);
+    const navigate = useNavigate();
+    if (!currentUser.laAdmin) navigate('/');
     const { data: allTinhs, isLoading: isLoadingAllTinh } = useQuery(['allTinh'], () =>
         ThongKeService.laytatcatinh()
     );
     const [ngaybd, setNgaybd] = useState(startOfYear(new Date()));
     const [ngaykt, setNgaykt] = useState(endOfYear(new Date()));
-    const [currentTinh, setCurrentTinh] = useState(null);
+    const [currentTinh, setCurrentTinh] = useState(allTinhs?.length > 0 ? allTinhs[0] : null);
     useEffect(() => {
         if (allTinhs) {
             setCurrentTinh(allTinhs[0]);
@@ -93,6 +98,7 @@ const Dashboard = () => {
                     ten: lh.ten,
                 },
             ]);
+            if (!thongkeTinh?.npp) return;
             for (let npp of thongkeTinh.npp) {
                 for (let row of thongkeTinhRows) {
                     row.push(0);
@@ -110,6 +116,7 @@ const Dashboard = () => {
     }, [currentTinh, ngaybd, ngaykt, isLoadingThongKeTinh]);
 
     let thongkeTinhRows = updateThongKeTinh();
+
     if (isLoadingAllTinh) return <LinearProgress />;
     return (
         <Grid container spacing={2}>

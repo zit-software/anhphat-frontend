@@ -25,6 +25,7 @@ const ManageUserForm = ({
                 cfmk: '',
                 laAdmin: user.laAdmin,
                 sdt: user.sdt || '',
+                pin: '',
             }}
             validateOnMount
             validationSchema={Yup.object().shape({
@@ -45,6 +46,11 @@ const ManageUserForm = ({
                         'Số điện thoại có độ dài trong 6 đến 11 số',
                         (v) => !v || (v.length >= 6 && v.length <= 11)
                     ),
+                pin: requiredPassword
+                    ? Yup.string()
+                          .required('Vui lòng nhập mã pin')
+                          .length(6, 'Chiều dài mã pin là 6')
+                    : Yup.string(),
             })}
             onSubmit={onSubmit}
         >
@@ -111,12 +117,35 @@ const ManageUserForm = ({
                         <FormHelperText error>{errors.cfmk}</FormHelperText>
                     </FormControl>
 
+                    <FormControl fullWidth sx={{ mb: 2 }}>
+                        <InputLabel htmlFor="cfmk">Mã pin</InputLabel>
+                        <OutlinedInput
+                            id="pin"
+                            name="pin"
+                            label="Mã pin"
+                            type="password"
+                            placeholder="Mã pin"
+                            value={values.pin}
+                            error={!!errors.pin}
+                            onChange={handleChange}
+                        />
+
+                        <FormHelperText error>{errors.pin}</FormHelperText>
+                    </FormControl>
+
                     <FormControlLabel
                         label="Tài khoản quản trị"
                         control={<Checkbox />}
                         name="laAdmin"
                         checked={values.laAdmin}
-                        onChange={handleChange}
+                        onChange={(event, checked) => {
+                            handleChange({
+                                target: {
+                                    name: 'laAdmin',
+                                    values: checked,
+                                },
+                            });
+                        }}
                     />
                     <FormHelperText error>{errors.laAdmin}</FormHelperText>
 

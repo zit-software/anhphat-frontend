@@ -30,6 +30,8 @@ import MainCard from 'ui-component/cards/MainCard';
 
 import dayjs from 'dayjs';
 import ManageUserForm from '../manage-forms/ManageUserForm';
+import { useNavigate } from 'react-router';
+import { useSelector } from 'react-redux';
 
 const DeleteAccountModal = ({ open, onClose, accountName, onSubmit }) => (
     <Dialog open={open} onClose={onClose}>
@@ -111,6 +113,9 @@ const CreateAccountModal = ({ open, onClose, onSubmit }) => {
 };
 
 const Accounts = () => {
+    const navigate = useNavigate();
+    const currentUser = useSelector((state) => state.auth.user);
+    if (!currentUser.laAdmin) navigate('/');
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [deleteAccountIndex, setDeleteAccountIndex] = useState(0);
     const [editAccount, setEditAccount] = useState(null);

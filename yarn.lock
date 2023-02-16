@@ -8249,6 +8249,11 @@ react-perfect-scrollbar@^1.5.8:
     perfect-scrollbar "^1.5.0"
     prop-types "^15.6.1"
 
+react-pin-input@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/react-pin-input/-/react-pin-input-1.3.0.tgz#0602a5baea31df86f97ec9683af15783a60337f5"
+  integrity sha512-9OEQIF4Wx3yDQzSoGq7HIiun9ViMK5jL5hxOKM7oBz9WSCYB/Q5ceurN4h+xnq05euK7s3bU9FHPaPRbMoOi+w==
+
 react-query@^3.39.2:
   version "3.39.3"
   resolved "https://registry.yarnpkg.com/react-query/-/react-query-3.39.3.tgz#4cea7127c6c26bdea2de5fb63e51044330b03f35"

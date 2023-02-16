@@ -7,7 +7,12 @@ export const SET_BORDER_RADIUS = '@customization/SET_BORDER_RADIUS';
 
 // action - auth
 export const SET_USER = '@auth/SET_USER';
+export const SET_PIN = '@auth/SET_PIN';
 
 export function setUser(payload) {
     return { type: SET_USER, payload };
+}
+
+export function setPin(payload) {
+    return { type: SET_PIN, payload };
 }

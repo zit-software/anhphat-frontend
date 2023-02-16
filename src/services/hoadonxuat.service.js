@@ -5,8 +5,8 @@ class HoaDonXuatService {
         return await request.post('xuathang/phieuxuat', payload);
     }
 
-    static async layTatCa({ page, limit, daluu }) {
-        return await request.get('xuathang/phieuxuat', { params: { page, limit, daluu } });
+    static async layTatCa({ page, limit, daluu, trahang = false }) {
+        return await request.get('xuathang/phieuxuat', { params: { page, limit, daluu, trahang } });
     }
 
     static async xoaHoaDon(ma) {

@@ -59,55 +59,63 @@ const DashboardStorage = () => {
                             container
                             item
                         >
-                            {allMHCloseToExpired.data.map((mh) => (
-                                <Grid key={mh.ma} item xs={4} sm={3} md={2}>
-                                    <Card elevation={6}>
-                                        <CardContent sx={{ padding: '12px' }}>
-                                            <Typography>
-                                                <b style={{ marginRight: '4px' }}>Mã</b>
-                                                {mh.ma}
-                                            </Typography>
-                                            <Typography>
-                                                <b style={{ marginRight: '4px' }}>Loại Hàng</b>
-                                                {mh.loaihang.ten}
-                                            </Typography>
-                                            <Typography>
-                                                <b style={{ marginRight: '4px' }}>Đơn Vị</b>
-                                                {mh.donvi.ten}
-                                            </Typography>
-                                            <Typography>
-                                                <b style={{ marginRight: '4px' }}>Ngày Nhập</b>
-                                                {dayjs(mh.ngaynhap).format('DD/MM/YYYY')}
-                                            </Typography>
-                                            <Typography>
-                                                <b style={{ marginRight: '4px' }}>Hạn Sử Dụng</b>
-                                                {
-                                                    <span
-                                                        style={{
-                                                            padding: '1px 3px',
-                                                            borderRadius: '4px',
-                                                            backgroundColor: 'red',
-                                                            color: 'white',
-                                                        }}
-                                                    >
-                                                        {dayjs(mh.hsd).format('DD/MM/YYYY')}
-                                                    </span>
-                                                }
-                                            </Typography>
-                                        </CardContent>
-                                        <CardActions sx={{ padding: '12px' }} disableSpacing>
-                                            <Button
-                                                onClick={() => setSelectedMHToPDelete(mh)}
-                                                color="error"
-                                                variant="contained"
-                                                size="small"
-                                            >
-                                                Tiêu Hủy
-                                            </Button>
-                                        </CardActions>
-                                    </Card>
-                                </Grid>
-                            ))}
+                            {allMHCloseToExpired.data.length > 0 ? (
+                                allMHCloseToExpired.data.map((mh) => (
+                                    <Grid key={mh.ma} item xs={4} sm={3} md={2}>
+                                        <Card elevation={6}>
+                                            <CardContent sx={{ padding: '12px' }}>
+                                                <Typography>
+                                                    <b style={{ marginRight: '4px' }}>Mã</b>
+                                                    {mh.ma}
+                                                </Typography>
+                                                <Typography>
+                                                    <b style={{ marginRight: '4px' }}>Loại Hàng</b>
+                                                    {mh.loaihang.ten}
+                                                </Typography>
+                                                <Typography>
+                                                    <b style={{ marginRight: '4px' }}>Đơn Vị</b>
+                                                    {mh.donvi.ten}
+                                                </Typography>
+                                                <Typography>
+                                                    <b style={{ marginRight: '4px' }}>Ngày Nhập</b>
+                                                    {dayjs(mh.ngaynhap).format('DD/MM/YYYY')}
+                                                </Typography>
+                                                <Typography>
+                                                    <b style={{ marginRight: '4px' }}>
+                                                        Hạn Sử Dụng
+                                                    </b>
+                                                    {
+                                                        <span
+                                                            style={{
+                                                                padding: '1px 3px',
+                                                                borderRadius: '4px',
+                                                                backgroundColor: 'red',
+                                                                color: 'white',
+                                                            }}
+                                                        >
+                                                            {dayjs(mh.hsd).format('DD/MM/YYYY')}
+                                                        </span>
+                                                    }
+                                                </Typography>
+                                            </CardContent>
+                                            <CardActions sx={{ padding: '12px' }} disableSpacing>
+                                                <Button
+                                                    onClick={() => setSelectedMHToPDelete(mh)}
+                                                    color="error"
+                                                    variant="contained"
+                                                    size="small"
+                                                >
+                                                    Tiêu Hủy
+                                                </Button>
+                                            </CardActions>
+                                        </Card>
+                                    </Grid>
+                                ))
+                            ) : (
+                                <Typography>
+                                    Không có mặt hàng nào sắp hết hạn sử dụng (Trong 1 tháng tới)
+                                </Typography>
+                            )}
                         </Grid>
                         <Grid justifyContent="center" container item>
                             <Pagination
