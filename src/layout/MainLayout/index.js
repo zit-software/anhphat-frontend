@@ -32,6 +32,7 @@ import { IconChevronRight } from '@tabler/icons';
 import { Formik } from 'formik';
 import PinInput from 'react-pin-input';
 import AuthService from 'services/auth.service';
+import accessToken from 'utils/access-token';
 
 // styles
 const Main = styled('main', {
@@ -194,7 +195,14 @@ const MainLayout = () => {
                                     Xác nhận
                                 </Button>
                                 <Divider>Hoặc</Divider>
-                                <Button type="submit" fullWidth>
+                                <Button
+                                    type="button"
+                                    fullWidth
+                                    onClick={() => {
+                                        accessToken.set('');
+                                        window.location = '/auth/login';
+                                    }}
+                                >
                                     Đăng xuất
                                 </Button>
                             </DialogContent>
