@@ -457,7 +457,6 @@ const AddKhuyenMaiTangModal = ({ open, onClose, onSubmit }) => {
     );
 
     const fixedKhuyenmaigiam = khuyenmaitang || [];
-    console.log(khuyenmaitang);
 
     return (
         <Dialog open={open} fullWidth onClose={onClose}>
@@ -601,6 +600,17 @@ function ChinhSuaHoaDon() {
     const fixedChitietKMT = phieuxuat?.kmt || chitietKMT;
 
     if (isLoading) return <LinearProgress />;
+
+    let giamgia = 0;
+
+    if (phieuxuat) {
+        giamgia = phieuxuat.npp.chietkhau;
+    }
+
+    if (fixedChitietKMG?.tile > giamgia) {
+        giamgia = fixedChitietKMG.tile;
+    }
+
     return (
         <MainCard
             title={
@@ -721,7 +731,6 @@ function ChinhSuaHoaDon() {
                                     <Button
                                         fullWidth
                                         startIcon={<AutoFixHigh />}
-                                        size="small"
                                         onClick={addAutoRow}
                                     >
                                         Thêm tự động
@@ -754,7 +763,6 @@ function ChinhSuaHoaDon() {
                                     <Button
                                         fullWidth
                                         startIcon={<SwipeVertical />}
-                                        size="small"
                                         onClick={handleOpenManualModal}
                                     >
                                         Thêm thủ công
@@ -834,7 +842,9 @@ function ChinhSuaHoaDon() {
 
                             <TableRow>
                                 <TableCell colSpan={6}>Thuế</TableCell>
-                                <TableCell colSpan={2}>{phieuxuat.thue * 100}%</TableCell>
+                                <TableCell colSpan={2}>
+                                    {(phieuxuat.thue * 100).toFixed(2)}%
+                                </TableCell>
                             </TableRow>
 
                             <TableRow>
@@ -872,7 +882,7 @@ function ChinhSuaHoaDon() {
                             </MainCard>
                         </Grid>
                     )}
-                    {fixedChitietKMT && (
+                    {fixedChitietKMT?.chitiet && (
                         <Grid item xs={12}>
                             <MainCard
                                 shadow
