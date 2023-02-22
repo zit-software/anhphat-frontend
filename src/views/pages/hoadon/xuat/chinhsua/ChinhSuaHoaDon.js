@@ -524,8 +524,12 @@ function ChinhSuaHoaDon() {
         HoaDonXuatService.layMotHoaDon(params.ma, { chitiet }).then((res) => res.data)
     );
 
-    const { data: chitietKMG } = useQuery([kmg], () => khuyenmaigiamService.layKMG(kmg));
-    const { data: chitietKMT } = useQuery([kmt], () => khuyenmaitangService.getKMT(kmt));
+    const { data: chitietKMG } = useQuery([kmg, 'khuyenmaigiam'], () =>
+        khuyenmaigiamService.layKMG(kmg)
+    );
+    const { data: chitietKMT } = useQuery([kmt, 'khuyenmaitang'], () =>
+        khuyenmaitangService.getKMT(kmt)
+    );
     const { data: mathang } = useQuery(['tatcamathang', {}], productcategoryservice.getAllMatHang);
 
     const [autoRows, setAutoRows] = useState([]);
@@ -598,7 +602,8 @@ function ChinhSuaHoaDon() {
 
     const fixedChitietKMG = phieuxuat?.kmg || chitietKMG;
     const fixedChitietKMT = phieuxuat?.kmt || chitietKMT;
-
+    console.log(fixedChitietKMG);
+    console.log(fixedChitietKMT);
     if (isLoading) return <LinearProgress />;
 
     let giamgia = 0;

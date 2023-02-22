@@ -125,6 +125,7 @@ const EditKhuyenMaiTang = () => {
             await khuyenmaitangService.themkmt(newKMT);
         }
         setIsSaving(false);
+        navigate(-1);
     };
 
     if (isLoading) return <LinearProgress />;
