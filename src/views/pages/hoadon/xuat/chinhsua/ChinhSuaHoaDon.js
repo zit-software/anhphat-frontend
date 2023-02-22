@@ -527,7 +527,6 @@ function ChinhSuaHoaDon() {
 
     const { data: chitietKMG } = useQuery([kmg], () => khuyenmaigiamService.layKMG(kmg));
     const { data: chitietKMT } = useQuery([kmt], () => khuyenmaitangService.getKMT(kmt));
-    console.log(chitietKMT);
     const { data: mathang } = useQuery(['tatcamathang', {}], productcategoryservice.getAllMatHang);
 
     const [autoRows, setAutoRows] = useState([]);
@@ -794,7 +793,19 @@ function ChinhSuaHoaDon() {
                                                           prev + manualDongia[current],
                                                       0
                                                   )) *
-                                                  (1 + thue)
+                                                  (phieuxuat.npp.truocthue
+                                                      ? 1 -
+                                                        (1 / (1 + thue)) *
+                                                            Math.max(
+                                                                phieuxuat.npp.chietkhau,
+                                                                kmg?.tile || 0
+                                                            )
+                                                      : 1 -
+                                                        1 *
+                                                            Math.max(
+                                                                phieuxuat.npp.chietkhau,
+                                                                kmg?.tile || 0
+                                                            ))
                                     )}
                                 </TableCell>
                             </TableRow>
