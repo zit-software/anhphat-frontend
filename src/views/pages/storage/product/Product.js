@@ -65,36 +65,37 @@ const Product = () => {
         {
             field: 'loaihang',
             headerName: 'Loại hàng',
-            flex: 1,
+            flex: 1.6,
             renderCell: ({ value: { ten } }) => ten,
         },
         {
             field: 'donvi',
             headerName: 'Đơn vị',
-            flex: 0.4,
+            flex: 0.6,
             renderCell: ({ value: { ten } }) => ten,
         },
         {
             field: 'ngaynhap',
             headerName: 'Ngày nhập',
-            flex: 1,
+            flex: 0.8,
             renderCell: ({ value }) => dayjs(value).format('DD/MM/YYYY'),
         },
         {
             field: 'hsd',
             headerName: 'Hạn sử dụng',
-            flex: 1,
+            flex: 0.8,
             renderCell: ({ value }) => dayjs(value).format('DD/MM/YYYY'),
         },
         {
             field: 'gianhap',
             headerName: 'Giá nhập',
-            flex: 1,
-            renderCell: ({ value }) => formatter.format(value),
+            flex: 0.8,
+            renderCell: ({ row }) => formatter.format(row.donvi.gianhap),
         },
         {
             field: 'giaxuat',
             headerName: 'Giá xuất',
+            flex: 0.8,
             renderCell({ row }) {
                 return formatter.format(row.donvi.giaban);
             },
