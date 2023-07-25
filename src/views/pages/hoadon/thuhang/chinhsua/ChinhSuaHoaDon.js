@@ -101,7 +101,6 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                             value={values.malh || ''}
                             name="malh"
                             fullWidth
-                            size="small"
                             onChange={handleChange}
                         >
                             {products.map((product) => (
@@ -116,7 +115,6 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                         {product && (
                             <Select
                                 error={!!errors.madv}
-                                size="small"
                                 fullWidth
                                 value={values.madv || ''}
                                 name="madv"
@@ -144,13 +142,7 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                             value={values.hsd}
                             inputFormat="DD/MM/YYYY"
                             renderInput={(params) => (
-                                <TextField
-                                    fullWidth
-                                    name="hsd"
-                                    size="small"
-                                    {...params}
-                                    error={!!errors.hsd}
-                                />
+                                <TextField fullWidth name="hsd" {...params} error={!!errors.hsd} />
                             )}
                             onChange={(value) =>
                                 handleChange({
@@ -170,7 +162,6 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                             type="number"
                             label="Số lượng"
                             fullWidth
-                            size="small"
                             value={values.soluong}
                             name="soluong"
                             onChange={handleChange}
@@ -181,7 +172,7 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                     {currentUser.laAdmin && (
                         <>
                             <TableCell>
-                                <FormControl variant="outlined" size="small" fullWidth>
+                                <FormControl variant="outlined" fullWidth>
                                     <InputLabel>Đơn giá</InputLabel>
                                     <OutlinedInput
                                         disabled
@@ -330,7 +321,7 @@ function ChinhSuaHoaDon() {
                         <Stack spacing={2} direction="column" sx={{ ml: -2, p: 2 }}>
                             <Typography variant="subtitle2">Thông tin hóa đơn</Typography>
 
-                            <Table size="small">
+                            <Table>
                                 <TableHead>
                                     <TableRow>
                                         <TableCell rowSpan={2}>Mã số</TableCell>
@@ -359,7 +350,7 @@ function ChinhSuaHoaDon() {
 
                             <Typography variant="subtitle2">Nhà phân phối</Typography>
 
-                            <Table size="small">
+                            <Table>
                                 <TableHead>
                                     <TableRow>
                                         <TableCell>Mã nhà phân phối</TableCell>
@@ -392,7 +383,7 @@ function ChinhSuaHoaDon() {
                             )}
 
                             <TableContainer>
-                                <Table size="small">
+                                <Table>
                                     <TableHead>
                                         <TableRow>
                                             <TableCell>STT</TableCell>

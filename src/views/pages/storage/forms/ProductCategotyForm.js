@@ -88,7 +88,6 @@ function ProductCategoryForm({ value = { donvi: [] }, title, onSubmit, onClose }
                                 <LoadingButton
                                     startIcon={<AddCircle />}
                                     variant="contained"
-                                    size="small"
                                     loading={loading}
                                     onClick={handleAddDonvi}
                                 >

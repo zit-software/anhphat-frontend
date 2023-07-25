@@ -173,7 +173,6 @@ const NotificationSection = () => {
                                                             All Notification
                                                         </Typography>
                                                         <Chip
-                                                            size="small"
                                                             label="01"
                                                             sx={{
                                                                 color: theme.palette.background
@@ -251,9 +250,7 @@ const NotificationSection = () => {
                                             justifyContent: 'center',
                                         }}
                                     >
-                                        <Button size="small" disableElevation>
-                                            View All
-                                        </Button>
+                                        <Button disableElevation>View All</Button>
                                     </CardActions>
                                 </MainCard>
                             </ClickAwayListener>

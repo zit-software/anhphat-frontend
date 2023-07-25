@@ -229,7 +229,7 @@ const Product = () => {
                     <Stack spacing={1}>
                         <Typography variant="subtitle1">Tìm kiếm</Typography>
 
-                        <FormControl fullWidth size="small">
+                        <FormControl fullWidth>
                             <InputLabel id="loaihang">Loại Hàng</InputLabel>
                             <Select
                                 value={selected.malh}
@@ -256,7 +256,7 @@ const Product = () => {
                             </Select>
                         </FormControl>
 
-                        <FormControl fullWidth size="small">
+                        <FormControl fullWidth>
                             <InputLabel id="donvi">Đơn Vị</InputLabel>
                             <Select
                                 onChange={(e) => {
@@ -281,7 +281,7 @@ const Product = () => {
 
                         <Typography variant="subtitle1">Sắp xếp theo</Typography>
 
-                        <FormControl fullWidth size="small">
+                        <FormControl fullWidth>
                             <RadioGroup
                                 onChange={(e) => {
                                     setSelectedOrder(e.target.value);
@@ -310,7 +310,6 @@ const Product = () => {
                         </FormControl>
                         <Button
                             variant="contained"
-                            size="small"
                             onClick={() => {
                                 handleReset();
                                 setGroup(!group);
@@ -320,7 +319,6 @@ const Product = () => {
                             {!group ? 'Xem Gộp' : 'Xem Chi Tiết'}
                         </Button>
                         <Button
-                            size="small"
                             onClick={() => {
                                 handleReset();
                             }}

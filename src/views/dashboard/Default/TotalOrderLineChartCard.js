@@ -99,7 +99,6 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                                         <Button
                                             disableElevation
                                             variant={timeValue ? 'contained' : 'text'}
-                                            size="small"
                                             sx={{
                                                 color: 'inherit',
                                             }}
@@ -110,7 +109,6 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                                         <Button
                                             disableElevation
                                             variant={!timeValue ? 'contained' : 'text'}
-                                            size="small"
                                             sx={{
                                                 color: 'inherit',
                                             }}

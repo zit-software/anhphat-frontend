@@ -204,7 +204,6 @@ const Customization = () => {
                                     </Grid>
                                     <Grid item xs>
                                         <Slider
-                                            size="small"
                                             value={borderRadius}
                                             onChange={handleBorderRadius}
                                             getAriaValueText={valueText}

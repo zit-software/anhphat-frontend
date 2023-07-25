@@ -43,7 +43,6 @@ function ManageNPPPointForm({ value = {}, buttonText, onSubmit, onClose }) {
                             value={value.ten || ''}
                             label="Tên nhà phân phối"
                             focused={false}
-                            size="small"
                             InputProps={{ readOnly: true }}
                         />
 
@@ -55,9 +54,8 @@ function ManageNPPPointForm({ value = {}, buttonText, onSubmit, onClose }) {
                             InputProps={{ readOnly: true }}
                             name="tinh"
                             autoComplete="tinh"
-                            size="small"
                         />
-                        <FormControl fullWidth size="small">
+                        <FormControl fullWidth>
                             <InputLabel>Điểm</InputLabel>
                             <OutlinedInput
                                 value={values.diem || ''}
@@ -87,7 +85,6 @@ function ManageNPPPointForm({ value = {}, buttonText, onSubmit, onClose }) {
                                 label="Ghi chú thay đổi điểm"
                                 placeholder="VD: Đổi quà cho nhà phân phối y tế 100 điểm"
                                 name="ghichu"
-                                size="small"
                                 onChange={(e) => {
                                     handleChange({
                                         target: {

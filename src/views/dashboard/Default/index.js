@@ -130,7 +130,7 @@ const Dashboard = () => {
                                 inputFormat="DD/MM/YYYY"
                                 label="Từ ngày"
                                 placeholder="Ngày bắt đầu"
-                                renderInput={(props) => <TextField size="small" {...props} />}
+                                renderInput={(props) => <TextField {...props} />}
                             />
                         </Grid>
 
@@ -141,14 +141,13 @@ const Dashboard = () => {
                                 inputFormat="DD/MM/YYYY"
                                 label="Đến ngày"
                                 placeholder="Ngày kết thúc"
-                                renderInput={(props) => <TextField size="small" {...props} />}
+                                renderInput={(props) => <TextField {...props} />}
                             />
                         </Grid>
 
                         <Grid item>
                             <Select
                                 defaultValue="thisYear"
-                                size="small"
                                 onChange={(event) => {
                                     const value = event.target.value;
 

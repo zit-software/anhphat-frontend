@@ -417,7 +417,7 @@ const PopularCard = ({ isLoading }) => {
                             justifyContent: 'center',
                         }}
                     >
-                        <Button size="small" disableElevation>
+                        <Button disableElevation>
                             View All
                             <ChevronRightOutlinedIcon />
                         </Button>

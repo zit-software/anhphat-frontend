@@ -103,7 +103,6 @@ const DashboardStorage = () => {
                                                     onClick={() => setSelectedMHToPDelete(mh)}
                                                     color="error"
                                                     variant="contained"
-                                                    size="small"
                                                 >
                                                     Tiêu Hủy
                                                 </Button>

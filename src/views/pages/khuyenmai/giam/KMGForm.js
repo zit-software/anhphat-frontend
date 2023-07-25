@@ -43,11 +43,10 @@ function KMGForm({ value = {}, buttonText, onSubmit, onClose }) {
                                 name="ten"
                                 autoComplete="name"
                                 onChange={handleChange}
-                                size="small"
                             />
                             <FormHelperText error>{errors.ten}</FormHelperText>
 
-                            <FormControl fullWidth size="small">
+                            <FormControl fullWidth>
                                 <InputLabel>Tỉ Lệ Giảm</InputLabel>
                                 <OutlinedInput
                                     value={values.tile * 100 || ''}
