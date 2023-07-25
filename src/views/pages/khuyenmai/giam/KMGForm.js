@@ -4,15 +4,11 @@ import {
     FormHelperText,
     InputAdornment,
     InputLabel,
-    MenuItem,
     OutlinedInput,
-    Select,
     TextField,
 } from '@mui/material';
 import { Stack } from '@mui/system';
 import { Formik } from 'formik';
-import { useQuery } from 'react-query';
-import productcategoryservice from 'services/productcategory.service';
 import * as Yup from 'yup';
 
 function KMGForm({ value = {}, buttonText, onSubmit, onClose }) {
