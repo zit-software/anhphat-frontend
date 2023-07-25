@@ -43,7 +43,9 @@
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
-        "format": "prettier --write ."
+        "format": "prettier --write .",
+        "prepare": "husky install",
+        "lint": "eslint --ext .js,.jsx,.ts,.tsx src --fix"
     },
     "eslintConfig": {
         "extends": [
@@ -83,6 +85,7 @@
         "eslint-plugin-prettier": "^4.2.1",
         "eslint-plugin-react": "^7.30.1",
         "eslint-plugin-react-hooks": "4.6.0",
+        "husky": "^8.0.0",
         "prettier": "^2.7.1",
         "sass": "^1.53.0"
     }
