@@ -409,7 +409,7 @@ const AddKhuyenMaiGiamModal = ({ open, onClose, onSubmit }) => {
                             headerName: 'Tỷ lệ giảm',
                             flex: 1,
                             renderCell({ value }) {
-                                return `${value * 100}%`;
+                                return `${Math.imul(value * 100, 1)}%`;
                             },
                         },
                         {
@@ -673,7 +673,7 @@ function ChinhSuaHoaDon() {
                             <TableCell>
                                 {ProvinceService.findByCode(phieuxuat.npp.tinh)?.name}
                             </TableCell>
-                            <TableCell>{phieuxuat.npp.chietkhau * 100}%</TableCell>
+                            <TableCell>{Math.imul(phieuxuat.npp.chietkhau * 100, 1)}%</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -858,7 +858,7 @@ function ChinhSuaHoaDon() {
                                     Mã khuyến mãi: {fixedChitietKMG.ma}
                                 </Typography>
                                 <Typography variant="subtitle1">
-                                    Tỷ lệ giảm: {fixedChitietKMG.tile * 100}%
+                                    Tỷ lệ giảm: {Math.imul(fixedChitietKMG.tile * 100, 1)}%
                                 </Typography>
                             </MainCard>
                         </Grid>
