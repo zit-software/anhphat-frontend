@@ -120,7 +120,6 @@ const AutoHangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                             value={values.malh || ''}
                             name="malh"
                             fullWidth
-                            size="small"
                             onChange={handleChange}
                         >
                             {products.map((product) => (
@@ -135,7 +134,6 @@ const AutoHangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                         {product && (
                             <Select
                                 error={!!errors.madv}
-                                size="small"
                                 fullWidth
                                 value={values.madv || ''}
                                 name="madv"
@@ -158,7 +156,6 @@ const AutoHangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                             type="number"
                             label="Số lượng"
                             fullWidth
-                            size="small"
                             value={values.soluong}
                             name="soluong"
                             onChange={handleChange}
@@ -167,7 +164,7 @@ const AutoHangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                     </TableCell>
 
                     <TableCell>
-                        <FormControl variant="outlined" size="small" fullWidth>
+                        <FormControl variant="outlined" fullWidth>
                             <InputLabel>Đơn giá</InputLabel>
                             <OutlinedInput
                                 error={!!errors.giaban}
@@ -192,12 +189,11 @@ const AutoHangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                         <Stack direction="row">
                             <IconButton
                                 disabled={!refFormik.current?.isValid}
-                                size="small"
                                 onClick={handleSubmit}
                             >
                                 <Save />
                             </IconButton>
-                            <IconButton size="small" onClick={onRemove}>
+                            <IconButton onClick={onRemove}>
                                 <DeleteOutline />
                             </IconButton>
                         </Stack>
@@ -325,7 +321,6 @@ const ManualRow = ({ mathang, index, dongia, updateDongia }) => {
             <TableCell>1</TableCell>
             <TableCell>
                 <TextField
-                    size="small"
                     label="Đơn giá"
                     placeholder="1.000.000đ"
                     value={dongia || '0'}
@@ -523,7 +518,7 @@ function ChinhSuaHoaDon() {
             <Stack spacing={2}>
                 <Typography variant="subtitle2">Thông tin hóa đơn</Typography>
 
-                <Table size="small">
+                <Table>
                     <TableHead>
                         <TableRow>
                             <TableCell rowSpan={2}>Mã số hóa đơn</TableCell>
@@ -553,7 +548,7 @@ function ChinhSuaHoaDon() {
 
                 <Typography variant="subtitle2">Thông tin nhà phân phối</Typography>
 
-                <Table size="small">
+                <Table>
                     <TableHead>
                         <TableRow>
                             <TableCell>Mã nhà phân phối</TableCell>
@@ -588,7 +583,7 @@ function ChinhSuaHoaDon() {
                     />
                 )}
 
-                <Table size="small">
+                <Table>
                     <TableHead>
                         <TableRow>
                             <TableCell>STT</TableCell>
@@ -623,7 +618,6 @@ function ChinhSuaHoaDon() {
                                     <Button
                                         fullWidth
                                         startIcon={<AutoFixHigh />}
-                                        size="small"
                                         onClick={addAutoRow}
                                     >
                                         Thêm tự động
@@ -656,7 +650,6 @@ function ChinhSuaHoaDon() {
                                     <Button
                                         fullWidth
                                         startIcon={<SwipeVertical />}
-                                        size="small"
                                         onClick={handleOpenManualModal}
                                     >
                                         Thêm thủ công

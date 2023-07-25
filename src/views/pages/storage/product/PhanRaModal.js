@@ -33,7 +33,7 @@ function PhanRaForm({ value = {}, onClose, onSubmit }) {
     const { data: donvis, isLoading: loadingDonvi } = useQuery([donvi], () =>
         productcategoryservice.getAllDonVis({ madv1: donvi.ma })
     );
-    const { data: quycach, isLoading: loadingQuyCach } = useQuery([donvi, selectedDV2], () =>
+    const { data: quycach } = useQuery([donvi, selectedDV2], () =>
         productcategoryservice.laymotquycach({ madv1: donvi.ma, madv2: selectedDV2 })
     );
 

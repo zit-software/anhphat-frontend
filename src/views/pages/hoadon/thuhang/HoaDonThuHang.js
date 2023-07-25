@@ -276,14 +276,12 @@ const HoaDonThuHang = () => {
                                         icon={params.row.daluu ? <Visibility /> : <Edit />}
                                         label="Chỉnh sửa"
                                         onClick={() => navigate(`/hoadon/thuhang/${params.row.ma}`)}
-                                        size="small"
                                     />,
                                     <GridActionsCellItem
                                         color="error"
                                         icon={<Delete />}
                                         label="Xóa"
                                         onClick={() => setSelectedDelete(params.row.ma)}
-                                        size="small"
                                     />,
                                 ];
                             },

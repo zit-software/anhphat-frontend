@@ -58,6 +58,7 @@ const ProfileSection = () => {
         setOpen(false);
     };
 
+    // eslint-disable-next-line no-unused-vars
     const handleListItemClick = (event, index, route = '') => {
         setSelectedIndex(index);
         handleClose(event);

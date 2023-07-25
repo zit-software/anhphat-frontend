@@ -155,7 +155,7 @@ function NhaPhanPhoi() {
             field: 'chietkhau',
             headerName: 'Chiết khấu',
             flex: 2,
-            renderCell: ({ value }) => `${value * 100}%`,
+            renderCell: ({ value }) => `${Math.imul(value * 100, 1)}%`,
         },
         {
             field: 'diem',
@@ -189,7 +189,6 @@ function NhaPhanPhoi() {
                     <GridActionsCellItem
                         icon={<Payment />}
                         label="Điểm"
-                        size="small"
                         onClick={() => {
                             handleOpenPointsModal(params.row);
                         }}
@@ -197,13 +196,11 @@ function NhaPhanPhoi() {
                     <GridActionsCellItem
                         icon={<Edit />}
                         label="Chỉnh sửa"
-                        size="small"
                         onClick={() => handleOpenUpdateModal(params.row)}
                     />,
                     <GridActionsCellItem
                         icon={<Delete />}
                         label="Xóa"
-                        size="small"
                         color="error"
                         onClick={() => setDeleteId(params.row.ma)}
                     />,

@@ -1,3 +1,5 @@
+import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
+import SaveIcon from '@mui/icons-material/Save';
 import {
     Badge,
     Button,
@@ -15,15 +17,13 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
-import dayjs from 'dayjs';
-import { useQuery } from 'react-query';
-import khuyenmaitangService from 'services/khuyenmaitang.service';
-import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
-import SaveIcon from '@mui/icons-material/Save';
 import { IconPlus } from '@tabler/icons';
+import dayjs from 'dayjs';
 import { Formik } from 'formik';
 import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import khuyenmaitangService from 'services/khuyenmaitang.service';
 import * as Yup from 'yup';
 import ChiTietChinhSua from './ChiTietChinhSua';
 
@@ -158,21 +158,19 @@ const EditKhuyenMaiTang = () => {
                             return (
                                 <form>
                                     {type === 'view' ? (
-                                        <Table size="small">
+                                        <Table>
                                             <TableHead>
                                                 <TableRow>
                                                     <TableCell>Mã</TableCell>
                                                     <TableCell>Tên</TableCell>
-                                                    <TableCell size="small">
-                                                        Cập Nhật Lần Cuối
-                                                    </TableCell>
+                                                    <TableCell>Cập Nhật Lần Cuối</TableCell>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
                                                 <TableRow>
                                                     <TableCell>{values.ma}</TableCell>
                                                     <TableCell>{values.ten}</TableCell>
-                                                    <TableCell size="small">
+                                                    <TableCell>
                                                         {values.updatedAt
                                                             ? dayjs(values.updatedAt).format(
                                                                   'DD-MM-YYYY'

@@ -4,7 +4,6 @@ import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import NppService from 'services/npp.service';
-import MainCard from 'ui-component/cards/MainCard';
 
 const LogDiem = () => {
     const [currentPage, setCurrentPage] = useState(0);

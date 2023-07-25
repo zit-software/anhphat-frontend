@@ -103,7 +103,6 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                             value={values.malh || ''}
                             name="malh"
                             fullWidth
-                            size="small"
                             onChange={handleChange}
                         >
                             {products.map((product) => (
@@ -118,7 +117,6 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                         {product && (
                             <Select
                                 error={!!errors.madv}
-                                size="small"
                                 fullWidth
                                 value={values.madv || ''}
                                 name="madv"
@@ -146,13 +144,7 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                             value={values.hsd}
                             inputFormat="DD/MM/YYYY"
                             renderInput={(params) => (
-                                <TextField
-                                    fullWidth
-                                    name="hsd"
-                                    size="small"
-                                    {...params}
-                                    error={!!errors.hsd}
-                                />
+                                <TextField fullWidth name="hsd" {...params} error={!!errors.hsd} />
                             )}
                             onChange={(value) =>
                                 handleChange({
@@ -172,7 +164,6 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                             type="number"
                             label="Số lượng"
                             fullWidth
-                            size="small"
                             value={values.soluong}
                             name="soluong"
                             onChange={handleChange}
@@ -183,7 +174,7 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                     {currentUser.laAdmin && (
                         <>
                             <TableCell>
-                                <FormControl variant="outlined" size="small" fullWidth>
+                                <FormControl variant="outlined" fullWidth>
                                     <InputLabel>Đơn giá</InputLabel>
                                     <OutlinedInput
                                         error={!!errors.gianhap}
@@ -204,7 +195,6 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                                     product.donvi.find((e) => e.ma === value.madv)?.gianhap !==
                                         value.gianhap && (
                                         <Button
-                                            size="small"
                                             fullWidth
                                             onClick={() =>
                                                 setFieldValue(
@@ -354,7 +344,7 @@ function ChinhSuaHoaDon() {
                         <Stack spacing={2} direction="column" sx={{ ml: -2, p: 2 }}>
                             <Typography variant="subtitle2">Thông tin hóa đơn</Typography>
 
-                            <Table size="small">
+                            <Table>
                                 <TableHead>
                                     <TableRow>
                                         <TableCell rowSpan={2}>Mã số</TableCell>
@@ -384,7 +374,7 @@ function ChinhSuaHoaDon() {
                             <Typography variant="subtitle2">Nguồn nhập</Typography>
 
                             {phieunhap.daluu ? (
-                                <Table size="small">
+                                <Table>
                                     <TableHead>
                                         <TableRow>
                                             <TableCell>Nguồn</TableCell>
@@ -407,7 +397,6 @@ function ChinhSuaHoaDon() {
                                 <Grid container spacing={2} sx={{ mb: 2, mt: 2 }}>
                                     <Grid xs={12} md={4} item>
                                         <TextField
-                                            size="small"
                                             fullWidth
                                             label="Nguồn"
                                             placeholder="Nguồn"
@@ -423,7 +412,6 @@ function ChinhSuaHoaDon() {
 
                                     <Grid xs={12} md={4} item>
                                         <TextField
-                                            size="small"
                                             fullWidth
                                             label="Người giao"
                                             placeholder="Người giao"
@@ -443,7 +431,6 @@ function ChinhSuaHoaDon() {
                                             renderInput={(params) => (
                                                 <TextField
                                                     fullWidth
-                                                    size="small"
                                                     {...params}
                                                     disabled={phieunhap.daluu}
                                                     error={!!errors.ngaynhap}
@@ -480,7 +467,7 @@ function ChinhSuaHoaDon() {
                             )}
 
                             <TableContainer>
-                                <Table size="small">
+                                <Table>
                                     <TableHead>
                                         <TableRow>
                                             <TableCell>STT</TableCell>

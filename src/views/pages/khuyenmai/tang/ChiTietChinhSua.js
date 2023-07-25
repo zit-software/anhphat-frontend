@@ -1,3 +1,6 @@
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
 import {
     FormHelperText,
     IconButton,
@@ -7,14 +10,11 @@ import {
     TableRow,
     TextField,
 } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import SaveIcon from '@mui/icons-material/Save';
-import { useEffect, useState } from 'react';
-import * as Yup from 'yup';
 import { Formik } from 'formik';
-import productcategoryservice from 'services/productcategory.service';
+import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
+import productcategoryservice from 'services/productcategory.service';
+import * as Yup from 'yup';
 
 const ChiTietChinhSua = ({ type, row, index, setCurrentEditing, editingIndex, setRows }) => {
     const isEditing = editingIndex === index;
@@ -128,7 +128,6 @@ const ChiTietChinhSua = ({ type, row, index, setCurrentEditing, editingIndex, se
                                         value={values.malh || ''}
                                         name="malh"
                                         fullWidth
-                                        size="small"
                                         onChange={(e) => {
                                             const selected = products.find(
                                                 (ele) => ele.ma === e.target.value
@@ -156,7 +155,6 @@ const ChiTietChinhSua = ({ type, row, index, setCurrentEditing, editingIndex, se
                                         <Select
                                             disabled={!selectedLH}
                                             error={!!errors.madvmua}
-                                            size="small"
                                             fullWidth
                                             value={values.madvmua || ''}
                                             name="madvmua"
@@ -186,7 +184,6 @@ const ChiTietChinhSua = ({ type, row, index, setCurrentEditing, editingIndex, se
                                         <Select
                                             disabled={!selectedLH}
                                             error={!!errors.madvtang}
-                                            size="small"
                                             fullWidth
                                             value={values.madvtang || ''}
                                             name="madvtang"

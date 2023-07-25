@@ -4,15 +4,11 @@ import {
     FormHelperText,
     InputAdornment,
     InputLabel,
-    MenuItem,
     OutlinedInput,
-    Select,
     TextField,
 } from '@mui/material';
 import { Stack } from '@mui/system';
 import { Formik } from 'formik';
-import { useQuery } from 'react-query';
-import productcategoryservice from 'services/productcategory.service';
 import * as Yup from 'yup';
 
 function KMGForm({ value = {}, buttonText, onSubmit, onClose }) {
@@ -43,11 +39,10 @@ function KMGForm({ value = {}, buttonText, onSubmit, onClose }) {
                                 name="ten"
                                 autoComplete="name"
                                 onChange={handleChange}
-                                size="small"
                             />
                             <FormHelperText error>{errors.ten}</FormHelperText>
 
-                            <FormControl fullWidth size="small">
+                            <FormControl fullWidth>
                                 <InputLabel>Tỉ Lệ Giảm</InputLabel>
                                 <OutlinedInput
                                     value={values.tile * 100 || ''}
