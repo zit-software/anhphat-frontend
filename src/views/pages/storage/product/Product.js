@@ -244,7 +244,7 @@ const Product = () => {
                                         (loaihang) => loaihang.ma === malh
                                     )?.donvi;
                                     setDonViToChoose(donvis);
-                                    setCurrentPage(1);
+                                    setCurrentPage(0);
                                 }}
                             >
                                 {allcategories.map((category) => {
