@@ -303,8 +303,8 @@ function ChinhSuaHoaDon() {
     };
 
     useEffect(() => {
-        if (isLoading || !phieunhap.daluu) return;
         console.log(phieunhap);
+        if (isLoading || !phieunhap.daluu) return;
         setRows(
             phieunhap.chitiet.map((row) => ({
                 ...row,

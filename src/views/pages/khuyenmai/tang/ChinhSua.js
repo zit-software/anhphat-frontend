@@ -35,7 +35,7 @@ const EditKhuyenMaiTang = () => {
 
     const ma = searchParams.get('ma');
     const type = searchParams.get('type');
-    const { data, isLoading } = useQuery(['kmt', type], () => {
+    const { data, isLoading, refetch } = useQuery(['getOneKMT', ma, type], () => {
         if (type === 'view' || type === 'edit') {
             return khuyenmaitangService.getKMT(ma);
         }
@@ -49,6 +49,7 @@ const EditKhuyenMaiTang = () => {
 
     const [rows, setRows] = useState([]);
     useEffect(() => {
+        refetch();
         if (data) {
             const rows = data.chitiet.map((chitiet) => ({
                 malh: chitiet.lh.ma,
@@ -59,7 +60,6 @@ const EditKhuyenMaiTang = () => {
                 tendvtang: chitiet.dvtang.ten,
                 soluongmua: chitiet.soluongmua,
                 soluongtang: chitiet.soluongtang,
-                isNew: false,
             }));
             setRows(rows);
         }
@@ -75,38 +75,33 @@ const EditKhuyenMaiTang = () => {
             tendvtang: '',
             soluongmua: '',
             soluongtang: '',
-            isNew: true,
         };
         setRows((prev) => [...prev, row]);
     };
 
     const handleSave = async () => {
-        // Kiểm tra mã loại hàng có trùng trong rows không
         setIsSaving(true);
         if (type === 'edit') {
             await khuyenmaitangService.chinhsuakmt(ma, kmt);
             await khuyenmaitangService.themchitiet(ma, {
-                chitiet: rows
-                    .filter((row) => row.isNew)
-                    .map((row) => ({
+                chitiet: rows.map((row) => ({
+                    soluongmua: row.soluongmua,
+                    soluongtang: row.soluongtang,
+                    madvmua: row.madvmua,
+                    madvtang: row.madvtang,
+                    malh: row.malh,
+                })),
+            });
+            for (let row of rows) {
+                await khuyenmaitangService.chinhsuachitiet(ma, {
+                    malh: row.malh,
+                    chitiet: {
                         soluongmua: row.soluongmua,
                         soluongtang: row.soluongtang,
                         madvmua: row.madvmua,
                         madvtang: row.madvtang,
-                        malh: row.malh,
-                    })),
-            });
-            for (let row of rows) {
-                if (!row.isNew)
-                    await khuyenmaitangService.chinhsuachitiet(ma, {
-                        malh: row.malh,
-                        chitiet: {
-                            soluongmua: row.soluongmua,
-                            soluongtang: row.soluongtang,
-                            madvmua: row.madvmua,
-                            madvtang: row.madvtang,
-                        },
-                    });
+                    },
+                });
             }
         }
         if (type === 'add') {
