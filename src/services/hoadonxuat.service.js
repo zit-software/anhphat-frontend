@@ -22,6 +22,10 @@ class HoaDonXuatService {
     static async luuPhieuXuat(ma, payload) {
         return await request.post(`xuathang/phieuxuat/${ma}/luu`, payload);
     }
+
+    static async checkHangTang(payload) {
+        return (await request.post(`xuathang/phieuxuat/check-tang`, payload)).data;
+    }
 }
 
 export default HoaDonXuatService;

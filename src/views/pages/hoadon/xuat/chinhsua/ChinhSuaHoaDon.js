@@ -10,6 +10,7 @@ import {
     SwipeVertical,
 } from '@mui/icons-material';
 import {
+    Alert,
     Badge,
     Button,
     Dialog,
@@ -592,6 +593,27 @@ function ChinhSuaHoaDon() {
     const fixedChitietKMG = phieuxuat?.kmg || chitietKMG;
     const fixedChitietKMT = phieuxuat?.kmt || chitietKMT;
 
+    const [missing, setMissing] = useState([]);
+
+    useEffect(() => {
+        const checkTang = async () => {
+            if (!kmt) return;
+            try {
+                await HoaDonXuatService.checkHangTang({
+                    manual: selectedManual.map((e) => ({
+                        mh: e,
+                    })),
+                    auto: autoRows.filter((e) => e.madv),
+                    maKMT: kmt,
+                });
+                setMissing([]);
+            } catch (err) {
+                setMissing(err.response.data.missing);
+            }
+        };
+        checkTang();
+    }, [autoRows, selectedManual, kmt]);
+
     if (isLoading) return <LinearProgress />;
 
     let giamgia = 0;
@@ -921,6 +943,32 @@ function ChinhSuaHoaDon() {
                             Thêm khuyến mãi tặng
                         </Button>
                     </>
+                )}
+
+                {missing.length > 0 && (
+                    <Alert
+                        action={
+                            <Button
+                                onClick={() => {
+                                    window.open('/hanghoa/mathang');
+                                }}
+                            >
+                                Phân rã mặt hàng
+                            </Button>
+                        }
+                        severity="warning"
+                    >
+                        Các sản phẩm sau đây không đủ số lượng tặng
+                        <ul>
+                            {missing.map((donvi) => {
+                                return (
+                                    <li
+                                        key={donvi.ma}
+                                    >{`${donvi.loaihang.ten} thiếu: ${donvi.soluong} ${donvi.ten}`}</li>
+                                );
+                            })}
+                        </ul>
+                    </Alert>
                 )}
 
                 <Stack direction="row" spacing={2}>
