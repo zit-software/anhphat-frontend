@@ -690,7 +690,7 @@ function ChinhSuaHoaDon() {
                     <TableBody>
                         <TableRow>
                             <TableCell>{phieuxuat.npp.ma}</TableCell>
-                            <TableCell>{phieuxuat.npp.ten}</TableCell>
+                            <TableCell>{phieuxuat.npp?.ten}</TableCell>
                             <TableCell>{phieuxuat.npp.sdt}</TableCell>
                             <TableCell>
                                 {ProvinceService.findByCode(phieuxuat.npp.tinh)?.name}
