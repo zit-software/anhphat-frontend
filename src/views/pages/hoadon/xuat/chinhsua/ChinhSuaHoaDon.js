@@ -117,7 +117,15 @@ const AutoHangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
             validate={onChange}
             onSubmit={handleSave}
         >
-            {({ values, handleSubmit, errors, handleChange, setFieldValue }) => (
+            {({
+                values,
+                handleSubmit,
+                errors,
+                handleChange,
+                setFieldValue,
+                setValues,
+                isValid,
+            }) => (
                 <TableRow hover>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>
@@ -143,7 +151,15 @@ const AutoHangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                                 fullWidth
                                 value={values.madv || ''}
                                 name="madv"
-                                onChange={handleChange}
+                                onChange={(event) => {
+                                    setValues((prev) => ({
+                                        ...prev,
+                                        madv: event.target.value,
+                                        giaban:
+                                            product.donvi.find((e) => e.ma === event.target.value)
+                                                ?.giaban || 0,
+                                    }));
+                                }}
                             >
                                 {product.donvi.map((donvi) => (
                                     <MenuItem key={donvi.ma} value={donvi.ma}>
@@ -208,10 +224,7 @@ const AutoHangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                     </TableCell>
                     <TableCell>
                         <Stack direction="row">
-                            <IconButton
-                                disabled={!refFormik.current?.isValid}
-                                onClick={handleSubmit}
-                            >
+                            <IconButton disabled={!isValid} onClick={handleSubmit}>
                                 <Save />
                             </IconButton>
                             <IconButton onClick={onRemove}>
@@ -410,7 +423,7 @@ const AddKhuyenMaiGiamModal = ({ open, onClose, onSubmit }) => {
                             headerName: 'Tỷ lệ giảm',
                             flex: 1,
                             renderCell({ value }) {
-                                return `${value * 100}%`;
+                                return `${Math.imul(value * 100, 1)}%`;
                             },
                         },
                         {
@@ -695,7 +708,7 @@ function ChinhSuaHoaDon() {
                             <TableCell>
                                 {ProvinceService.findByCode(phieuxuat.npp.tinh)?.name}
                             </TableCell>
-                            <TableCell>{phieuxuat.npp.chietkhau * 100}%</TableCell>
+                            <TableCell>{Math.imul(phieuxuat.npp.chietkhau * 100, 1)}%</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -880,7 +893,7 @@ function ChinhSuaHoaDon() {
                                     Mã khuyến mãi: {fixedChitietKMG.ma}
                                 </Typography>
                                 <Typography variant="subtitle1">
-                                    Tỷ lệ giảm: {fixedChitietKMG.tile * 100}%
+                                    Tỷ lệ giảm: {Math.imul(fixedChitietKMG.tile * 100, 1)}%
                                 </Typography>
                             </MainCard>
                         </Grid>

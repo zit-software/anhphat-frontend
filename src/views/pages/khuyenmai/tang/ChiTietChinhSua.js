@@ -4,11 +4,13 @@ import SaveIcon from '@mui/icons-material/Save';
 import {
     FormHelperText,
     IconButton,
+    LinearProgress,
     MenuItem,
     Select,
     TableCell,
     TableRow,
     TextField,
+    Typography,
 } from '@mui/material';
 import { Formik } from 'formik';
 import { useEffect, useState } from 'react';
@@ -43,7 +45,24 @@ const ChiTietChinhSua = ({ type, row, index, setCurrentEditing, editingIndex, se
         setRows((prev) => prev.filter((ele, i) => i !== index));
         setCurrentEditing(-1);
     };
-    if (isLoading || !selectedLH) return <></>;
+
+    if (!selectedLH)
+        return (
+            <TableRow>
+                <TableCell colSpan={6}>
+                    <Typography>Không có mặt hàng để hiển thị, vui lòng thêm mặt hàng.</Typography>
+                </TableCell>
+            </TableRow>
+        );
+
+    if (isLoading)
+        return (
+            <TableRow>
+                <TableCell colSpan={6}>
+                    <LinearProgress />
+                </TableCell>
+            </TableRow>
+        );
 
     return (
         <>

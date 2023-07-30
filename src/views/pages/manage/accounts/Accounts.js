@@ -29,9 +29,9 @@ import usernamangeService from 'services/usermanage.service';
 import MainCard from 'ui-component/cards/MainCard';
 
 import dayjs from 'dayjs';
-import ManageUserForm from '../manage-forms/ManageUserForm';
-import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
+import ManageUserForm from '../manage-forms/ManageUserForm';
 
 const DeleteAccountModal = ({ open, onClose, accountName, onSubmit }) => (
     <Dialog open={open} onClose={onClose}>

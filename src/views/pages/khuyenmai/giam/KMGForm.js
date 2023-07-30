@@ -45,7 +45,7 @@ function KMGForm({ value = {}, buttonText, onSubmit, onClose }) {
                             <FormControl fullWidth>
                                 <InputLabel>Tỉ Lệ Giảm</InputLabel>
                                 <OutlinedInput
-                                    value={values.tile * 100 || ''}
+                                    value={Math.imul(values.tile * 100, 1) || ''}
                                     error={!!errors.tile}
                                     label="Chiết khấu"
                                     placeholder="16%"

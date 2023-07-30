@@ -78,6 +78,8 @@ function ManageNPPPointForm({ value = {}, buttonText, onSubmit, onClose }) {
 
                         <FormControl>
                             <TextField
+                                multiline
+                                minRows={4}
                                 fullWidth
                                 value={values.ghichu || ''}
                                 error={!!errors.ghichu}
