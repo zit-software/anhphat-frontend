@@ -12,6 +12,9 @@ class TonKhoService {
             await request.get('mathang/saphet')
         ).data;
     }
+    static async tieuHuyMatHangSapHetHan(params) {
+        return await request.delete('mathang/saphethan', { params });
+    }
 }
 
 export default TonKhoService;
