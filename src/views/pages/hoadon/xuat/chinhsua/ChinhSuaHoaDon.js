@@ -117,7 +117,15 @@ const AutoHangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
             validate={onChange}
             onSubmit={handleSave}
         >
-            {({ values, handleSubmit, errors, handleChange, setFieldValue }) => (
+            {({
+                values,
+                handleSubmit,
+                errors,
+                handleChange,
+                setFieldValue,
+                setValues,
+                isValid,
+            }) => (
                 <TableRow hover>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>
@@ -143,7 +151,15 @@ const AutoHangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                                 fullWidth
                                 value={values.madv || ''}
                                 name="madv"
-                                onChange={handleChange}
+                                onChange={(event) => {
+                                    setValues((prev) => ({
+                                        ...prev,
+                                        madv: event.target.value,
+                                        giaban:
+                                            product.donvi.find((e) => e.ma === event.target.value)
+                                                ?.giaban || 0,
+                                    }));
+                                }}
                             >
                                 {product.donvi.map((donvi) => (
                                     <MenuItem key={donvi.ma} value={donvi.ma}>
@@ -208,10 +224,7 @@ const AutoHangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                     </TableCell>
                     <TableCell>
                         <Stack direction="row">
-                            <IconButton
-                                disabled={!refFormik.current?.isValid}
-                                onClick={handleSubmit}
-                            >
+                            <IconButton disabled={!isValid} onClick={handleSubmit}>
                                 <Save />
                             </IconButton>
                             <IconButton onClick={onRemove}>

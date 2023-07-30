@@ -30,7 +30,7 @@ import {
 } from '@mui/material';
 import { Stack } from '@mui/system';
 import { DatePicker } from '@mui/x-date-pickers';
-import { IconDeviceFloppy, IconFile, IconPencil, IconPlus, IconTrash, IconX } from '@tabler/icons';
+import { IconFile, IconPencil, IconPlus, IconX } from '@tabler/icons';
 import { Formik } from 'formik';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
@@ -39,6 +39,7 @@ import HoaDonNhapService from 'services/hoadonnhap.service';
 import MainCard from 'ui-component/cards/MainCard';
 import * as Yup from 'yup';
 
+import { DeleteOutline, SaveOutlined } from '@mui/icons-material';
 import { useSelector } from 'react-redux';
 import productcategoryservice from 'services/productcategory.service';
 import RowSkeleton from 'ui-component/skeletons/RowSkeleton';
@@ -94,7 +95,15 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
             validate={onChange}
             onSubmit={handleSave}
         >
-            {({ values, handleSubmit, errors, handleChange, setFieldValue, setValues }) => {
+            {({
+                values,
+                handleSubmit,
+                errors,
+                handleChange,
+                setFieldValue,
+                setValues,
+                isValid,
+            }) => {
                 return (
                     <TableRow hover>
                         <TableCell>{index + 1}</TableCell>
@@ -229,13 +238,13 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                             </>
                         )}
                         <TableCell>
-                            <IconButton color="primary" onClick={handleSubmit}>
-                                <IconDeviceFloppy />
+                            <IconButton color="primary" disabled={!isValid} onClick={handleSubmit}>
+                                <SaveOutlined />
                             </IconButton>
                         </TableCell>
                         <TableCell>
                             <IconButton color="error" onClick={onRemove}>
-                                <IconTrash />
+                                <DeleteOutline />
                             </IconButton>
                         </TableCell>
                     </TableRow>
