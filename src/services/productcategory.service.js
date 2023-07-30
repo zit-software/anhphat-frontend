@@ -91,6 +91,9 @@ const productcategoryservice = {
             await request.delete(`mathang/${ma}`)
         ).data;
     },
+    async countProductStorage() {
+        return (await request.get(`mathang/soluong-kho`)).data;
+    },
 };
 
 export default productcategoryservice;

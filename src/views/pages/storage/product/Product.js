@@ -31,6 +31,7 @@ import formatter from 'views/utilities/formatter';
 import PhanRaModal from './PhanRaModal';
 import * as Yup from 'yup';
 import { useSelector } from 'react-redux';
+import StorageAmount from './StorageAmount';
 const Product = () => {
     const [selected, setSelected] = useState({
         malh: '',
@@ -224,200 +225,203 @@ const Product = () => {
 
     if (isLoading) return <LinearProgress />;
     return (
-        <MainCard title="Mặt Hàng Tồn Kho">
-            <Grid container spacing={2}>
-                <Grid item md={2}>
-                    <Stack spacing={1}>
-                        <Typography variant="subtitle1">Tìm kiếm</Typography>
+        <div>
+            <MainCard title="Mặt Hàng Tồn Kho">
+                <Grid container spacing={2}>
+                    <Grid item md={2}>
+                        <Stack spacing={1}>
+                            <Typography variant="subtitle1">Tìm kiếm</Typography>
 
-                        <FormControl fullWidth>
-                            <InputLabel id="loaihang">Loại Hàng</InputLabel>
-                            <Select
-                                value={selected.malh}
-                                fullWidth
-                                labelId="loaihang"
-                                label="Loại Hàng"
-                                onChange={(e) => {
-                                    const malh = e.target.value;
-                                    setSelected({ ...selected, malh });
-                                    const donvis = allcategories.find(
-                                        (loaihang) => loaihang.ma === malh
-                                    )?.donvi;
-                                    setDonViToChoose(donvis);
-                                    setCurrentPage(0);
-                                }}
-                            >
-                                {allcategories.map((category) => {
-                                    return (
-                                        <MenuItem key={category.ma} value={category.ma}>
-                                            {category.ten}
-                                        </MenuItem>
-                                    );
-                                })}
-                            </Select>
-                        </FormControl>
-
-                        <FormControl fullWidth>
-                            <InputLabel id="donvi">Đơn Vị</InputLabel>
-                            <Select
-                                onChange={(e) => {
-                                    setSelected({ ...selected, madv: e.target.value });
-                                    setCurrentPage(1);
-                                }}
-                                value={selected.madv}
-                                fullWidth
-                                labelId="donvi"
-                                label="Đơn Vị"
-                                disabled={!selected.malh}
-                            >
-                                {donViToChoose.map((dv) => {
-                                    return (
-                                        <MenuItem key={dv.ma} value={dv.ma}>
-                                            {dv.ten}
-                                        </MenuItem>
-                                    );
-                                })}
-                            </Select>
-                        </FormControl>
-
-                        <Typography variant="subtitle1">Sắp xếp theo</Typography>
-
-                        <FormControl fullWidth>
-                            <RadioGroup
-                                onChange={(e) => {
-                                    setSelectedOrder(e.target.value);
-                                    if (e.target.value === 'soluong') setGroup(true);
-                                }}
-                                value={selectedOrder}
-                                row
-                                aria-labelledby="radio-order"
-                            >
-                                <FormControlLabel
-                                    value="hsd"
-                                    control={<Radio />}
-                                    label="Hạn Sử Dụng"
-                                />
-                                <FormControlLabel
-                                    value="ngaynhap"
-                                    control={<Radio />}
-                                    label="Ngày Nhập"
-                                />
-                                <FormControlLabel
-                                    value="soluong"
-                                    control={<Radio />}
-                                    label="Số Lượng"
-                                />
-                            </RadioGroup>
-                        </FormControl>
-                        <Button
-                            variant="contained"
-                            onClick={() => {
-                                handleReset();
-                                setGroup(!group);
-                            }}
-                            color="primary"
-                        >
-                            {!group ? 'Xem Gộp' : 'Xem Chi Tiết'}
-                        </Button>
-                        <Button
-                            onClick={() => {
-                                handleReset();
-                            }}
-                            color="info"
-                        >
-                            Đặt Lại
-                        </Button>
-                    </Stack>
-                </Grid>
-
-                <Grid item md={10}>
-                    <Box sx={{ height: '60vh', width: '100%' }}>
-                        <DataGrid
-                            columns={group ? columnsGroup : columnsChiTiet}
-                            rows={rowsChiTiet ? rowsGroup : rowsChiTiet}
-                            loading={isLoading}
-                            autoPageSize
-                            localeText={viVN.components.MuiDataGrid.defaultProps.localeText}
-                            density="compact"
-                            components={{
-                                Toolbar: GridToolbar,
-                            }}
-                            paginationMode="server"
-                            rowCount={allMatHang.total}
-                            columnVisibilityModel={{
-                                unpack: currentUser.laAdmin,
-                                delete: currentUser.laAdmin,
-                                gianhap: currentUser.laAdmin,
-                            }}
-                            onPageChange={(page) => {
-                                setCurrentPage(page);
-                            }}
-                            pageSize={20}
-                            page={currentPage}
-                            initialState={{
-                                pagination: {
-                                    page: currentPage,
-                                    pageSize: 20,
-                                },
-                            }}
-                        />
-                    </Box>
-                </Grid>
-            </Grid>
-            <PhanRaModal
-                value={selectedMHToPhanRa}
-                open={!!selectedMHToPhanRa}
-                onClose={handleClosePhanRa}
-                onSubmit={handleSubmitPhanRa}
-            />
-            <Dialog open={!!selectedMHToPDelete} onClose={() => setSelectedMHToPDelete(null)}>
-                <Formik
-                    initialValues={{ accept: false }}
-                    validationSchema={Yup.object().shape({
-                        accept: Yup.bool().equals([true], 'Vui lòng xác nhận để xóa mặt hàng'),
-                    })}
-                    onSubmit={handleDelete}
-                >
-                    {({ values, handleChange, errors, handleSubmit }) => (
-                        <form onSubmit={handleSubmit}>
-                            <DialogTitle>Tiêu hủy mặt hàng</DialogTitle>
-                            <DialogContent sx={{ maxWidth: 360 }}>
-                                <DialogContentText>
-                                    Bạn chắc chắn muốn tiêu hủy mặt hàng này?
-                                </DialogContentText>
-                                <DialogContentText>
-                                    Điều này có thể ảnh hưởng tới các mặt hàng cũng như dữ liệu tồn
-                                    kho của cửa hàng.
-                                </DialogContentText>
-
-                                <FormControlLabel
-                                    label="Xác nhận tiêu hủy mặt hàng này"
-                                    name="accept"
-                                    value={values.accept}
-                                    control={<Checkbox />}
-                                    onChange={handleChange}
-                                />
-
-                                <FormHelperText error>{errors.accept}</FormHelperText>
-                            </DialogContent>
-
-                            <DialogActions>
-                                <Button type="submit" variant="contained" color="error">
-                                    Tiêu hủy
-                                </Button>
-                                <Button
-                                    type="button"
-                                    color="inherit"
-                                    onClick={() => setSelectedMHToPDelete(null)}
+                            <FormControl fullWidth>
+                                <InputLabel id="loaihang">Loại Hàng</InputLabel>
+                                <Select
+                                    value={selected.malh}
+                                    fullWidth
+                                    labelId="loaihang"
+                                    label="Loại Hàng"
+                                    onChange={(e) => {
+                                        const malh = e.target.value;
+                                        setSelected({ ...selected, malh });
+                                        const donvis = allcategories.find(
+                                            (loaihang) => loaihang.ma === malh
+                                        )?.donvi;
+                                        setDonViToChoose(donvis);
+                                        setCurrentPage(0);
+                                    }}
                                 >
-                                    Hủy
-                                </Button>
-                            </DialogActions>
-                        </form>
-                    )}
-                </Formik>
-            </Dialog>
-        </MainCard>
+                                    {allcategories.map((category) => {
+                                        return (
+                                            <MenuItem key={category.ma} value={category.ma}>
+                                                {category.ten}
+                                            </MenuItem>
+                                        );
+                                    })}
+                                </Select>
+                            </FormControl>
+
+                            <FormControl fullWidth>
+                                <InputLabel id="donvi">Đơn Vị</InputLabel>
+                                <Select
+                                    onChange={(e) => {
+                                        setSelected({ ...selected, madv: e.target.value });
+                                        setCurrentPage(1);
+                                    }}
+                                    value={selected.madv}
+                                    fullWidth
+                                    labelId="donvi"
+                                    label="Đơn Vị"
+                                    disabled={!selected.malh}
+                                >
+                                    {donViToChoose.map((dv) => {
+                                        return (
+                                            <MenuItem key={dv.ma} value={dv.ma}>
+                                                {dv.ten}
+                                            </MenuItem>
+                                        );
+                                    })}
+                                </Select>
+                            </FormControl>
+
+                            <Typography variant="subtitle1">Sắp xếp theo</Typography>
+
+                            <FormControl fullWidth>
+                                <RadioGroup
+                                    onChange={(e) => {
+                                        setSelectedOrder(e.target.value);
+                                        if (e.target.value === 'soluong') setGroup(true);
+                                    }}
+                                    value={selectedOrder}
+                                    row
+                                    aria-labelledby="radio-order"
+                                >
+                                    <FormControlLabel
+                                        value="hsd"
+                                        control={<Radio />}
+                                        label="Hạn Sử Dụng"
+                                    />
+                                    <FormControlLabel
+                                        value="ngaynhap"
+                                        control={<Radio />}
+                                        label="Ngày Nhập"
+                                    />
+                                    <FormControlLabel
+                                        value="soluong"
+                                        control={<Radio />}
+                                        label="Số Lượng"
+                                    />
+                                </RadioGroup>
+                            </FormControl>
+                            <Button
+                                variant="contained"
+                                onClick={() => {
+                                    handleReset();
+                                    setGroup(!group);
+                                }}
+                                color="primary"
+                            >
+                                {!group ? 'Xem Gộp' : 'Xem Chi Tiết'}
+                            </Button>
+                            <Button
+                                onClick={() => {
+                                    handleReset();
+                                }}
+                                color="info"
+                            >
+                                Đặt Lại
+                            </Button>
+                        </Stack>
+                    </Grid>
+
+                    <Grid item md={10}>
+                        <Box sx={{ height: '60vh', width: '100%' }}>
+                            <DataGrid
+                                columns={group ? columnsGroup : columnsChiTiet}
+                                rows={rowsChiTiet ? rowsGroup : rowsChiTiet}
+                                loading={isLoading}
+                                autoPageSize
+                                localeText={viVN.components.MuiDataGrid.defaultProps.localeText}
+                                density="compact"
+                                components={{
+                                    Toolbar: GridToolbar,
+                                }}
+                                paginationMode="server"
+                                rowCount={allMatHang.total}
+                                columnVisibilityModel={{
+                                    unpack: currentUser.laAdmin,
+                                    delete: currentUser.laAdmin,
+                                    gianhap: currentUser.laAdmin,
+                                }}
+                                onPageChange={(page) => {
+                                    setCurrentPage(page);
+                                }}
+                                pageSize={20}
+                                page={currentPage}
+                                initialState={{
+                                    pagination: {
+                                        page: currentPage,
+                                        pageSize: 20,
+                                    },
+                                }}
+                            />
+                        </Box>
+                    </Grid>
+                </Grid>
+                <PhanRaModal
+                    value={selectedMHToPhanRa}
+                    open={!!selectedMHToPhanRa}
+                    onClose={handleClosePhanRa}
+                    onSubmit={handleSubmitPhanRa}
+                />
+                <Dialog open={!!selectedMHToPDelete} onClose={() => setSelectedMHToPDelete(null)}>
+                    <Formik
+                        initialValues={{ accept: false }}
+                        validationSchema={Yup.object().shape({
+                            accept: Yup.bool().equals([true], 'Vui lòng xác nhận để xóa mặt hàng'),
+                        })}
+                        onSubmit={handleDelete}
+                    >
+                        {({ values, handleChange, errors, handleSubmit }) => (
+                            <form onSubmit={handleSubmit}>
+                                <DialogTitle>Tiêu hủy mặt hàng</DialogTitle>
+                                <DialogContent sx={{ maxWidth: 360 }}>
+                                    <DialogContentText>
+                                        Bạn chắc chắn muốn tiêu hủy mặt hàng này?
+                                    </DialogContentText>
+                                    <DialogContentText>
+                                        Điều này có thể ảnh hưởng tới các mặt hàng cũng như dữ liệu
+                                        tồn kho của cửa hàng.
+                                    </DialogContentText>
+
+                                    <FormControlLabel
+                                        label="Xác nhận tiêu hủy mặt hàng này"
+                                        name="accept"
+                                        value={values.accept}
+                                        control={<Checkbox />}
+                                        onChange={handleChange}
+                                    />
+
+                                    <FormHelperText error>{errors.accept}</FormHelperText>
+                                </DialogContent>
+
+                                <DialogActions>
+                                    <Button type="submit" variant="contained" color="error">
+                                        Tiêu hủy
+                                    </Button>
+                                    <Button
+                                        type="button"
+                                        color="inherit"
+                                        onClick={() => setSelectedMHToPDelete(null)}
+                                    >
+                                        Hủy
+                                    </Button>
+                                </DialogActions>
+                            </form>
+                        )}
+                    </Formik>
+                </Dialog>
+            </MainCard>
+            <StorageAmount></StorageAmount>
+        </div>
     );
 };
 export default Product;
