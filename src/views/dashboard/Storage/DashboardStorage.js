@@ -21,7 +21,6 @@ import { Formik } from 'formik';
 import { useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { useQuery } from 'react-query';
-import productcategoryservice from 'services/productcategory.service';
 import TonKhoService from 'services/tonkho.service';
 import MainCard from 'ui-component/cards/MainCard';
 import * as Yup from 'yup';
@@ -40,8 +39,9 @@ const DashboardStorage = () => {
     const { data: allLHOutOfStock, isLoading: isLoadingStock } = useQuery(['closeOutOfStock'], () =>
         TonKhoService.getLHOutOfStock()
     );
-    const handleDelete = async (value) => {
-        await productcategoryservice.xoamathang(selectedMHToPDelete.ma);
+    const handleDelete = async () => {
+        // await productcategoryservice.xoamathang(selectedMHToPDelete.ma);
+        await TonKhoService.tieuHuyMatHangSapHetHan(selectedMHToPDelete);
         setSelectedMHToPDelete(null);
         refetchSapHetHan();
     };
@@ -60,13 +60,15 @@ const DashboardStorage = () => {
                         >
                             {allMHCloseToExpired.data.length > 0 ? (
                                 allMHCloseToExpired.data.map((mh) => (
-                                    <Grid key={mh.ma} item xs={4} sm={3} md={2}>
+                                    <Grid
+                                        key={`${mh.madv}_${mh.hsd}_${mh.ngaynhap}`}
+                                        item
+                                        xs={4}
+                                        sm={3}
+                                        md={2}
+                                    >
                                         <Card elevation={6}>
                                             <CardContent sx={{ padding: '12px' }}>
-                                                <Typography>
-                                                    <b style={{ marginRight: '4px' }}>Mã</b>
-                                                    {mh.ma}
-                                                </Typography>
                                                 <Typography>
                                                     <b style={{ marginRight: '4px' }}>Loại Hàng</b>
                                                     {mh.loaihang.ten}
@@ -96,10 +98,20 @@ const DashboardStorage = () => {
                                                         </span>
                                                     }
                                                 </Typography>
+                                                <Typography>
+                                                    <b style={{ marginRight: '4px' }}>Số lượng</b>
+                                                    {mh.soluong}
+                                                </Typography>
                                             </CardContent>
                                             <CardActions sx={{ padding: '12px' }} disableSpacing>
                                                 <Button
-                                                    onClick={() => setSelectedMHToPDelete(mh)}
+                                                    onClick={() => {
+                                                        setSelectedMHToPDelete({
+                                                            madv: mh.donvi.ma,
+                                                            hsd: mh.hsd,
+                                                            ngaynhap: mh.ngaynhap,
+                                                        });
+                                                    }}
                                                     color="error"
                                                     variant="contained"
                                                 >
@@ -111,7 +123,7 @@ const DashboardStorage = () => {
                                 ))
                             ) : (
                                 <Typography>
-                                    Không có mặt hàng nào sắp hết hạn sử dụng (Trong 1 tháng tới)
+                                    Không có mặt hàng nào sắp hết hạn sử dụng (Trong 180 ngày tới)
                                 </Typography>
                             )}
                         </Grid>
@@ -159,7 +171,10 @@ const DashboardStorage = () => {
                 <Formik
                     initialValues={{ accept: false }}
                     validationSchema={Yup.object().shape({
-                        accept: Yup.bool().equals([true], 'Vui lòng xác nhận để xóa hóa đơn'),
+                        accept: Yup.bool().equals(
+                            [true],
+                            'Vui lòng xác nhận để xóa những mặt hàng này'
+                        ),
                     })}
                     onSubmit={handleDelete}
                 >
