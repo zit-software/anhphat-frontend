@@ -30,7 +30,7 @@ import {
 } from '@mui/material';
 import { Stack } from '@mui/system';
 import { DatePicker } from '@mui/x-date-pickers';
-import { IconDeviceFloppy, IconFile, IconPencil, IconPlus, IconTrash, IconX } from '@tabler/icons';
+import { IconFile, IconPencil, IconPlus, IconX } from '@tabler/icons';
 import { Formik } from 'formik';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
@@ -39,11 +39,12 @@ import HoaDonNhapService from 'services/hoadonnhap.service';
 import MainCard from 'ui-component/cards/MainCard';
 import * as Yup from 'yup';
 
+import { DeleteOutline, SaveOutlined } from '@mui/icons-material';
+import { useSelector } from 'react-redux';
 import productcategoryservice from 'services/productcategory.service';
 import RowSkeleton from 'ui-component/skeletons/RowSkeleton';
 import dayjs from 'utils/dayjs';
 import formatter from 'views/utilities/formatter';
-import { useSelector } from 'react-redux';
 
 const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
     const { data: products, isLoading } = useQuery(
@@ -94,142 +95,161 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
             validate={onChange}
             onSubmit={handleSave}
         >
-            {({ values, handleSubmit, errors, handleChange, setFieldValue }) => (
-                <TableRow hover>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>
-                        <Select
-                            error={!!errors.malh}
-                            value={values.malh || ''}
-                            name="malh"
-                            fullWidth
-                            onChange={handleChange}
-                        >
-                            {products.map((product) => (
-                                <MenuItem key={product.ma} value={product.ma}>
-                                    {product.ten}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                        <FormHelperText error>{errors.malh}</FormHelperText>
-                    </TableCell>
-                    <TableCell>
-                        {product && (
+            {({
+                values,
+                handleSubmit,
+                errors,
+                handleChange,
+                setFieldValue,
+                setValues,
+                isValid,
+            }) => {
+                return (
+                    <TableRow hover>
+                        <TableCell>{index + 1}</TableCell>
+                        <TableCell>
                             <Select
-                                error={!!errors.madv}
+                                error={!!errors.malh}
+                                value={values.malh || ''}
+                                name="malh"
                                 fullWidth
-                                value={values.madv || ''}
-                                name="madv"
-                                onChange={(event) => {
-                                    handleChange({
-                                        target: { name: 'madv', value: event.target.value },
-                                    });
-
-                                    handleChange({
-                                        target: { name: 'gianhap', value: donvi.gianhap },
-                                    });
-                                }}
+                                onChange={handleChange}
                             >
-                                {product.donvi.map((donvi) => (
-                                    <MenuItem key={donvi.ma} value={donvi.ma}>
-                                        {donvi.ten}
+                                {products.map((product) => (
+                                    <MenuItem key={product.ma} value={product.ma}>
+                                        {product.ten}
                                     </MenuItem>
                                 ))}
                             </Select>
-                        )}
-                        <FormHelperText error>{errors.madv}</FormHelperText>
-                    </TableCell>
-                    <TableCell>
-                        <DatePicker
-                            value={values.hsd}
-                            inputFormat="DD/MM/YYYY"
-                            renderInput={(params) => (
-                                <TextField fullWidth name="hsd" {...params} error={!!errors.hsd} />
+                            <FormHelperText error>{errors.malh}</FormHelperText>
+                        </TableCell>
+                        <TableCell>
+                            {product && (
+                                <Select
+                                    error={!!errors.madv}
+                                    fullWidth
+                                    value={values.madv || ''}
+                                    name="madv"
+                                    onChange={(event) => {
+                                        const donvi =
+                                            product.donvi.find(
+                                                (e) => e.ma === event.target.value
+                                            ) || {};
+
+                                        setValues((prev) => ({
+                                            ...prev,
+                                            gianhap: donvi.gianhap || 0,
+                                            madv: event.target.value,
+                                        }));
+                                    }}
+                                >
+                                    {product.donvi.map((donvi) => (
+                                        <MenuItem key={donvi.ma} value={donvi.ma}>
+                                            {donvi.ten}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
                             )}
-                            onChange={(value) =>
-                                handleChange({
-                                    target: {
-                                        name: 'hsd',
-                                        value: value.$d,
-                                    },
-                                })
-                            }
-                        />
-                        <FormHelperText error>{errors.hsd}</FormHelperText>
-                    </TableCell>
-                    <TableCell>
-                        <TextField
-                            error={!!errors.soluong}
-                            placeholder="Số lượng"
-                            type="number"
-                            label="Số lượng"
-                            fullWidth
-                            value={values.soluong}
-                            name="soluong"
-                            onChange={handleChange}
-                        />
-                        <FormHelperText error>{errors.soluong}</FormHelperText>
-                    </TableCell>
-
-                    {currentUser.laAdmin && (
-                        <>
-                            <TableCell>
-                                <FormControl variant="outlined" fullWidth>
-                                    <InputLabel>Đơn giá</InputLabel>
-                                    <OutlinedInput
-                                        error={!!errors.gianhap}
-                                        placeholder="Đơn giá"
-                                        type="number"
-                                        label="Đơn giá"
-                                        value={values.gianhap}
-                                        name="gianhap"
-                                        endAdornment={
-                                            <InputAdornment position="end">vnđ</InputAdornment>
-                                        }
-                                        onChange={handleChange}
+                            <FormHelperText error>{errors.madv}</FormHelperText>
+                        </TableCell>
+                        <TableCell>
+                            <DatePicker
+                                value={values.hsd}
+                                inputFormat="DD/MM/YYYY"
+                                renderInput={(params) => (
+                                    <TextField
+                                        fullWidth
+                                        name="hsd"
+                                        {...params}
+                                        error={!!errors.hsd}
                                     />
-                                    <FormHelperText error>{errors.gianhap}</FormHelperText>
-                                </FormControl>
+                                )}
+                                onChange={(value) =>
+                                    handleChange({
+                                        target: {
+                                            name: 'hsd',
+                                            value: value.$d,
+                                        },
+                                    })
+                                }
+                            />
+                            <FormHelperText error>{errors.hsd}</FormHelperText>
+                        </TableCell>
+                        <TableCell>
+                            <TextField
+                                error={!!errors.soluong}
+                                placeholder="Số lượng"
+                                type="number"
+                                label="Số lượng"
+                                fullWidth
+                                value={values.soluong}
+                                name="soluong"
+                                onChange={handleChange}
+                            />
+                            <FormHelperText error>{errors.soluong}</FormHelperText>
+                        </TableCell>
 
-                                {product.donvi.find((e) => e.ma === value.madv)?.gianhap &&
-                                    product.donvi.find((e) => e.ma === value.madv)?.gianhap !==
-                                        value.gianhap && (
-                                        <Button
-                                            fullWidth
-                                            onClick={() =>
-                                                setFieldValue(
-                                                    'gianhap',
+                        {currentUser.laAdmin && (
+                            <>
+                                <TableCell>
+                                    <FormControl variant="outlined" fullWidth>
+                                        <InputLabel>Đơn giá</InputLabel>
+                                        <OutlinedInput
+                                            error={!!errors.gianhap}
+                                            placeholder="Đơn giá"
+                                            type="number"
+                                            label="Đơn giá"
+                                            value={values.gianhap}
+                                            name="gianhap"
+                                            endAdornment={
+                                                <InputAdornment position="end">vnđ</InputAdornment>
+                                            }
+                                            onChange={handleChange}
+                                        />
+                                        <FormHelperText error>{errors.gianhap}</FormHelperText>
+                                    </FormControl>
+
+                                    {product.donvi.find((e) => e.ma === value.madv)?.gianhap &&
+                                        product.donvi.find((e) => e.ma === value.madv)?.gianhap !==
+                                            value.gianhap && (
+                                            <Button
+                                                fullWidth
+                                                onClick={() =>
+                                                    setFieldValue(
+                                                        'gianhap',
+                                                        product.donvi.find(
+                                                            (e) => e.ma === value.madv
+                                                        ).gianhap
+                                                    )
+                                                }
+                                            >
+                                                {
                                                     product.donvi.find((e) => e.ma === value.madv)
-                                                        .gianhap
-                                                )
-                                            }
-                                        >
-                                            {
-                                                product.donvi.find((e) => e.ma === value.madv)
-                                                    ?.gianhap
-                                            }
-                                        </Button>
-                                    )}
-                            </TableCell>
-                            <TableCell>
-                                <Typography variant="subtitle2">
-                                    {formatter.format(values.gianhap * values.soluong)}
-                                </Typography>
-                            </TableCell>
-                        </>
-                    )}
-                    <TableCell>
-                        <IconButton color="primary" onClick={handleSubmit}>
-                            <IconDeviceFloppy />
-                        </IconButton>
-                    </TableCell>
-                    <TableCell>
-                        <IconButton color="error" onClick={onRemove}>
-                            <IconTrash />
-                        </IconButton>
-                    </TableCell>
-                </TableRow>
-            )}
+                                                        ?.gianhap
+                                                }
+                                            </Button>
+                                        )}
+                                </TableCell>
+                                <TableCell>
+                                    <Typography variant="subtitle2">
+                                        {formatter.format(values.gianhap * values.soluong)}
+                                    </Typography>
+                                </TableCell>
+                            </>
+                        )}
+                        <TableCell>
+                            <IconButton color="primary" disabled={!isValid} onClick={handleSubmit}>
+                                <SaveOutlined />
+                            </IconButton>
+                        </TableCell>
+                        <TableCell>
+                            <IconButton color="error" onClick={onRemove}>
+                                <DeleteOutline />
+                            </IconButton>
+                        </TableCell>
+                    </TableRow>
+                );
+            }}
         </Formik>
     ) : (
         <TableRow hover>
