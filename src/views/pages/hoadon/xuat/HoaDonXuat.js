@@ -35,7 +35,7 @@ import MainCard from 'ui-component/cards/MainCard';
 import { useSearchParams } from 'react-router-dom';
 
 const CreateModal = ({ open, onClose, onSubmit }) => {
-    const { data: npps, isLoading } = useQuery(['npp'], () =>
+    const { data: npps, isLoading } = useQuery(['getAllNppPhieuXuat'], () =>
         NppService.layTatCa().then((res) => res.data)
     );
 
@@ -282,7 +282,8 @@ function HoaDonXuat() {
                             headerName: 'Nhà phân phối',
                             flex: 1,
                             renderCell({ value }) {
-                                return value.ten;
+                                console.log(value);
+                                return value?.ten || '';
                             },
                         },
                         {
