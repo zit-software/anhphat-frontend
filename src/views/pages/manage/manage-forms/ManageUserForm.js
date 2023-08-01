@@ -54,7 +54,7 @@ const ManageUserForm = ({
             })}
             onSubmit={onSubmit}
         >
-            {({ values, errors, isValid, handleChange, handleSubmit }) => (
+            {({ values, errors, isValid, handleChange, handleSubmit, setFieldValue }) => (
                 <form noValidate style={{ padding: '20px 0' }} onSubmit={handleSubmit}>
                     <FormControl fullWidth sx={{ mb: 2 }} error={!!errors.ten}>
                         <InputLabel htmlFor="ten">Tên nhân viên</InputLabel>
@@ -139,12 +139,7 @@ const ManageUserForm = ({
                         name="laAdmin"
                         checked={values.laAdmin}
                         onChange={(event, checked) => {
-                            handleChange({
-                                target: {
-                                    name: 'laAdmin',
-                                    values: checked,
-                                },
-                            });
+                            setFieldValue('laAdmin', checked);
                         }}
                     />
                     <FormHelperText error>{errors.laAdmin}</FormHelperText>

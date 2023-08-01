@@ -112,7 +112,7 @@ const Dashboard = () => {
             return thongkeTinhRows;
         }
         return [];
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line
     }, [currentTinh, ngaybd, ngaykt, isLoadingThongKeTinh]);
 
     let thongkeTinhRows = updateThongKeTinh();
