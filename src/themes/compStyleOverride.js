@@ -1,3 +1,5 @@
+import { Grow } from '@mui/material';
+
 export default function componentStyleOverrides(theme) {
     const bgColor = theme.colors?.grey50;
     return {
@@ -181,6 +183,12 @@ export default function componentStyleOverrides(theme) {
                     color: theme.paper,
                     background: theme.colors?.grey700,
                 },
+            },
+        },
+        MuiDialog: {
+            defaultProps: {
+                TransitionComponent: Grow,
+                fullWidth: true,
             },
         },
     };

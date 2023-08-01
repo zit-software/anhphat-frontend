@@ -100,6 +100,7 @@ const MainLayout = () => {
 
     useEffect(() => {
         dispatch({ type: SET_MENU, opened: !matchDownMd });
+        // eslint-disable-next-line
     }, [matchDownMd]);
 
     return (
@@ -142,6 +143,7 @@ const MainLayout = () => {
                 sx={{
                     backdropFilter: 'blur(20px)',
                 }}
+                fullWidth={false}
                 open={!pin}
             >
                 <Formik
@@ -162,7 +164,7 @@ const MainLayout = () => {
                         }
                     }}
                 >
-                    {({ errors, handleChange, handleSubmit }) => (
+                    {({ errors, handleChange, handleSubmit, setFieldValue }) => (
                         <form onSubmit={handleSubmit}>
                             <DialogTitle>Mã pin</DialogTitle>
                             <DialogContent>
@@ -170,17 +172,16 @@ const MainLayout = () => {
                                 <PinInput
                                     length={6}
                                     type="numeric"
-                                    secret
                                     autoSelect
                                     focus
+                                    autoComplete="off"
                                     inputStyle={{
                                         borderRadius: 10,
                                         borderColor: errors.pin ? 'red' : '#ddd',
+                                        WebkitTextSecurity: 'disc',
                                     }}
                                     onChange={(value) => {
-                                        handleChange({
-                                            target: { name: 'pin', value },
-                                        });
+                                        setFieldValue('pin', value);
                                     }}
                                 />
 

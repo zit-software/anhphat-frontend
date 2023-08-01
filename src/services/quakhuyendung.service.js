@@ -1,8 +1,8 @@
 import request from 'utils/request';
 
 class QuakhuyendungService {
-    async getAll() {
-        return (await request.get('/qua')).data;
+    async getAll(page = 0) {
+        return (await request.get('/qua', { params: { page } })).data;
     }
 
     async create(payload) {

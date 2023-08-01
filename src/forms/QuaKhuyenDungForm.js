@@ -1,13 +1,13 @@
 import { TextField } from '@mui/material';
 import { Stack } from '@mui/system';
 import { Formik } from 'formik';
-import PropTypes from 'prop-types';
 import InputNumber from 'ui-component/input-number';
 import * as Yup from 'yup';
 
-const initialValue = {
+const _initialValue = {
     ten: '',
     diem: 0,
+    soluong: 0,
 };
 
 const validationSchema = Yup.object().shape({
@@ -16,9 +16,10 @@ const validationSchema = Yup.object().shape({
         .required('Vui lòng nhập điểm')
         .min(1, 'Điểm quy đổi phải lớn hơn 0')
         .integer('Điểm quy đổi phải là số nguyên'),
+    soluong: Yup.number(),
 });
 
-const QuaKhuyenDungForm = ({ actions, onSubmit }) => {
+const QuaKhuyenDungForm = ({ actions, initialValue = _initialValue, onSubmit }) => {
     return (
         <Formik
             initialValues={initialValue}
@@ -28,7 +29,15 @@ const QuaKhuyenDungForm = ({ actions, onSubmit }) => {
         >
             {({ values, errors, handleChange, handleSubmit }) => (
                 <form onSubmit={handleSubmit}>
-                    <Stack spacing={2}>
+                    <Stack spacing={2} py={2}>
+                        <TextField
+                            placeholder="Tự động tạo"
+                            disabled
+                            label="Mã (tự động tạo)"
+                            name="ma"
+                            value={values.ma}
+                        />
+
                         <TextField
                             placeholder="Mũ bảo hiểm"
                             label="Tên"
@@ -51,17 +60,23 @@ const QuaKhuyenDungForm = ({ actions, onSubmit }) => {
                             onChange={handleChange}
                         />
 
+                        <InputNumber
+                            placeholder="0"
+                            label="Số lượng"
+                            name="soluong"
+                            type="number"
+                            error={!!errors.soluong}
+                            helperText={errors.soluong}
+                            value={values.soluong}
+                            onChange={handleChange}
+                        />
+
                         {actions}
                     </Stack>
                 </form>
             )}
         </Formik>
     );
-};
-
-QuaKhuyenDungForm.propTypes = {
-    actions: PropTypes.node,
-    onSubmit: PropTypes.func,
 };
 
 export default QuaKhuyenDungForm;

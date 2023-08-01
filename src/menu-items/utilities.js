@@ -97,7 +97,7 @@ const utilities = {
                     id: 'qua',
                     title: 'Kho',
                     type: 'item',
-                    url: 'qua/kho',
+                    url: 'qua/qua',
                     breadcrumbs: true,
                     icon: icons.IconPackage,
                 },

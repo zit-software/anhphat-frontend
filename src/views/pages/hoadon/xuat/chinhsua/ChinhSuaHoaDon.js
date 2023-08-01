@@ -343,7 +343,7 @@ const ManualAddModal = ({ open, selecteds = [], onUpdate, onClose }) => {
 const ManualRow = ({ mathang, index, dongia, updateDongia }) => {
     useEffect(() => {
         updateDongia(mathang.giaban);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line
     }, [mathang.giaban]);
 
     return (

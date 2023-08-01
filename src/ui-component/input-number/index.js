@@ -1,7 +1,6 @@
 import { AddOutlined, RemoveOutlined } from '@mui/icons-material';
 import { IconButton, TextField } from '@mui/material';
 import { Stack } from '@mui/system';
-import { func, number, string } from 'prop-types';
 
 const InputNumber = (props) => {
     const setValue = (value) => {
@@ -17,24 +16,23 @@ const InputNumber = (props) => {
     };
 
     return (
-        <Stack direction="row" spacing={1} alignItems="start">
-            <TextField {...props} sx={{ flex: 1 }} />
+        <TextField
+            {...props}
+            InputProps={{
+                endAdornment: (
+                    <Stack direction="row" spacing={1} alignItems="center">
+                        <IconButton color="info" onClick={desrease}>
+                            <RemoveOutlined />
+                        </IconButton>
 
-            <IconButton size="large" color="info" onClick={desrease}>
-                <RemoveOutlined />
-            </IconButton>
-
-            <IconButton size="large" color="info" onClick={increase}>
-                <AddOutlined />
-            </IconButton>
-        </Stack>
+                        <IconButton color="info" onClick={increase}>
+                            <AddOutlined />
+                        </IconButton>
+                    </Stack>
+                ),
+            }}
+        />
     );
-};
-
-InputNumber.propTypes = {
-    onChange: func,
-    value: number,
-    name: string,
 };
 
 export default InputNumber;
