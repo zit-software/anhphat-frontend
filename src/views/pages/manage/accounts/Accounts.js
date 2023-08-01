@@ -156,7 +156,9 @@ const Accounts = () => {
             await usernamangeService.updateAccount(editAccount.ma, values);
             await refetch();
             handleCloseEditAccount();
-        } catch (error) {}
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     const handleCloseCreateModal = () => setShowCreateAccount(false);
@@ -168,7 +170,9 @@ const Accounts = () => {
             await usernamangeService.createAccount(values);
             await refetch();
             handleCloseCreateModal();
-        } catch (error) {}
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     const fixedAccounts = accounts || [];
@@ -223,11 +227,13 @@ const Accounts = () => {
                             getActions(props) {
                                 return [
                                     <GridActionsCellItem
+                                        key="edit"
                                         icon={<Edit />}
                                         label="Chỉnh sửa"
                                         onClick={() => setEditAccount(props.row)}
                                     />,
                                     <GridActionsCellItem
+                                        key="delete"
                                         color="error"
                                         icon={<Delete />}
                                         label="Xóa"

@@ -1,13 +1,16 @@
 // assets
 import {
-    IconTypography,
+    IconBox,
+    IconDiscount,
+    IconFileInvoice,
+    IconGift,
+    IconPackage,
     IconPalette,
     IconShadow,
+    IconTypography,
     IconWindmill,
-    IconPackage,
-    IconBox,
-    IconFileInvoice,
-    IconDiscount,
+    IconTicket,
+    IconPackgeExport,
 } from '@tabler/icons';
 
 // constant
@@ -20,6 +23,9 @@ const icons = {
     IconBox,
     IconFileInvoice,
     IconDiscount,
+    IconGift,
+    IconTicket,
+    IconPackgeExport,
 };
 
 // ==============================|| UTILITIES MENU ITEMS ||============================== //
@@ -78,6 +84,30 @@ const utilities = {
                     type: 'item',
                     url: 'hoadon/trahang',
                     breadcrumbs: true,
+                },
+            ],
+        },
+        {
+            id: 'qua',
+            title: 'Quà khuyến dùng',
+            type: 'collapse',
+            icon: icons.IconGift,
+            children: [
+                {
+                    id: 'qua',
+                    title: 'Kho',
+                    type: 'item',
+                    url: 'qua/kho',
+                    breadcrumbs: true,
+                    icon: icons.IconPackage,
+                },
+                {
+                    id: 'tang',
+                    title: 'Tặng quà',
+                    type: 'item',
+                    url: 'qua/tang',
+                    breadcrumbs: true,
+                    icon: icons.IconPackgeExport,
                 },
             ],
         },

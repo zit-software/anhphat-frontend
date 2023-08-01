@@ -21,7 +21,7 @@ import * as Yup from 'yup';
 
 // project imports
 import navigation from 'menu-items';
-import { setPin, SET_MENU } from 'store/actions';
+import { SET_MENU, setPin } from 'store/actions';
 import { drawerWidth } from 'store/constant';
 import Breadcrumbs from 'ui-component/extended/Breadcrumbs';
 import Header from './Header';
@@ -30,6 +30,7 @@ import Sidebar from './Sidebar';
 // assets
 import { IconChevronRight } from '@tabler/icons';
 import { Formik } from 'formik';
+import { Toaster } from 'react-hot-toast';
 import PinInput from 'react-pin-input';
 import AuthService from 'services/auth.service';
 import accessToken from 'utils/access-token';
@@ -99,7 +100,6 @@ const MainLayout = () => {
 
     useEffect(() => {
         dispatch({ type: SET_MENU, opened: !matchDownMd });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [matchDownMd]);
 
     return (
@@ -175,7 +175,7 @@ const MainLayout = () => {
                                     focus
                                     inputStyle={{
                                         borderRadius: 10,
-                                        borderColor: !!errors.pin ? 'red' : '#ddd',
+                                        borderColor: errors.pin ? 'red' : '#ddd',
                                     }}
                                     onChange={(value) => {
                                         handleChange({
@@ -210,6 +210,8 @@ const MainLayout = () => {
                     )}
                 </Formik>
             </Dialog>
+
+            <Toaster />
         </Box>
     );
 };
