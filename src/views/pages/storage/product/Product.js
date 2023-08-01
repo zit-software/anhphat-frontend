@@ -347,7 +347,6 @@ const Product = () => {
                                 paginationMode="server"
                                 rowCount={allMatHang.total}
                                 columnVisibilityModel={{
-                                    unpack: currentUser.laAdmin,
                                     delete: currentUser.laAdmin,
                                     gianhap: currentUser.laAdmin,
                                 }}
