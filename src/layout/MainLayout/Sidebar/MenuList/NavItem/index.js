@@ -27,7 +27,7 @@ const NavItem = ({ item, level }) => {
     const theme = useTheme();
     const dispatch = useDispatch();
     const customization = useSelector((state) => state.customization);
-    const matchesSM = useMediaQuery(theme.breakpoints.down('lg'));
+    const matchesSM = useMediaQuery(theme.breakpoints.down('sm'));
 
     const Icon = item.icon;
     const itemIcon = item?.icon ? (

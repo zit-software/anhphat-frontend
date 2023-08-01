@@ -3,6 +3,8 @@ import { lazy } from 'react';
 // project imports
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
+import KhoQua from 'views/pages/qua/qua';
+import TangQua from 'views/pages/qua/tang';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -192,6 +194,29 @@ const MainRoutes = {
                                     element: <EditKhuyenMaiTang />,
                                 },
                             ],
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            path: 'qua',
+            children: [
+                {
+                    path: 'qua',
+                    children: [
+                        {
+                            path: '',
+                            element: <KhoQua />,
+                        },
+                    ],
+                },
+                {
+                    path: 'tang',
+                    children: [
+                        {
+                            path: '',
+                            element: <TangQua />,
                         },
                     ],
                 },

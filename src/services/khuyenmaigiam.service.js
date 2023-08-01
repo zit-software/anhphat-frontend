@@ -1,4 +1,4 @@
-const { default: request } = require('utils/request');
+import request from 'utils/request';
 
 class KhuyenMaiGiam {
     async getAllKMG() {
@@ -26,7 +26,7 @@ class KhuyenMaiGiam {
     }
     async suaKMG(ma, values) {
         try {
-            await request.put(`/khuyenmaigiam/${ma}`);
+            await request.put(`/khuyenmaigiam/${ma}`, values);
         } catch (error) {
             console.log(error);
         }

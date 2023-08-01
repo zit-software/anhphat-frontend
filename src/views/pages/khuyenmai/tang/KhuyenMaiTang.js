@@ -24,8 +24,8 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { createSearchParams } from 'react-router-dom';
 import khuyenmaitangService from 'services/khuyenmaitang.service';
+import MainCard from 'ui-component/cards/MainCard';
 import * as Yup from 'yup';
-const { default: MainCard } = require('ui-component/cards/MainCard');
 
 const KhuyenMaiTang = () => {
     const navigate = useNavigate();
