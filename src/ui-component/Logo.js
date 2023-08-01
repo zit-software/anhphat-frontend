@@ -1,5 +1,5 @@
 // material-ui
-import logo from '../assets/images/logo.jpg';
+import logo from '../assets/images/logo.png';
 
 /**
  * if you want to use image instead of <svg> uncomment following.
@@ -12,7 +12,7 @@ import logo from '../assets/images/logo.jpg';
 // ==============================|| LOGO SVG ||============================== //
 
 const Logo = () => {
-    return <img src={logo} alt="Berry" width="100" />;
+    return <img src={logo} alt="Berry" width="100" style={{ margin: -25 }} />;
 };
 
 export default Logo;
