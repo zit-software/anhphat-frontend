@@ -20,6 +20,10 @@ class QuakhuyendungService {
     async getById(ma) {
         return (await request.get(`/qua/${ma}`)).data;
     }
+
+    async getAllPhieuXuatQuaKD(page = 0) {
+        return (await request.get('/qua/xuat', { params: page })).data;
+    }
 }
 
 export default new QuakhuyendungService();
