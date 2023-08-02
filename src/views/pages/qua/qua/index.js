@@ -1,4 +1,11 @@
-import { AddOutlined, DeleteOutline, EditOutlined, RefreshOutlined } from '@mui/icons-material';
+import {
+    AddOutlined,
+    DeleteOutline,
+    EditOutlined,
+    RefreshOutlined,
+    Search,
+    SearchRounded,
+} from '@mui/icons-material';
 import {
     Button,
     Dialog,
@@ -6,13 +13,18 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
+    Grid,
+    Icon,
     IconButton,
     LinearProgress,
+    TextField,
 } from '@mui/material';
 import { Stack } from '@mui/system';
 import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import QuaKhuyenDungForm from 'forms/QuaKhuyenDungForm';
+import useDelay from 'hooks/useDelay';
+import { useEffect } from 'react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useQuery } from 'react-query';
@@ -28,6 +40,9 @@ const KhoQua = () => {
 
     const [isDeleting, setIsDeleting] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
+
+    const [search, setSearch] = useState('');
+    const delayedKeyword = useDelay(search);
 
     const handleCreate = async (values) => {
         try {
@@ -72,7 +87,9 @@ const KhoQua = () => {
         data: listQua,
         isLoading: isLoadingListQua,
         refetch: refetchListQua,
-    } = useQuery(['kho-qua', page], () => quakhuyendungService.getAll(page));
+    } = useQuery(['kho-qua', page, delayedKeyword], () =>
+        quakhuyendungService.getAll({ ten: delayedKeyword }, page)
+    );
 
     return (
         <>
@@ -94,6 +111,23 @@ const KhoQua = () => {
                     </Stack>
                 }
             >
+                <Grid sx={{ marginBottom: '12px' }} container alignItems="center">
+                    <Grid xs={11} item>
+                        <TextField
+                            value={search}
+                            onChange={(event) => {
+                                setSearch(event.target.value);
+                                setPage(0);
+                            }}
+                            placeholder="Tìm kiếm quà theo tên"
+                            size="small"
+                            fullWidth
+                        ></TextField>
+                    </Grid>
+                    <Grid xs={1} justifyContent="center" container>
+                        <SearchRounded />
+                    </Grid>
+                </Grid>
                 <DataGrid
                     getRowId={(e) => e.ma}
                     rows={listQua?.data || []}
