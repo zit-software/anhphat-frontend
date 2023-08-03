@@ -7,6 +7,7 @@ import {
 import {
     Button,
     Divider,
+    LinearProgress,
     Table,
     TableBody,
     TableCell,
@@ -17,13 +18,18 @@ import {
 import { Box, Stack } from '@mui/system';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { Link, useNavigate } from 'react-router-dom';
 import MainCard from 'ui-component/cards/MainCard';
 import InputNumber from 'ui-component/input-number';
 import SelectGiftModal from './SelectGiftModal';
+import quakhuyendungService from 'services/quakhuyendung.service';
 
 const NewNhapQua = () => {
     const [ngaynhap, setNgaynhap] = useState(new Date());
+    const [isSaving, setIsSaving] = useState(false);
+
+    const navigate = useNavigate();
 
     const [isOpenSelectModal, setIsOpenSelectModal] = useState(false);
 
@@ -49,10 +55,45 @@ const NewNhapQua = () => {
         });
     };
 
-    const updateSelectedGift = (ma, payload) => {};
+    const updateSelectedGift = (ma, payload) => {
+        setSelectedGift((prev) => {
+            prev = prev.map((e) => {
+                if (e.ma === payload.ma) {
+                    return { ...payload };
+                }
+
+                return e;
+            });
+
+            return [...prev];
+        });
+    };
+
+    const deleteSelectedGift = (ma) => {
+        setSelectedGift((prev) => [...prev.filter((e) => e.ma !== ma)]);
+    };
 
     const handleOpenSelectModal = () => setIsOpenSelectModal(true);
     const handleCloseSelectModal = () => setIsOpenSelectModal(false);
+
+    const handleSubmit = async () => {
+        try {
+            setIsSaving(true);
+
+            await quakhuyendungService.createPhieuNhap({
+                ngaynhap,
+                chitiets: selectedGift,
+            });
+
+            toast.success('Nhập quà thành công');
+
+            navigate(-1);
+        } catch (error) {
+            toast.error(error.response?.data.message);
+        } finally {
+            setIsSaving(false);
+        }
+    };
 
     return (
         <>
@@ -64,13 +105,19 @@ const NewNhapQua = () => {
                             <Button startIcon={<DisabledByDefaultRounded />}>Hủy</Button>
                         </Link>
 
-                        <Button variant="contained" startIcon={<SaveOutlined />}>
+                        <Button
+                            variant="contained"
+                            startIcon={<SaveOutlined />}
+                            onClick={handleSubmit}
+                        >
                             Xác nhận
                         </Button>
                     </Stack>
                 }
             >
                 <Stack spacing={2}>
+                    {isSaving && <LinearProgress />}
+
                     <DatePicker
                         value={ngaynhap}
                         renderInput={(props) => (
@@ -92,22 +139,24 @@ const NewNhapQua = () => {
 
                     <Divider />
 
-                    <Table>
+                    <Table size="small">
                         <TableHead>
                             <TableRow>
                                 <TableCell>Mã quà</TableCell>
 
                                 <TableCell>Tên quà</TableCell>
 
-                                <TableCell>Số lượng</TableCell>
+                                <TableCell>Số lượng nhập</TableCell>
+
+                                <TableCell>Điểm quy đổi</TableCell>
 
                                 <TableCell>Xóa</TableCell>
                             </TableRow>
                         </TableHead>
 
                         <TableBody>
-                            {selectedGift.map((gift, key) => (
-                                <TableRow key={key}>
+                            {selectedGift.map((gift) => (
+                                <TableRow key={gift.ma}>
                                     <TableCell>{gift.ma}</TableCell>
                                     <TableCell>{gift.ten}</TableCell>
                                     <TableCell>
@@ -115,10 +164,26 @@ const NewNhapQua = () => {
                                             placeholder="Số lượng"
                                             label="Số lượng"
                                             value={gift.soluong}
+                                            onChange={({ target: { value } }) =>
+                                                updateSelectedGift(gift.ma, {
+                                                    ...gift,
+                                                    soluong: value,
+                                                })
+                                            }
                                         />
                                     </TableCell>
+
+                                    <TableCell>{gift.diem}</TableCell>
+
                                     <TableCell>
-                                        <Button startIcon={<DeleteOutline />}>Xóa</Button>
+                                        <Button
+                                            color="error"
+                                            variant="contained"
+                                            startIcon={<DeleteOutline />}
+                                            onClick={() => deleteSelectedGift(gift.ma)}
+                                        >
+                                            Xóa
+                                        </Button>
                                     </TableCell>
                                 </TableRow>
                             ))}
