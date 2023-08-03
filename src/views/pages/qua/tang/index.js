@@ -1,19 +1,31 @@
 import {
     CreateNewFolderOutlined,
     DeleteOutline,
-    EditOutlined,
     RefreshOutlined,
-    ViewDayOutlined,
     Visibility,
 } from '@mui/icons-material';
-import { Button, Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
+import {
+    Button,
+    Checkbox,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    FormControlLabel,
+    FormHelperText,
+    IconButton,
+} from '@mui/material';
 import { Stack } from '@mui/system';
 import { DataGrid, GridActionsCellItem, GridToolbar, viVN } from '@mui/x-data-grid';
 import MainCard from 'ui-component/cards/MainCard';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import quakhuyendungService from 'services/quakhuyendung.service';
-import { IconEye } from '@tabler/icons';
+import { Formik } from 'formik';
+import { object } from 'yup';
+import * as Yup from 'yup';
+import { useNavigate } from 'react-router';
 
 const TangQua = () => {
     const [page, setPage] = useState(0);
@@ -28,6 +40,11 @@ const TangQua = () => {
         () => quakhuyendungService.getAllPhieuXuatQuaKD(page),
         { initialData: [] }
     );
+    const navigate = useNavigate();
+
+    const navigateToCreatePhieu = () => {
+        navigate('/qua/tang/create');
+    };
     return (
         <MainCard
             title="Tặng quà"
@@ -37,7 +54,11 @@ const TangQua = () => {
                         <RefreshOutlined />
                     </IconButton>
 
-                    <Button startIcon={<CreateNewFolderOutlined />} variant="outlined">
+                    <Button
+                        startIcon={<CreateNewFolderOutlined />}
+                        variant="outlined"
+                        onClick={navigateToCreatePhieu}
+                    >
                         Thêm
                     </Button>
                 </Stack>
@@ -106,18 +127,61 @@ const TangQua = () => {
                 onClose={() => {
                     setDeleteId(null);
                 }}
+                refetch={refetch}
             />
         </MainCard>
     );
 };
 
-export default TangQua;
-
-const DeleteModal = ({ deleteId, onClose }) => {
+const DeleteModal = ({ deleteId, onClose, refetch }) => {
+    const submit = async () => {
+        try {
+            const data = await quakhuyendungService.xoaPhieuXuatQuaKD(deleteId);
+            alert(data.message);
+            refetch();
+            onClose();
+        } catch (error) {
+            alert(error?.response?.data?.message || 'Có lỗi xảy ra');
+        }
+    };
     return (
         <Dialog open={!!deleteId} onClose={onClose}>
-            <DialogTitle>Xác nhận xóa phiếu tặng quà khuyến dùng này?</DialogTitle>
-            <DialogContent>Bạn có chắc chắn muốn xóa không?</DialogContent>
+            <Formik
+                onSubmit={submit}
+                initialValues={{ accept: false }}
+                validationSchema={object().shape({
+                    accept: Yup.bool().equals([true], 'Vui lòng xác nhận để xóa hóa đơn'),
+                })}
+            >
+                {({ values, handleChange, errors, handleSubmit }) => (
+                    <form onSubmit={handleSubmit}>
+                        <DialogContent>
+                            <DialogTitle>Xác nhận xóa phiếu tặng quà khuyến dùng này?</DialogTitle>
+                            <DialogContentText>
+                                Sau khi xóa, phiếu tặng này sẽ không thể phục hồi, bạn có chắc chắn
+                                muốn xóa không
+                            </DialogContentText>
+                            <FormControlLabel
+                                onChange={handleChange}
+                                control={<Checkbox />}
+                                value={values.accept}
+                                name="accept"
+                                label="Xác nhận xóa hóa đơn này"
+                            ></FormControlLabel>
+                            <FormHelperText error>{errors.accept}</FormHelperText>
+                            <DialogActions>
+                                <Button type="submit" variant="contained">
+                                    Xóa
+                                </Button>
+                                <Button type="button" onClick={() => onClose()}>
+                                    Hủy
+                                </Button>
+                            </DialogActions>
+                        </DialogContent>
+                    </form>
+                )}
+            </Formik>
         </Dialog>
     );
 };
+export default TangQua;

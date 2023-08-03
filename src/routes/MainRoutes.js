@@ -5,6 +5,8 @@ import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 import KhoQua from 'views/pages/qua/qua';
 import TangQua from 'views/pages/qua/tang';
+import { element } from 'prop-types';
+import CreatePhieuXuatQuaKhuyenDung from 'views/pages/qua/tang/createPhieu';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -217,6 +219,10 @@ const MainRoutes = {
                         {
                             path: '',
                             element: <TangQua />,
+                        },
+                        {
+                            path: 'create',
+                            element: <CreatePhieuXuatQuaKhuyenDung />,
                         },
                     ],
                 },

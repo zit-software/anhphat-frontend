@@ -24,6 +24,9 @@ class QuakhuyendungService {
     async getAllPhieuXuatQuaKD(page = 0) {
         return (await request.get('/qua/xuat', { params: page })).data;
     }
+    async xoaPhieuXuatQuaKD(ma) {
+        return (await request.delete(`/qua/xuat/${ma}`)).data;
+    }
 }
 
 export default new QuakhuyendungService();
