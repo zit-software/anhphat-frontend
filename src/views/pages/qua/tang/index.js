@@ -15,6 +15,13 @@ import {
     FormControlLabel,
     FormHelperText,
     IconButton,
+    LinearProgress,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    Typography,
 } from '@mui/material';
 import { Stack } from '@mui/system';
 import { DataGrid, GridActionsCellItem, GridToolbar, viVN } from '@mui/x-data-grid';
@@ -26,11 +33,12 @@ import { Formik } from 'formik';
 import { object } from 'yup';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router';
+import dayjs from 'dayjs';
 
 const TangQua = () => {
     const [page, setPage] = useState(0);
     const [deleteId, setDeleteId] = useState(null);
-
+    const [viewId, setViewId] = useState(null);
     const {
         data: allPhieus,
         isLoading,
@@ -104,6 +112,7 @@ const TangQua = () => {
                                     icon={<Visibility />}
                                     key="view"
                                     label="Xem"
+                                    onClick={() => setViewId(row.ma)}
                                 />,
                                 <GridActionsCellItem
                                     icon={<DeleteOutline />}
@@ -129,7 +138,71 @@ const TangQua = () => {
                 }}
                 refetch={refetch}
             />
+            {!!viewId && (
+                <ViewPhieuModal open={!!viewId} ma={viewId} onClose={() => setViewId(null)} />
+            )}
         </MainCard>
+    );
+};
+
+const ViewPhieuModal = ({ open, onClose, ma }) => {
+    const { data: phieu, isLoading } = useQuery(['getOnePhieuXuatQuaKD', ma], () =>
+        quakhuyendungService.getOnePhieuXuatQuaKD(ma)
+    );
+    if (isLoading) return <LinearProgress />;
+    console.log(phieu);
+    return (
+        <Dialog open={open} onClose={onClose}>
+            <DialogTitle>
+                <Typography sx={{ fontStyle: 'bold', fontSize: '24px' }}>
+                    Phiếu Xuất Quà Khuyến Dùng #{ma}
+                </Typography>
+            </DialogTitle>
+            <DialogContent>
+                <Typography sx={{ fontWeight: '500', fontStyle: 'bold', fontSize: '16px' }}>
+                    Thông tin
+                </Typography>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Ngày Xuất</TableCell>
+                            <TableCell>Nhà Phân Phối</TableCell>
+                            <TableCell>Tổng Điểm</TableCell>
+                            <TableCell>Người Lập</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        <TableRow>
+                            <TableCell>{dayjs(phieu.ngayxuat).format('DD/MM/YYYY')}</TableCell>
+                            <TableCell>{phieu.npp.ten}</TableCell>
+                            <TableCell>{phieu.tongdiem}</TableCell>
+                            <TableCell>{phieu.nguoinhap.ten}</TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+                <div style={{ marginTop: '12px' }}>
+                    <Typography sx={{ fontWeight: '500', fontStyle: 'bold', fontSize: '16px' }}>
+                        Chi Tiết
+                    </Typography>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Quà</TableCell>
+                                <TableCell>Số lượng</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {(phieu.chitiets || []).map((chitiet) => (
+                                <TableRow key={chitiet.ma}>
+                                    <TableCell>{chitiet.qua.ten}</TableCell>
+                                    <TableCell>{chitiet.soluong}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
+            </DialogContent>
+        </Dialog>
     );
 };
 
