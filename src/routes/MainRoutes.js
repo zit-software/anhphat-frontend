@@ -5,6 +5,8 @@ import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 import KhoQua from 'views/pages/qua/qua';
 import TangQua from 'views/pages/qua/tang';
+import NhapQuaPage from 'views/pages/qua/nhap';
+import NewNhapQua from 'views/pages/qua/nhap/new';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -208,6 +210,19 @@ const MainRoutes = {
                         {
                             path: '',
                             element: <KhoQua />,
+                        },
+                    ],
+                },
+                {
+                    path: 'nhap',
+                    children: [
+                        {
+                            path: '',
+                            element: <NhapQuaPage />,
+                        },
+                        {
+                            path: 'new',
+                            element: <NewNhapQua />,
                         },
                     ],
                 },

@@ -3,7 +3,6 @@ import {
     DeleteOutline,
     EditOutlined,
     RefreshOutlined,
-    Search,
     SearchRounded,
 } from '@mui/icons-material';
 import {
@@ -14,7 +13,6 @@ import {
     DialogContentText,
     DialogTitle,
     Grid,
-    Icon,
     IconButton,
     LinearProgress,
     TextField,
@@ -24,7 +22,6 @@ import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import QuaKhuyenDungForm from 'forms/QuaKhuyenDungForm';
 import useDelay from 'hooks/useDelay';
-import { useEffect } from 'react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useQuery } from 'react-query';
@@ -87,7 +84,7 @@ const KhoQua = () => {
         data: listQua,
         isLoading: isLoadingListQua,
         refetch: refetchListQua,
-    } = useQuery(['kho-qua', page, delayedKeyword], () =>
+    } = useQuery(['qua', page, delayedKeyword], () =>
         quakhuyendungService.getAll({ ten: delayedKeyword }, page)
     );
 

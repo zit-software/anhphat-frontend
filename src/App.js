@@ -18,12 +18,11 @@ import AuthService from 'services/auth.service';
 import { store } from 'store';
 import { setUser } from 'store/actions';
 
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from 'react-query';
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
-const queryClient = new QueryClient();
+import queryClient from 'views/utilities/queryClient';
 
 // ==============================|| APP ||============================== //
 
