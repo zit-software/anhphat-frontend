@@ -6,7 +6,7 @@ import {
     ViewDayOutlined,
     Visibility,
 } from '@mui/icons-material';
-import { Button, IconButton } from '@mui/material';
+import { Button, Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import { Stack } from '@mui/system';
 import { DataGrid, GridActionsCellItem, GridToolbar, viVN } from '@mui/x-data-grid';
 import MainCard from 'ui-component/cards/MainCard';
@@ -17,6 +17,7 @@ import { IconEye } from '@tabler/icons';
 
 const TangQua = () => {
     const [page, setPage] = useState(0);
+    const [deleteId, setDeleteId] = useState(null);
 
     const {
         data: allPhieus,
@@ -87,20 +88,36 @@ const TangQua = () => {
                                     icon={<DeleteOutline />}
                                     key="delete"
                                     label="Xóa"
+                                    onClick={() => setDeleteId(row.ma)}
                                 />,
                             ];
                         },
                     },
                 ]}
-                rows={allPhieus.data}
-                rowCount={allPhieus.total || 0}
+                rows={allPhieus?.data || []}
+                rowCount={allPhieus?.total || 0}
                 rowsPerPageOptions={['10']}
                 pageSize={10}
                 autoHeight
                 localeText={viVN.components.MuiDataGrid.defaultProps.localeText}
             ></DataGrid>
+            <DeleteModal
+                deleteId={deleteId}
+                onClose={() => {
+                    setDeleteId(null);
+                }}
+            />
         </MainCard>
     );
 };
 
 export default TangQua;
+
+const DeleteModal = ({ deleteId, onClose }) => {
+    return (
+        <Dialog open={!!deleteId} onClose={onClose}>
+            <DialogTitle>Xác nhận xóa phiếu tặng quà khuyến dùng này?</DialogTitle>
+            <DialogContent>Bạn có chắc chắn muốn xóa không?</DialogContent>
+        </Dialog>
+    );
+};
