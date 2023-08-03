@@ -1,4 +1,4 @@
-import { AddOutlined, DeleteOutline, RefreshRounded } from '@mui/icons-material';
+import { AddOutlined, DeleteOutline, ListOutlined, RefreshRounded } from '@mui/icons-material';
 import {
     Button,
     Dialog,
@@ -15,7 +15,7 @@ import dayjs from 'dayjs';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useQuery } from 'react-query';
-import { Link } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import quakhuyendungService from 'services/quakhuyendung.service';
 import MainCard from 'ui-component/cards/MainCard';
 
@@ -80,6 +80,8 @@ const NhapQuaPage = () => {
     const [page, setPage] = useState(0);
     const [deletePayload, setDeletePayload] = useState(null);
 
+    const navigate = useNavigate();
+
     const {
         data: listPhieuNhap,
         isLoading: isLoadingPhieuNhap,
@@ -135,6 +137,13 @@ const NhapQuaPage = () => {
                             getActions({ row }) {
                                 return [
                                     <GridActionsCellItem
+                                        icon={<ListOutlined />}
+                                        key="view"
+                                        label="View"
+                                        title="View"
+                                        onClick={() => navigate(`/qua/nhap/${row.ma}`)}
+                                    />,
+                                    <GridActionsCellItem
                                         icon={<DeleteOutline />}
                                         key="delete"
                                         label="Delete"
@@ -163,6 +172,8 @@ const NhapQuaPage = () => {
                 }}
                 payload={deletePayload}
             />
+
+            <Outlet />
         </>
     );
 };
