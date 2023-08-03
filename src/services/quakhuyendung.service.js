@@ -36,6 +36,10 @@ class QuakhuyendungService {
     async deletePhieuNhapById(ma) {
         return (await request.delete(`/qua/nhap/${ma}`)).data;
     }
+
+    async getPhieuNhapById(ma) {
+        return (await request.get(`/qua/nhap/${ma}`)).data;
+    }
 }
 
 export default new QuakhuyendungService();
