@@ -40,6 +40,15 @@ class QuakhuyendungService {
     async getPhieuNhapById(ma) {
         return (await request.get(`/qua/nhap/${ma}`)).data;
     }
+    async xoaPhieuXuatQuaKD(ma) {
+        return (await request.delete(`/qua/xuat/${ma}`)).data;
+    }
+    async createPhieuXuatQuaKD(body) {
+        return await request.post('/qua/xuat', body);
+    }
+    async getOnePhieuXuatQuaKD(ma) {
+        return (await request.get(`/qua/xuat/${ma}`)).data;
+    }
 }
 
 export default new QuakhuyendungService();
