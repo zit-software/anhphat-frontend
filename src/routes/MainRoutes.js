@@ -8,6 +8,7 @@ import ChitietPhieuNhap from 'views/pages/qua/nhap/[id]';
 import NewNhapQua from 'views/pages/qua/nhap/new';
 import KhoQua from 'views/pages/qua/qua';
 import TangQua from 'views/pages/qua/tang';
+import CreatePhieuXuatQuaKhuyenDung from 'views/pages/qua/tang/createPhieu';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -239,6 +240,10 @@ const MainRoutes = {
                         {
                             path: '',
                             element: <TangQua />,
+                        },
+                        {
+                            path: 'create',
+                            element: <CreatePhieuXuatQuaKhuyenDung />,
                         },
                     ],
                 },
