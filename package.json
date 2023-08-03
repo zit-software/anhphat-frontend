@@ -1,6 +1,6 @@
 {
     "name": "anhphat-frontend",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "private": true,
     "dependencies": {
         "@emotion/cache": "^11.9.3",
@@ -46,7 +46,8 @@
         "eject": "react-scripts eject",
         "format": "prettier --write .",
         "prepare": "husky install",
-        "lint": "eslint --ext .js,.jsx,.ts,.tsx src --fix"
+        "lint": "eslint --ext .js,.jsx,.ts,.tsx src --fix",
+        "release": "standard-version"
     },
     "eslintConfig": {
         "extends": [
@@ -90,6 +91,7 @@
         "eslint-plugin-react-hooks": "4.6.0",
         "husky": "^8.0.0",
         "prettier": "^2.7.1",
-        "sass": "^1.53.0"
+        "sass": "^1.53.0",
+        "standard-version": "^9.5.0"
     }
 }
