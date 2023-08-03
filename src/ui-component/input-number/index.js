@@ -2,6 +2,9 @@ import { AddOutlined, RemoveOutlined } from '@mui/icons-material';
 import { IconButton, TextField } from '@mui/material';
 import { Stack } from '@mui/system';
 
+/**
+ * @type {import('react').FC<import('@mui/material').TextFieldProps>}
+ */
 const InputNumber = (props) => {
     const setValue = (value) => {
         props.onChange?.({ target: { name: props.name, value } });
