@@ -22,7 +22,23 @@ class QuakhuyendungService {
     }
 
     async getAllPhieuXuatQuaKD(page = 0) {
-        return (await request.get('/qua/xuat', { params: page })).data;
+        return (await request.get('/qua/xuat', { params: { page } })).data;
+    }
+
+    async createPhieuNhap(payload) {
+        return (await request.post('/qua/nhap', payload)).data;
+    }
+
+    async getAllPhieuNhap(page = 0) {
+        return (await request.get('/qua/nhap', { params: { page } })).data;
+    }
+
+    async deletePhieuNhapById(ma) {
+        return (await request.delete(`/qua/nhap/${ma}`)).data;
+    }
+
+    async getPhieuNhapById(ma) {
+        return (await request.get(`/qua/nhap/${ma}`)).data;
     }
     async xoaPhieuXuatQuaKD(ma) {
         return (await request.delete(`/qua/xuat/${ma}`)).data;
