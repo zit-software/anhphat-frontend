@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 
-const useDelay = (search) => {
+const useDelay = (search, timeout = 500) => {
     const [delayed, setDelayed] = useState();
     useEffect(() => {
         setTimeout(() => {
             setDelayed(search);
-        }, 500);
-    }, [search]);
+        }, timeout);
+    }, [search, timeout]);
     return delayed;
 };
 

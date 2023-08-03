@@ -11,6 +11,7 @@ import {
     IconWindmill,
     IconTicket,
     IconPackgeExport,
+    IconPackages,
 } from '@tabler/icons';
 
 // constant
@@ -26,6 +27,7 @@ const icons = {
     IconGift,
     IconTicket,
     IconPackgeExport,
+    IconPackages,
 };
 
 // ==============================|| UTILITIES MENU ITEMS ||============================== //
@@ -100,6 +102,14 @@ const utilities = {
                     url: 'qua/qua',
                     breadcrumbs: true,
                     icon: icons.IconPackage,
+                },
+                {
+                    id: 'nhap',
+                    title: 'Nhập',
+                    type: 'item',
+                    url: 'qua/nhap',
+                    breadcrumbs: true,
+                    icon: icons.IconPackages,
                 },
                 {
                     id: 'tang',
