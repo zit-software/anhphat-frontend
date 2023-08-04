@@ -110,7 +110,7 @@ const NewNhapQua = () => {
                             startIcon={<SaveOutlined />}
                             onClick={handleSubmit}
                         >
-                            Xác nhận
+                            Lưu
                         </Button>
                     </Stack>
                 }
