@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/zit-software/anhphat-frontend/compare/v1.0.2...v1.1.0) (2023-08-04)
+
+### Features
+
+-   home page ([2c26d50](https://github.com/zit-software/anhphat-frontend/commit/2c26d505120b17bce7624a4e5090a2d524fc3bc1))
+-   implemented phieu xuat qua khuyen dung ([d9f1dcf](https://github.com/zit-software/anhphat-frontend/commit/d9f1dcf8c1b30e1e631b1c3cca5fa3486b1af899))
+-   updating create phieu tang qua kd ([8e90e54](https://github.com/zit-software/anhphat-frontend/commit/8e90e54578ad5ea540e8e208eef4a7ef0b66deb8))
+
+### Bug Fixes
+
+-   fix minor frontend bugs and ux ([04a1fc4](https://github.com/zit-software/anhphat-frontend/commit/04a1fc4f12d3df1238ba89a4efcf7ef65b49cfe0))
+-   nhap hang ([3b6edfa](https://github.com/zit-software/anhphat-frontend/commit/3b6edfa9fd717b657f8080f12977edd67e6704ad))
+-   tra hang ([87236bc](https://github.com/zit-software/anhphat-frontend/commit/87236bc7fe31eeb72ec81d0530557ff4a9ceca57))
+
 ### [1.0.2](https://github.com/zit-software/anhphat-frontend/compare/v1.0.1...v1.0.2) (2023-08-03)
 
 ### [1.0.1](https://github.com/zit-software/anhphat-frontend/compare/v1.0.0...v1.0.1) (2023-08-03)
