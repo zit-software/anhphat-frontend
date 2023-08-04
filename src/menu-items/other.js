@@ -25,6 +25,7 @@ const other = {
             url: 'quantri/taikhoan',
             icon: icons.IconUser,
             breadcrumbs: true,
+            onlyAdmin: true,
         },
         {
             id: 'quantri-npp',

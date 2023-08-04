@@ -4,8 +4,9 @@ class NppService {
     static async them(payload) {
         return await request.post('npp', payload);
     }
-    static async layTatCa() {
-        return await request.get('npp');
+    static async layTatCa(filter) {
+        console.log(filter);
+        return await request.get('npp', { params: filter });
     }
     static async layMot(ma) {
         return await request.get(`npp/${ma}`);

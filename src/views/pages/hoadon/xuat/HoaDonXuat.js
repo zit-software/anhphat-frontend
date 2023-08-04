@@ -86,7 +86,7 @@ const CreateModal = ({ open, onClose, onSubmit }) => {
                             </FormControl>
 
                             <DatePicker
-                                value={values.ngayxuat}
+                                value={dayjs(values.ngayxuat)}
                                 inputFormat="DD/MM/YYYY"
                                 label="Ngày xuất"
                                 renderInput={(props) => (

@@ -30,7 +30,7 @@ import * as Yup from 'yup';
 const KhuyenMaiTang = () => {
     const navigate = useNavigate();
     const currentUser = useSelector((state) => state.auth.user);
-    if (!currentUser.laAdmin) navigate('/');
+    // if (!currentUser.laAdmin) navigate('/');
     const { data: allKMT, refetch } = useQuery('getAllKMT', khuyenmaitangService.getAllKMT);
     const [deleteID, setDeleteId] = useState(null);
     const handleDelete = async () => {

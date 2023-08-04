@@ -21,10 +21,10 @@ const { default: NppService } = require('services/npp.service');
 
 const SelectNhaPhanPhoi = ({ open, onClose, onSelect }) => {
     const [search, setSearch] = useState('');
-    const delayedKeyword = useDelay(search, 500);
+    const delayedKeyword = useDelay(search);
 
-    const { data: npps, isLoading } = useQuery(['getAllNpp', delayedKeyword], () =>
-        NppService.layTatCa().then((response) => response.data)
+    const { data: npps, isLoading } = useQuery(['getAllNppTangQuaKD', delayedKeyword], () =>
+        NppService.layTatCa({ ten: delayedKeyword }).then((response) => response.data)
     );
 
     return (

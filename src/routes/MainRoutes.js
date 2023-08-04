@@ -8,6 +8,7 @@ import ChitietPhieuNhap from 'views/pages/qua/nhap/[id]';
 import NewNhapQua from 'views/pages/qua/nhap/new';
 import KhoQua from 'views/pages/qua/qua';
 import TangQua from 'views/pages/qua/tang';
+import IndexPage from 'views/pages';
 import CreatePhieuXuatQuaKhuyenDung from 'views/pages/qua/tang/createPhieu';
 
 // dashboard routing
@@ -47,6 +48,10 @@ const MainRoutes = {
     path: '/',
     element: <MainLayout />,
     children: [
+        {
+            path: '',
+            element: <IndexPage />,
+        },
         {
             path: 'dashboard/default',
             element: <DashboardDefault />,

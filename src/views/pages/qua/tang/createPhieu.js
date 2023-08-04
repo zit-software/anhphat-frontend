@@ -112,6 +112,7 @@ const CreatePhieuXuatQuaKhuyenDung = () => {
                 })),
             });
             toast.success('Tạo Thành Công');
+            navigate('/qua/tang');
         } catch (error) {
             toast.error(error?.response?.data?.message || 'Có lỗi xảy ra');
         }
