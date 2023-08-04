@@ -1,8 +1,8 @@
 // assets
-import { IconDashboard, IconPackages } from '@tabler/icons';
+import { IconDashboard, IconPackages, IconHome } from '@tabler/icons';
 
 // constant
-const icons = { IconDashboard, IconPackages };
+const icons = { IconDashboard, IconPackages, IconHome };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
@@ -12,12 +12,21 @@ const dashboard = {
     type: 'group',
     children: [
         {
+            id: 'home',
+            title: 'Trang chủ',
+            type: 'item',
+            url: '/',
+            icon: icons.IconHome,
+            breadcrumbs: true,
+        },
+        {
             id: 'statistic',
             title: 'Thống Kê',
             type: 'item',
             url: 'dashboard/statistic',
             icon: icons.IconDashboard,
             breadcrumbs: true,
+            onlyAdmin: true,
         },
         {
             id: 'storage',

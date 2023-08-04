@@ -17,13 +17,8 @@ const NavGroup = ({ item }) => {
 
     // menu list collapse & items
     const items = item.children?.map((menu) => {
-        if (
-            (menu.id === 'statistic' ||
-                menu.id === 'quantri-taikhoan' ||
-                menu.id === 'quantri-khuyenmai') &&
-            !currentUser.laAdmin
-        )
-            return null;
+        if (menu.onlyAdmin && !currentUser.laAdmin) return null;
+
         switch (menu.type) {
             case 'collapse':
                 return <NavCollapse key={menu.id} menu={menu} level={1} />;
