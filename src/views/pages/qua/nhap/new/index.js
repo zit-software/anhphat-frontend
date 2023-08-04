@@ -24,6 +24,7 @@ import MainCard from 'ui-component/cards/MainCard';
 import InputNumber from 'ui-component/input-number';
 import SelectGiftModal from './SelectGiftModal';
 import quakhuyendungService from 'services/quakhuyendung.service';
+import dayjs from 'dayjs';
 
 const NewNhapQua = () => {
     const [ngaynhap, setNgaynhap] = useState(new Date());
@@ -119,7 +120,7 @@ const NewNhapQua = () => {
                     {isSaving && <LinearProgress />}
 
                     <DatePicker
-                        value={ngaynhap}
+                        value={dayjs(ngaynhap)}
                         renderInput={(props) => (
                             <TextField {...props} label="Ngày nhập" placeholder="Chọn ngày nhập" />
                         )}

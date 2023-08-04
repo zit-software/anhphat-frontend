@@ -106,7 +106,7 @@ const TaoHoaDonModal = ({ open, onClose }) => {
                                                 fullWidth
                                             />
                                         )}
-                                        value={values.ngaynhap}
+                                        value={dayjs(values.ngaynhap)}
                                         name="ngaynhap"
                                         label="Ngày nhập"
                                         onChange={(value) => {

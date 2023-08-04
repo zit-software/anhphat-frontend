@@ -1,29 +1,22 @@
 import {
     CreateNewFolderOutlined,
     DeleteOutline,
-    EditOutlined,
     RefreshOutlined,
-    ViewDayOutlined,
     Visibility,
 } from '@mui/icons-material';
 import { Button, Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import { Stack } from '@mui/system';
 import { DataGrid, GridActionsCellItem, GridToolbar, viVN } from '@mui/x-data-grid';
-import MainCard from 'ui-component/cards/MainCard';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import quakhuyendungService from 'services/quakhuyendung.service';
-import { IconEye } from '@tabler/icons';
+import MainCard from 'ui-component/cards/MainCard';
 
 const TangQua = () => {
     const [page, setPage] = useState(0);
     const [deleteId, setDeleteId] = useState(null);
 
-    const {
-        data: allPhieus,
-        isLoading,
-        refetch,
-    } = useQuery(
+    const { data: allPhieus, isLoading } = useQuery(
         ['getAllPhieuXuatQuaKD', page],
         () => quakhuyendungService.getAllPhieuXuatQuaKD(page),
         { initialData: [] }

@@ -139,7 +139,7 @@ const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
                     </TableCell>
                     <TableCell>
                         <DatePicker
-                            value={values.hsd}
+                            value={dayjs(values.hsd)}
                             inputFormat="DD/MM/YYYY"
                             renderInput={(params) => (
                                 <TextField fullWidth name="hsd" {...params} error={!!errors.hsd} />
