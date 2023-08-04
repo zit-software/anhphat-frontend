@@ -88,6 +88,7 @@ const SelectGiftModal = ({ open = false, onClose = () => {}, onSelected = () => 
                                             <TableCell>Mã quà</TableCell>
                                             <TableCell>Tên quà</TableCell>
                                             <TableCell>Điểm</TableCell>
+                                            <TableCell>Tồn kho</TableCell>
                                             <TableCell>Chọn</TableCell>
                                         </TableRow>
                                     </TableHead>
@@ -98,6 +99,7 @@ const SelectGiftModal = ({ open = false, onClose = () => {}, onSelected = () => 
                                                 <TableCell>{qua.ma}</TableCell>
                                                 <TableCell>{qua.ten}</TableCell>
                                                 <TableCell>{qua.diem}</TableCell>
+                                                <TableCell>{qua.soluong}</TableCell>
                                                 <TableCell>
                                                     <Button
                                                         onClick={({ currentTarget }) => {
