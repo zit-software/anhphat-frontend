@@ -43,6 +43,7 @@ import RowSkeleton from 'ui-component/skeletons/RowSkeleton';
 import dayjs from 'utils/dayjs';
 import formatter from 'views/utilities/formatter';
 import { useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
 
 const HangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
     const { data: products, isLoading } = useQuery(
@@ -253,6 +254,7 @@ function ChinhSuaHoaDon() {
         HoaDonNhapService.layPhieuNhap(params.ma, { chitiet })
     );
     const [saveModal, setSaveModal] = useState(null);
+    const [isSaving, setIsSaving] = useState(false);
 
     const [rows, setRows] = useState([]);
 
@@ -261,13 +263,24 @@ function ChinhSuaHoaDon() {
 
     const handleSave = async () => {
         try {
-            await HoaDonNhapService.capNhat(phieunhap.ma, saveModal);
-            await HoaDonNhapService.themSanPham(phieunhap.ma, rows);
-            await HoaDonNhapService.luu(phieunhap.ma);
+            setIsSaving(true);
+            const payload = {
+                ...saveModal,
+                chitiets: rows.map((row) => {
+                    const { ma, ..._return } = row;
+
+                    return _return;
+                }),
+            };
+
+            await HoaDonNhapService.luu(phieunhap.ma, payload);
             await refetch();
         } catch (error) {
+            toast.error(error.response?.data.message || error.message);
         } finally {
             setSaveModal(null);
+
+            setIsSaving(false);
         }
     };
 
@@ -305,6 +318,7 @@ function ChinhSuaHoaDon() {
                 </Badge>
             }
         >
+            {isSaving && <LinearProgress />}
             <Formik
                 initialValues={{
                     ...phieunhap,
@@ -488,15 +502,18 @@ function ChinhSuaHoaDon() {
                             </TableContainer>
 
                             <Stack direction="row" spacing={2}>
-                                <Button
-                                    variant="contained"
-                                    type="submit"
-                                    startIcon={<IconFile />}
-                                    disabled={phieunhap.daluu}
-                                    onClick={handleSubmit}
-                                >
-                                    Lưu
-                                </Button>
+                                {!phieunhap.daluu && (
+                                    <Button
+                                        variant="contained"
+                                        type="submit"
+                                        startIcon={<IconFile />}
+                                        disabled={isSaving}
+                                        onClick={handleSubmit}
+                                    >
+                                        Lưu
+                                    </Button>
+                                )}
+
                                 <Button
                                     type="button"
                                     startIcon={<IconX />}
