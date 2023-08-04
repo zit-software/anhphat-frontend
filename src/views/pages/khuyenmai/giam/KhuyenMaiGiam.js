@@ -53,7 +53,7 @@ const UpdateModal = ({ value, open, onClose, onSubmit }) => {
 const KhuyenMaiGiam = () => {
     const currentUser = useSelector((state) => state.auth.user);
     const navigate = useNavigate();
-    if (!currentUser.laAdmin) navigate('/');
+    // if (!currentUser.laAdmin) navigate('/');
     let { data, isLoading, refetch } = useQuery('allKMG', () => khuyenmaigiamService.getAllKMG());
     data = data || [];
     const columns = [
