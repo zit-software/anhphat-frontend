@@ -20,7 +20,7 @@
         "axios": "^1.2.2",
         "caniuse-lite": "^1.0.30001519",
         "date-fns": "^2.29.3",
-        "dayjs": "^1.11.7",
+        "dayjs": "^1.11.9",
         "formik": "^2.2.9",
         "framer-motion": "^6.3.16",
         "material-ui-popup-state": "^4.0.1",
