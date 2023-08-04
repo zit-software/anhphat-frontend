@@ -98,6 +98,7 @@ export default function componentStyleOverrides(theme) {
                         color: theme.darkTextSecondary,
                         fontSize: '0.875rem',
                     },
+                    minWidth: '100px',
                 },
             },
         },
