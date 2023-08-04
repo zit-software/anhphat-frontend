@@ -32,8 +32,8 @@ class HoaDonNhapService {
         return await request.put(`nhaphang/phieunhap/${ma}`, payload);
     }
 
-    static async luu(ma) {
-        return await request.put(`nhaphang/phieunhap/${ma}/luu`);
+    static async luu(ma, payload) {
+        return await request.put(`nhaphang/phieunhap/${ma}/luu`, payload);
     }
 
     static async xoa(ma) {

@@ -1,6 +1,5 @@
 import { Box } from '@mui/system';
 import { DataGrid, GridToolbar, viVN } from '@mui/x-data-grid';
-import { useState } from 'react';
 import { useQuery } from 'react-query';
 import productcategoryservice from 'services/productcategory.service';
 import MainCard from 'ui-component/cards/MainCard';

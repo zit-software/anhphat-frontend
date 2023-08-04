@@ -125,7 +125,7 @@ const Dashboard = () => {
                     <Grid container spacing={1}>
                         <Grid item>
                             <DatePicker
-                                value={ngaybd}
+                                value={dayjs(ngaybd)}
                                 onChange={({ $d }) => setNgaybd($d)}
                                 inputFormat="DD/MM/YYYY"
                                 label="Từ ngày"
@@ -136,7 +136,7 @@ const Dashboard = () => {
 
                         <Grid item>
                             <DatePicker
-                                value={ngaykt}
+                                value={dayjs(ngaykt)}
                                 onChange={({ $d }) => setNgaykt($d)}
                                 inputFormat="DD/MM/YYYY"
                                 label="Đến ngày"
