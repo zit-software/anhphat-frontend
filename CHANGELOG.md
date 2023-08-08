@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/zit-software/anhphat-frontend/compare/v1.2.0...v1.3.0) (2023-08-08)
+
+### Features
+
+-   repaire button ([9bf71e1](https://github.com/zit-software/anhphat-frontend/commit/9bf71e1f3f7e00b8eabf24b43eece330519b5d28))
+
+### Bug Fixes
+
+-   fixed error with currentDate on create phieu ([0398bd2](https://github.com/zit-software/anhphat-frontend/commit/0398bd209d5c3ed1cdf7c887edd96641b2b8050a))
+
 ## [1.2.0](https://github.com/zit-software/anhphat-frontend/compare/v1.1.1...v1.2.0) (2023-08-08)
 
 ### Features
