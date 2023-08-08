@@ -13,7 +13,7 @@ import { IconTrendingDown, IconTrendingUp, IconWallet } from '@tabler/icons';
 import formatter from 'views/utilities/formatter';
 
 const CardWrapper = styled(MainCard)(({ theme }) => ({
-    backgroundColor: theme.palette.primary.dark,
+    backgroundColor: '#DAA520',
     color: '#fff',
     overflow: 'hidden',
     position: 'relative',
@@ -22,7 +22,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
         position: 'absolute',
         width: 210,
         height: 210,
-        background: theme.palette.primary[800],
+        background: '#F0E68C',
         borderRadius: '50%',
         top: -85,
         right: -95,
@@ -36,7 +36,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
         position: 'absolute',
         width: 210,
         height: 210,
-        background: theme.palette.primary[800],
+        background: '#F0E68C',
         borderRadius: '50%',
         top: -125,
         right: -15,
@@ -90,7 +90,7 @@ const DoanhThuCard = ({ isLoading, doanhthu = 0 }) => {
                                             color: '#fff',
                                         }}
                                     >
-                                        Doanh thu
+                                        Tiền lãi
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -105,7 +105,7 @@ const DoanhThuCard = ({ isLoading, doanhthu = 0 }) => {
                                                 ...theme.typography.largeAvatar,
                                                 backgroundColor: '#fff',
                                                 mt: 1,
-                                                color: theme.palette.primary.dark,
+                                                color: '#DAA520',
                                             }}
                                         >
                                             <IconWallet />
