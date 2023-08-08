@@ -19,6 +19,7 @@ import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useNavigate, useParams } from 'react-router';
 import quakhuyendungService from 'services/quakhuyendung.service';
+import formatter from 'views/utilities/formatter';
 
 const ChitietPhieuNhap = () => {
     const { id } = useParams();
@@ -38,7 +39,7 @@ const ChitietPhieuNhap = () => {
     return (
         <>
             <Drawer open anchor="right" onClose={handleClose}>
-                <Stack spacing={1} p={2} sx={{ width: 700, maxWidth: '100%' }}>
+                <Stack spacing={1} p={2} sx={{ width: 900, maxWidth: '100%' }}>
                     <Typography variant="h3" fontWeight={900}>
                         Thông tin nhập quà
                     </Typography>
@@ -82,6 +83,8 @@ const ChitietPhieuNhap = () => {
                                     <TableCell>Mã</TableCell>
                                     <TableCell>Tên</TableCell>
                                     <TableCell>Số lượng</TableCell>
+                                    <TableCell>Giá nhập</TableCell>
+                                    <TableCell>Thành tiền</TableCell>
                                     <TableCell>Chi tiết</TableCell>
                                 </TableHead>
 
@@ -92,6 +95,10 @@ const ChitietPhieuNhap = () => {
                                             <TableCell>{ct.qua.ma}</TableCell>
                                             <TableCell>{ct.qua.ten}</TableCell>
                                             <TableCell>{ct.soluong}</TableCell>
+                                            <TableCell>{formatter.format(ct.gia)}</TableCell>
+                                            <TableCell>
+                                                {formatter.format(ct.gia * ct.soluong)}
+                                            </TableCell>
                                             <TableCell>
                                                 <IconButton
                                                     color="primary"
@@ -106,7 +113,11 @@ const ChitietPhieuNhap = () => {
                                     <TableRow>
                                         <TableCell colSpan={3}>Tổng cộng</TableCell>
 
-                                        <TableCell colSpan={2}>{phieunhap.tongsl}</TableCell>
+                                        <TableCell colSpan={1}>{phieunhap.tongsl}</TableCell>
+                                        <TableCell colSpan={2}>
+                                            {formatter.format(phieunhap.tongtien)}
+                                        </TableCell>
+                                        <TableCell colSpan={1}></TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>

@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import dayjs from 'dayjs';
 import React from 'react';
+import formatter from 'views/utilities/formatter';
 
 /**
  * @type {import('react').FC<{
@@ -37,6 +38,7 @@ const GiftDetailsModal = ({ open, payload, onClose }) => {
                             <TableCell>Mã</TableCell>
                             <TableCell>Tên</TableCell>
                             <TableCell>Điểm</TableCell>
+                            <TableCell>Giá nhập</TableCell>
                             <TableCell>Tồn kho</TableCell>
                             <TableCell>Tạo vào</TableCell>
                             <TableCell>Cập nhật vào</TableCell>
@@ -48,6 +50,7 @@ const GiftDetailsModal = ({ open, payload, onClose }) => {
                             <TableCell>{payload.ma}</TableCell>
                             <TableCell>{payload.ten}</TableCell>
                             <TableCell>{payload.diem}</TableCell>
+                            <TableCell>{formatter.format(payload.gia)}</TableCell>
                             <TableCell>{payload.soluong}</TableCell>
                             <TableCell>
                                 {dayjs(payload.createdAt).format('DD/MM/YYYY, HH:mm:ss')}

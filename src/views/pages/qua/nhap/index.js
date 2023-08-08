@@ -18,6 +18,7 @@ import { useQuery } from 'react-query';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import quakhuyendungService from 'services/quakhuyendung.service';
 import MainCard from 'ui-component/cards/MainCard';
+import formatter from 'views/utilities/formatter';
 
 const DeleteModal = ({ payload, open, onClose }) => {
     const [isDeleting, setIsDeleting] = useState(false);
@@ -129,6 +130,17 @@ const NhapQuaPage = () => {
                             flex: 2,
                             renderCell({ value }) {
                                 return `${value.ten} (${value.ma})`;
+                            },
+                        },
+                        {
+                            field: 'tongsl',
+                            headerName: 'Tổng số lượng',
+                        },
+                        {
+                            field: 'tongtien',
+                            headerName: 'Tổng tiền',
+                            renderCell({ value }) {
+                                return formatter.format(value);
                             },
                         },
                         {
