@@ -13,7 +13,7 @@ import { IconPigMoney } from '@tabler/icons';
 import formatter from 'views/utilities/formatter';
 
 const CardWrapper = styled(MainCard)(({ theme }) => ({
-    backgroundColor: theme.palette.success.dark,
+    backgroundColor: theme.palette.warning.dark,
     color: '#fff',
     overflow: 'hidden',
     position: 'relative',
@@ -22,7 +22,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
         position: 'absolute',
         width: 210,
         height: 210,
-        background: theme.palette.success.main,
+        background: theme.palette.warning.main,
         borderRadius: '50%',
         top: -85,
         right: -95,
@@ -36,7 +36,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
         position: 'absolute',
         width: 210,
         height: 210,
-        background: theme.palette.success.main,
+        background: theme.palette.warning.main,
         borderRadius: '50%',
         top: -125,
         right: -15,
@@ -85,7 +85,7 @@ const ThuCard = ({ isLoading, tongthu = 0 }) => {
                                             color: '#fff',
                                         }}
                                     >
-                                        Tổng thu
+                                        Doanh thu
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -100,7 +100,7 @@ const ThuCard = ({ isLoading, tongthu = 0 }) => {
                                                 ...theme.typography.largeAvatar,
                                                 backgroundColor: '#fff',
                                                 mt: 1,
-                                                color: theme.palette.success.dark,
+                                                color: theme.palette.warning.main,
                                             }}
                                         >
                                             <IconPigMoney />
