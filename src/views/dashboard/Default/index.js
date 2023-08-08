@@ -1,6 +1,7 @@
 // material-ui
 
 import {
+    Button,
     Grid,
     LinearProgress,
     MenuItem,
@@ -44,6 +45,8 @@ import formatter from 'views/utilities/formatter';
 import ChiCard from './ChiCard';
 import DoanhThuCard from './DoanhThuCard';
 import ThuCard from './ThuCard';
+import RepairModal from './RepairModal';
+import { BugReportOutlined } from '@mui/icons-material';
 
 // project imports
 
@@ -52,6 +55,16 @@ import ThuCard from './ThuCard';
 const Dashboard = () => {
     const currentUser = useSelector((state) => state.auth.user);
     const navigate = useNavigate();
+    const [isOpenRepairModal, setIsOpenRepairModal] = useState(false);
+
+    const handleOpenRepairModal = () => {
+        setIsOpenRepairModal(true);
+    };
+
+    const handleCloseRepairModal = () => {
+        setIsOpenRepairModal(false);
+    };
+
     if (!currentUser.laAdmin) navigate('/');
     const { data: allTinhs, isLoading: isLoadingAllTinh } = useQuery(['allTinh'], () =>
         ThongKeService.laytatcatinh()
@@ -119,261 +132,278 @@ const Dashboard = () => {
 
     if (isLoadingAllTinh) return <LinearProgress />;
     return (
-        <Grid container spacing={2}>
-            <Grid item sm={12} lg={8} xl={9}>
-                <MainCard title="Thống kê thu chi">
-                    <Grid container spacing={1}>
-                        <Grid item>
-                            <DatePicker
-                                value={dayjs(ngaybd)}
-                                onChange={({ $d }) => setNgaybd($d)}
-                                inputFormat="DD/MM/YYYY"
-                                label="Từ ngày"
-                                placeholder="Ngày bắt đầu"
-                                renderInput={(props) => <TextField {...props} />}
-                            />
-                        </Grid>
-
-                        <Grid item>
-                            <DatePicker
-                                value={dayjs(ngaykt)}
-                                onChange={({ $d }) => setNgaykt($d)}
-                                inputFormat="DD/MM/YYYY"
-                                label="Đến ngày"
-                                placeholder="Ngày kết thúc"
-                                renderInput={(props) => <TextField {...props} />}
-                            />
-                        </Grid>
-
-                        <Grid item>
-                            <Select
-                                defaultValue="thisYear"
-                                onChange={(event) => {
-                                    const value = event.target.value;
-
-                                    const now = new Date();
-
-                                    switch (value) {
-                                        case 'now':
-                                            setNgaybd(startOfDay(now));
-                                            setNgaykt(endOfDay(now));
-                                            break;
-
-                                        case 'thisWeek':
-                                            setNgaybd(startOfWeek(now));
-                                            setNgaykt(endOfWeek(now));
-                                            break;
-
-                                        case 'thisMonth':
-                                            setNgaybd(startOfMonth(now));
-                                            setNgaykt(endOfMonth(now));
-                                            break;
-
-                                        case 'thisYear':
-                                            setNgaybd(startOfYear(now));
-                                            setNgaykt(endOfYear(now));
-                                            break;
-
-                                        case 'lastYear':
-                                            setNgaybd(startOfYear(subYears(now, 1)));
-                                            setNgaykt(endOfYear(subYears(now, 1)));
-                                            break;
-
-                                        default:
-                                            throw new Error('Invalid option: ' + value);
-                                    }
-                                }}
+        <>
+            <Grid container spacing={2}>
+                <Grid item sm={12} lg={8} xl={9}>
+                    <MainCard
+                        title="Thống kê thu chi"
+                        secondary={
+                            <Button
+                                variant="contained"
+                                startIcon={<BugReportOutlined />}
+                                onClick={handleOpenRepairModal}
                             >
-                                <MenuItem value="now">Hôm nay</MenuItem>
-                                <MenuItem value="thisWeek">Tuần này</MenuItem>
-                                <MenuItem value="thisMonth">Tháng này</MenuItem>
-                                <MenuItem value="thisYear">Năm nay</MenuItem>
-                                <MenuItem value="lastYear">Năm trước</MenuItem>
-                            </Select>
+                                Sửa lỗi thống kê
+                            </Button>
+                        }
+                    >
+                        <Grid container spacing={1}>
+                            <Grid item>
+                                <DatePicker
+                                    value={dayjs(ngaybd)}
+                                    onChange={({ $d }) => setNgaybd($d)}
+                                    inputFormat="DD/MM/YYYY"
+                                    label="Từ ngày"
+                                    placeholder="Ngày bắt đầu"
+                                    renderInput={(props) => <TextField {...props} />}
+                                />
+                            </Grid>
+
+                            <Grid item>
+                                <DatePicker
+                                    value={dayjs(ngaykt)}
+                                    onChange={({ $d }) => setNgaykt($d)}
+                                    inputFormat="DD/MM/YYYY"
+                                    label="Đến ngày"
+                                    placeholder="Ngày kết thúc"
+                                    renderInput={(props) => <TextField {...props} />}
+                                />
+                            </Grid>
+
+                            <Grid item>
+                                <Select
+                                    defaultValue="thisYear"
+                                    onChange={(event) => {
+                                        const value = event.target.value;
+
+                                        const now = new Date();
+
+                                        switch (value) {
+                                            case 'now':
+                                                setNgaybd(startOfDay(now));
+                                                setNgaykt(endOfDay(now));
+                                                break;
+
+                                            case 'thisWeek':
+                                                setNgaybd(startOfWeek(now));
+                                                setNgaykt(endOfWeek(now));
+                                                break;
+
+                                            case 'thisMonth':
+                                                setNgaybd(startOfMonth(now));
+                                                setNgaykt(endOfMonth(now));
+                                                break;
+
+                                            case 'thisYear':
+                                                setNgaybd(startOfYear(now));
+                                                setNgaykt(endOfYear(now));
+                                                break;
+
+                                            case 'lastYear':
+                                                setNgaybd(startOfYear(subYears(now, 1)));
+                                                setNgaykt(endOfYear(subYears(now, 1)));
+                                                break;
+
+                                            default:
+                                                throw new Error('Invalid option: ' + value);
+                                        }
+                                    }}
+                                >
+                                    <MenuItem value="now">Hôm nay</MenuItem>
+                                    <MenuItem value="thisWeek">Tuần này</MenuItem>
+                                    <MenuItem value="thisMonth">Tháng này</MenuItem>
+                                    <MenuItem value="thisYear">Năm nay</MenuItem>
+                                    <MenuItem value="lastYear">Năm trước</MenuItem>
+                                </Select>
+                            </Grid>
                         </Grid>
-                    </Grid>
 
-                    <ReactApexChart
-                        options={{
-                            noData: {
-                                text: 'Chưa có dữ liệu',
-                            },
-                            dataLabels: {
-                                enabled: false,
-                            },
-
-                            stroke: {
-                                width: 2,
-                                curve: 'smooth',
-                            },
-                            xaxis: {
-                                categories: thongkeTheoNgay.map((e) => e.ngay),
-                                labels: {
-                                    formatter(value) {
-                                        return dayjs(value).format('HH:MM, DD/MM/YYYY');
-                                    },
-                                    show: false,
+                        <ReactApexChart
+                            options={{
+                                noData: {
+                                    text: 'Chưa có dữ liệu',
                                 },
-                            },
-                            yaxis: {
-                                labels: {
-                                    formatter(value) {
-                                        return formatter.format(value);
+                                dataLabels: {
+                                    enabled: false,
+                                },
+
+                                stroke: {
+                                    width: 2,
+                                    curve: 'smooth',
+                                },
+                                xaxis: {
+                                    categories: thongkeTheoNgay.map((e) => e.ngay),
+                                    labels: {
+                                        formatter(value) {
+                                            return dayjs(value).format('HH:MM, DD/MM/YYYY');
+                                        },
+                                        show: false,
                                     },
                                 },
-                            },
-                        }}
-                        series={[
-                            {
-                                name: 'Thu',
-                                data: thongkeTheoNgay.map((e) => e.thu || 0),
-                                color: '#00d950',
-                            },
-                            {
-                                name: 'Chi',
-                                data: thongkeTheoNgay.map((e) => e.chi || 0),
-                                color: '#e00026',
-                            },
-                            {
-                                name: 'Doanh thu',
-                                data: thongkeTheoNgay.map((e) => e.conlai || 0),
-                                color: '#007be6',
-                            },
-                        ]}
-                        type="line"
-                        height={350}
-                    />
-                </MainCard>
-            </Grid>
-
-            <Grid item sm={12} lg={4} xl={3}>
-                <Stack spacing={2}>
-                    <ThuCard tongthu={thongke?.tongthu} />
-                    <ChiCard tongchi={thongke?.tongchi} />
-                    <DoanhThuCard doanhthu={thongke?.doanhthu} />
-                </Stack>
-            </Grid>
-
-            {currentTinh && (
-                <Grid item xs={12}>
-                    <MainCard title="Thống kê theo tỉnh">
-                        {isLoadingAllTinh || isLoadingThongKeTinh ? (
-                            <LinearProgress />
-                        ) : (
-                            <TableContainer>
-                                <Grid container justifyContent="flex-end">
-                                    <Tabs
-                                        onChange={(e, value) => setCurrentTinh(value)}
-                                        value={currentTinh}
-                                        aria-label="basic tabs example"
-                                    >
-                                        {allTinhs.map((tinh) => (
-                                            <Tab
-                                                label={ProvinceService.findByCode(tinh).name}
-                                                key={tinh}
-                                                value={tinh}
-                                            ></Tab>
-                                        ))}
-                                    </Tabs>
-                                </Grid>
-                                <Table>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>Loại Hàng</TableCell>
-                                            {thongkeTinh.npp.map((npp) => (
-                                                <TableCell key={npp.ma}>{npp.ten}</TableCell>
-                                            ))}
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {thongkeTinhRows.map((thongke, index) => {
-                                            return (
-                                                <TableRow key={index}>
-                                                    {thongke.map((col, index) => {
-                                                        if (index === 0)
-                                                            return (
-                                                                <TableCell key={index}>
-                                                                    {col.ten}
-                                                                </TableCell>
-                                                            );
-                                                        return (
-                                                            <TableCell key={index}>{col}</TableCell>
-                                                        );
-                                                    })}
-                                                </TableRow>
-                                            );
-                                        })}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        )}
+                                yaxis: {
+                                    labels: {
+                                        formatter(value) {
+                                            return formatter.format(value);
+                                        },
+                                    },
+                                },
+                            }}
+                            series={[
+                                {
+                                    name: 'Thu',
+                                    data: thongkeTheoNgay.map((e) => e.thu || 0),
+                                    color: '#00d950',
+                                },
+                                {
+                                    name: 'Chi',
+                                    data: thongkeTheoNgay.map((e) => e.chi || 0),
+                                    color: '#e00026',
+                                },
+                                {
+                                    name: 'Doanh thu',
+                                    data: thongkeTheoNgay.map((e) => e.conlai || 0),
+                                    color: '#007be6',
+                                },
+                            ]}
+                            type="line"
+                            height={350}
+                        />
                     </MainCard>
                 </Grid>
-            )}
 
-            <Grid item xs={12}>
-                <MainCard title="Thống kê hàng nhập">
-                    <ReactApexChart
-                        options={{
-                            chart: {
-                                type: 'bar',
-                            },
-                            dataLabels: {
-                                enabled: false,
-                            },
-                            xaxis: {
-                                categories: fixedThongkenhap.map((e) => e.loaihang.ten),
-                            },
-                            plotOptions: {
-                                bar: {
-                                    distributed: true,
+                <Grid item sm={12} lg={4} xl={3}>
+                    <Stack spacing={2}>
+                        <ThuCard tongthu={thongke?.tongthu} />
+                        <ChiCard tongchi={thongke?.tongchi} />
+                        <DoanhThuCard doanhthu={thongke?.doanhthu} />
+                    </Stack>
+                </Grid>
+
+                {currentTinh && (
+                    <Grid item xs={12}>
+                        <MainCard title="Thống kê theo tỉnh">
+                            {isLoadingAllTinh || isLoadingThongKeTinh ? (
+                                <LinearProgress />
+                            ) : (
+                                <TableContainer>
+                                    <Grid container justifyContent="flex-end">
+                                        <Tabs
+                                            onChange={(e, value) => setCurrentTinh(value)}
+                                            value={currentTinh}
+                                            aria-label="basic tabs example"
+                                        >
+                                            {allTinhs.map((tinh) => (
+                                                <Tab
+                                                    label={ProvinceService.findByCode(tinh).name}
+                                                    key={tinh}
+                                                    value={tinh}
+                                                ></Tab>
+                                            ))}
+                                        </Tabs>
+                                    </Grid>
+                                    <Table>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell>Loại Hàng</TableCell>
+                                                {thongkeTinh.npp.map((npp) => (
+                                                    <TableCell key={npp.ma}>{npp.ten}</TableCell>
+                                                ))}
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {thongkeTinhRows.map((thongke, index) => {
+                                                return (
+                                                    <TableRow key={index}>
+                                                        {thongke.map((col, index) => {
+                                                            if (index === 0)
+                                                                return (
+                                                                    <TableCell key={index}>
+                                                                        {col.ten}
+                                                                    </TableCell>
+                                                                );
+                                                            return (
+                                                                <TableCell key={index}>
+                                                                    {col}
+                                                                </TableCell>
+                                                            );
+                                                        })}
+                                                    </TableRow>
+                                                );
+                                            })}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            )}
+                        </MainCard>
+                    </Grid>
+                )}
+
+                <Grid item xs={12}>
+                    <MainCard title="Thống kê hàng nhập">
+                        <ReactApexChart
+                            options={{
+                                chart: {
+                                    type: 'bar',
                                 },
-                            },
-                        }}
-                        type="bar"
-                        series={[
-                            {
-                                data: fixedThongkenhap.map((e) => e.soluong),
-                                name: 'Số lượng',
-                            },
-                        ]}
-                        height={350}
-                    />
-                </MainCard>
+                                dataLabels: {
+                                    enabled: false,
+                                },
+                                xaxis: {
+                                    categories: fixedThongkenhap.map((e) => e.loaihang.ten),
+                                },
+                                plotOptions: {
+                                    bar: {
+                                        distributed: true,
+                                    },
+                                },
+                            }}
+                            type="bar"
+                            series={[
+                                {
+                                    data: fixedThongkenhap.map((e) => e.soluong),
+                                    name: 'Số lượng',
+                                },
+                            ]}
+                            height={350}
+                        />
+                    </MainCard>
+                </Grid>
+
+                <Grid item xs={12}>
+                    <MainCard title="Thống kê hàng xuất">
+                        <ReactApexChart
+                            options={{
+                                chart: {
+                                    type: 'bar',
+                                    height: 350,
+                                },
+                                dataLabels: {
+                                    enabled: false,
+                                },
+                                xaxis: {
+                                    categories: fixedThongkeban.map((e) => e.loaihang.ten),
+                                },
+                                plotOptions: {
+                                    bar: {
+                                        distributed: true,
+                                    },
+                                },
+                            }}
+                            type="bar"
+                            series={[
+                                {
+                                    data: fixedThongkeban.map((e) => e.soluong),
+                                    name: 'Số lượng',
+                                },
+                            ]}
+                            height={350}
+                        />
+                    </MainCard>
+                </Grid>
             </Grid>
 
-            <Grid item xs={12}>
-                <MainCard title="Thống kê hàng xuất">
-                    <ReactApexChart
-                        options={{
-                            chart: {
-                                type: 'bar',
-                                height: 350,
-                            },
-                            dataLabels: {
-                                enabled: false,
-                            },
-                            xaxis: {
-                                categories: fixedThongkeban.map((e) => e.loaihang.ten),
-                            },
-                            plotOptions: {
-                                bar: {
-                                    distributed: true,
-                                },
-                            },
-                        }}
-                        type="bar"
-                        series={[
-                            {
-                                data: fixedThongkeban.map((e) => e.soluong),
-                                name: 'Số lượng',
-                            },
-                        ]}
-                        height={350}
-                    />
-                </MainCard>
-            </Grid>
-        </Grid>
+            <RepairModal open={isOpenRepairModal} onClose={handleCloseRepairModal} />
+        </>
     );
 };
 
