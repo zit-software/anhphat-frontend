@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/zit-software/anhphat-frontend/compare/v1.1.1...v1.2.0) (2023-08-08)
+
+### Features
+
+-   add docker-compose ([1e62709](https://github.com/zit-software/anhphat-frontend/commit/1e627091e41d1da88db9d91d3db3b125d5c212fe))
+-   colors ([75434c6](https://github.com/zit-software/anhphat-frontend/commit/75434c6db3d56f0f76b0335e2877dd22fea79620))
+
 ### [1.1.1](https://github.com/zit-software/anhphat-frontend/compare/v1.1.0...v1.1.1) (2023-08-05)
 
 ## [1.1.0](https://github.com/zit-software/anhphat-frontend/compare/v1.0.2...v1.1.0) (2023-08-04)
