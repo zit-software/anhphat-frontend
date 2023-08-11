@@ -38,7 +38,7 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
-import { Stack } from '@mui/system';
+import { Stack, width } from '@mui/system';
 import { DataGrid, GridActionsCellItem, GridToolbar, viVN } from '@mui/x-data-grid';
 import { IconX } from '@tabler/icons';
 import dayjs from 'dayjs';
@@ -256,15 +256,40 @@ const AutoHangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
 };
 
 const ManualAddModal = ({ open, selecteds = [], onUpdate, onClose }) => {
-    const { data: mathang } = useQuery(['mathang'], productcategoryservice.getAllMatHang);
+    const [page, setPage] = useState(0);
+    const [selectedsState, setSelectedState] = useState(selecteds);
+    const [pageRowsInfo, setPageRowsInfo] = useState({});
 
+    const { data: mathang } = useQuery(['mathang', page], () =>
+        productcategoryservice.getAllMatHang({ page })
+    );
     const fixedMathang = mathang || {
         data: [],
         total: 0,
     };
 
+    useEffect(() => {
+        const updatePageRowsInfo = () => {
+            const newPageRowsInfo = { ...pageRowsInfo };
+            for (const mh of fixedMathang.data) {
+                if (newPageRowsInfo[mh.ma] != null) return;
+                newPageRowsInfo[mh.ma] = mh;
+            }
+            setPageRowsInfo(newPageRowsInfo);
+        };
+        updatePageRowsInfo();
+    }, [fixedMathang]);
+
+    const onPageChange = (page) => {
+        setPage(page);
+    };
+    const save = () => {
+        onUpdate(selectedsState.map((selected) => pageRowsInfo[selected]));
+        onClose();
+    };
+
     return (
-        <Dialog fullWidth open={open} onClose={onClose}>
+        <Dialog fullScreen open={open} onClose={onClose}>
             <DialogTitle>Thêm mặt hàng</DialogTitle>
             <DialogContent>
                 <DataGrid
@@ -326,13 +351,21 @@ const ManualAddModal = ({ open, selecteds = [], onUpdate, onClose }) => {
                     }}
                     localeText={viVN.components.MuiDataGrid.defaultProps.localeText}
                     checkboxSelection
-                    selectionModel={selecteds}
-                    onSelectionModelChange={onUpdate}
+                    selectionModel={selectedsState}
+                    onSelectionModelChange={(selections) => {
+                        setSelectedState(selections);
+                    }}
+                    keepNonExistentRowsSelected
+                    paginationMode="server"
+                    page={page}
+                    pageSize={15}
+                    onPageChange={onPageChange}
+                    rowCount={mathang?.total || 0}
                 />
             </DialogContent>
 
             <DialogActions>
-                <Button variant="contained" onClick={onClose}>
+                <Button variant="text" onClick={save}>
                     Lưu
                 </Button>
             </DialogActions>
@@ -578,8 +611,8 @@ function ChinhSuaHoaDon() {
             await HoaDonXuatService.luuPhieuXuat(params.ma, {
                 auto: autoRows,
                 manual: selectedManual.map((e) => ({
-                    mh: e,
-                    giaban: manualDongia[e],
+                    mh: e.ma,
+                    giaban: manualDongia[e.ma],
                 })),
                 kmg,
                 kmt,
@@ -770,21 +803,19 @@ function ChinhSuaHoaDon() {
                                 <TableCell colSpan={10}>Các mặt hàng thêm thủ công</TableCell>
                             </TableRow>
 
-                            {fixedMathang.data
-                                .filter((e) => selectedManual.includes(e.ma))
-                                .map((mathang, index) => (
-                                    <ManualRow
-                                        key={mathang.ma}
-                                        index={index}
-                                        mathang={mathang}
-                                        updateDongia={(dongia) => {
-                                            setManualDongia((prev) => {
-                                                return { ...prev, [mathang.ma]: dongia };
-                                            });
-                                        }}
-                                        dongia={manualDongia[mathang.ma]}
-                                    />
-                                ))}
+                            {selectedManual.map((mathang, index) => (
+                                <ManualRow
+                                    key={mathang.ma}
+                                    index={index}
+                                    mathang={mathang}
+                                    updateDongia={(dongia) => {
+                                        setManualDongia((prev) => {
+                                            return { ...prev, [mathang.ma]: dongia };
+                                        });
+                                    }}
+                                    dongia={manualDongia[mathang.ma]}
+                                />
+                            ))}
 
                             <TableRow>
                                 <TableCell colSpan={10}>

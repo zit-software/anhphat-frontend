@@ -53,7 +53,7 @@ const productcategoryservice = {
     async xoaQuyCach(ma) {
         await request.delete(`/quycach/${ma}`);
     },
-    async getAllMatHang({ queryKey: [, params] }) {
+    async getAllMatHang(params) {
         try {
             const lh = params?.malh || '';
             const dv = params?.madv || '';
