@@ -54,7 +54,6 @@ const productcategoryservice = {
         await request.delete(`/quycach/${ma}`);
     },
     async getAllMatHang(params) {
-        console.log(params);
         try {
             const lh = params?.malh || '';
             const dv = params?.madv || '';

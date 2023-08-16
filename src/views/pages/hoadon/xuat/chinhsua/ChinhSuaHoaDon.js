@@ -265,7 +265,7 @@ const ManualAddModal = ({ open, selecteds = [], onUpdate, onClose }) => {
     const delayedSearch = useDelay(search, 500);
 
     const { data: mathang } = useQuery(['mathang', page, delayedSearch], () =>
-        productcategoryservice.getAllMatHang({ page, delayedSearch })
+        productcategoryservice.getAllMatHang({ page, ten: delayedSearch })
     );
     const fixedMathang = mathang || {
         data: [],
