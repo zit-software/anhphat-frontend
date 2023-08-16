@@ -7,6 +7,7 @@ import {
     LocalOffer,
     PanToolAlt,
     Save,
+    SearchOutlined,
     SwipeVertical,
 } from '@mui/icons-material';
 import {
@@ -43,6 +44,7 @@ import { DataGrid, GridActionsCellItem, GridToolbar, viVN } from '@mui/x-data-gr
 import { IconX } from '@tabler/icons';
 import dayjs from 'dayjs';
 import { Formik } from 'formik';
+import useDelay from 'hooks/useDelay';
 import { useEffect, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useNavigate, useParams } from 'react-router';
@@ -259,9 +261,11 @@ const ManualAddModal = ({ open, selecteds = [], onUpdate, onClose }) => {
     const [page, setPage] = useState(0);
     const [selectedsState, setSelectedState] = useState(selecteds);
     const [pageRowsInfo, setPageRowsInfo] = useState({});
+    const [search, setSearch] = useState('');
+    const delayedSearch = useDelay(search, 500);
 
-    const { data: mathang } = useQuery(['mathang', page], () =>
-        productcategoryservice.getAllMatHang({ page })
+    const { data: mathang } = useQuery(['mathang', page, delayedSearch], () =>
+        productcategoryservice.getAllMatHang({ page, delayedSearch })
     );
     const fixedMathang = mathang || {
         data: [],
@@ -292,14 +296,20 @@ const ManualAddModal = ({ open, selecteds = [], onUpdate, onClose }) => {
         <Dialog fullScreen open={open} onClose={onClose}>
             <DialogTitle>Thêm mặt hàng</DialogTitle>
             <DialogContent>
+                <TextField
+                    onChange={({ target: { value } }) => {
+                        setSearch(value);
+                    }}
+                    fullWidth
+                    placeholder="Tìm kiếm mặt hàng theo tên"
+                    InputProps={{ endAdornment: <SearchOutlined /> }}
+                ></TextField>
                 <DataGrid
                     sx={{ height: 600 }}
                     autoPageSize
                     density="compact"
-                    rows={fixedMathang.data.map((e) => ({
-                        ...e,
-                        id: e.ma,
-                    }))}
+                    rows={fixedMathang?.data}
+                    getRowId={(row) => row.ma}
                     columns={[
                         {
                             field: 'ma',
