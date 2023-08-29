@@ -131,9 +131,81 @@ const Dashboard = () => {
     return (
         <>
             <Grid container spacing={2}>
-                {currentUser.isAdmin && (
+                <Grid item xs={12}>
+                    <Grid container spacing={1}>
+                        <Grid item>
+                            <DatePicker
+                                value={dayjs(ngaybd)}
+                                onChange={({ $d }) => setNgaybd($d)}
+                                inputFormat="DD/MM/YYYY"
+                                label="Từ ngày"
+                                placeholder="Ngày bắt đầu"
+                                renderInput={(props) => <TextField {...props} />}
+                            />
+                        </Grid>
+
+                        <Grid item>
+                            <DatePicker
+                                value={dayjs(ngaykt)}
+                                onChange={({ $d }) => setNgaykt($d)}
+                                inputFormat="DD/MM/YYYY"
+                                label="Đến ngày"
+                                placeholder="Ngày kết thúc"
+                                renderInput={(props) => <TextField {...props} />}
+                            />
+                        </Grid>
+
+                        <Grid item>
+                            <Select
+                                defaultValue="thisYear"
+                                onChange={(event) => {
+                                    const value = event.target.value;
+
+                                    const now = new Date();
+
+                                    switch (value) {
+                                        case 'now':
+                                            setNgaybd(startOfDay(now));
+                                            setNgaykt(endOfDay(now));
+                                            break;
+
+                                        case 'thisWeek':
+                                            setNgaybd(startOfWeek(now));
+                                            setNgaykt(endOfWeek(now));
+                                            break;
+
+                                        case 'thisMonth':
+                                            setNgaybd(startOfMonth(now));
+                                            setNgaykt(endOfMonth(now));
+                                            break;
+
+                                        case 'thisYear':
+                                            setNgaybd(startOfYear(now));
+                                            setNgaykt(endOfYear(now));
+                                            break;
+
+                                        case 'lastYear':
+                                            setNgaybd(startOfYear(subYears(now, 1)));
+                                            setNgaykt(endOfYear(subYears(now, 1)));
+                                            break;
+
+                                        default:
+                                            throw new Error('Invalid option: ' + value);
+                                    }
+                                }}
+                            >
+                                <MenuItem value="now">Hôm nay</MenuItem>
+                                <MenuItem value="thisWeek">Tuần này</MenuItem>
+                                <MenuItem value="thisMonth">Tháng này</MenuItem>
+                                <MenuItem value="thisYear">Năm nay</MenuItem>
+                                <MenuItem value="lastYear">Năm trước</MenuItem>
+                            </Select>
+                        </Grid>
+                    </Grid>
+                </Grid>
+                {currentUser.laAdmin && (
                     <>
-                        <Grid item sm={12} lg={8} xl={9}>
+                        <Grid item sm={12} lg={8} xl={8}>
                             <MainCard
                                 title="Thống kê thu chi"
                                 secondary={
@@ -146,77 +218,6 @@ const Dashboard = () => {
                                     </Button>
                                 }
                             >
-                                <Grid container spacing={1}>
-                                    <Grid item>
-                                        <DatePicker
-                                            value={dayjs(ngaybd)}
-                                            onChange={({ $d }) => setNgaybd($d)}
-                                            inputFormat="DD/MM/YYYY"
-                                            label="Từ ngày"
-                                            placeholder="Ngày bắt đầu"
-                                            renderInput={(props) => <TextField {...props} />}
-                                        />
-                                    </Grid>
-
-                                    <Grid item>
-                                        <DatePicker
-                                            value={dayjs(ngaykt)}
-                                            onChange={({ $d }) => setNgaykt($d)}
-                                            inputFormat="DD/MM/YYYY"
-                                            label="Đến ngày"
-                                            placeholder="Ngày kết thúc"
-                                            renderInput={(props) => <TextField {...props} />}
-                                        />
-                                    </Grid>
-
-                                    <Grid item>
-                                        <Select
-                                            defaultValue="thisYear"
-                                            onChange={(event) => {
-                                                const value = event.target.value;
-
-                                                const now = new Date();
-
-                                                switch (value) {
-                                                    case 'now':
-                                                        setNgaybd(startOfDay(now));
-                                                        setNgaykt(endOfDay(now));
-                                                        break;
-
-                                                    case 'thisWeek':
-                                                        setNgaybd(startOfWeek(now));
-                                                        setNgaykt(endOfWeek(now));
-                                                        break;
-
-                                                    case 'thisMonth':
-                                                        setNgaybd(startOfMonth(now));
-                                                        setNgaykt(endOfMonth(now));
-                                                        break;
-
-                                                    case 'thisYear':
-                                                        setNgaybd(startOfYear(now));
-                                                        setNgaykt(endOfYear(now));
-                                                        break;
-
-                                                    case 'lastYear':
-                                                        setNgaybd(startOfYear(subYears(now, 1)));
-                                                        setNgaykt(endOfYear(subYears(now, 1)));
-                                                        break;
-
-                                                    default:
-                                                        throw new Error('Invalid option: ' + value);
-                                                }
-                                            }}
-                                        >
-                                            <MenuItem value="now">Hôm nay</MenuItem>
-                                            <MenuItem value="thisWeek">Tuần này</MenuItem>
-                                            <MenuItem value="thisMonth">Tháng này</MenuItem>
-                                            <MenuItem value="thisYear">Năm nay</MenuItem>
-                                            <MenuItem value="lastYear">Năm trước</MenuItem>
-                                        </Select>
-                                    </Grid>
-                                </Grid>
-
                                 <ReactApexChart
                                     options={{
                                         noData: {
@@ -269,7 +270,7 @@ const Dashboard = () => {
                                 />
                             </MainCard>
                         </Grid>
-                        <Grid item sm={12} lg={4} xl={3}>
+                        <Grid item sm={12} lg={4} xl={4}>
                             <Stack spacing={2}>
                                 <ThuCard tongthu={thongke?.tongthu} />
                                 <ChiCard tongchi={thongke?.tongchi} />
