@@ -30,23 +30,21 @@ import {
     subYears,
 } from 'date-fns';
 import dayjs from 'dayjs';
-import { useEffect } from 'react';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { useQuery } from 'react-query';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router';
 import productcategoryservice from 'services/productcategory.service';
 import ProvinceService from 'services/province.service';
 
+import { BugReportOutlined } from '@mui/icons-material';
 import ThongKeService from 'services/thongke.service';
 import MainCard from 'ui-component/cards/MainCard';
 import formatter from 'views/utilities/formatter';
 import ChiCard from './ChiCard';
 import DoanhThuCard from './DoanhThuCard';
-import ThuCard from './ThuCard';
 import RepairModal from './RepairModal';
-import { BugReportOutlined } from '@mui/icons-material';
+import ThuCard from './ThuCard';
 
 // project imports
 
@@ -54,7 +52,7 @@ import { BugReportOutlined } from '@mui/icons-material';
 
 const Dashboard = () => {
     const currentUser = useSelector((state) => state.auth.user);
-    const navigate = useNavigate();
+
     const [isOpenRepairModal, setIsOpenRepairModal] = useState(false);
 
     const handleOpenRepairModal = () => {
@@ -65,7 +63,6 @@ const Dashboard = () => {
         setIsOpenRepairModal(false);
     };
 
-    if (!currentUser.laAdmin) navigate('/');
     const { data: allTinhs, isLoading: isLoadingAllTinh } = useQuery(['allTinh'], () =>
         ThongKeService.laytatcatinh()
     );
@@ -134,150 +131,153 @@ const Dashboard = () => {
     return (
         <>
             <Grid container spacing={2}>
-                <Grid item sm={12} lg={8} xl={9}>
-                    <MainCard
-                        title="Thống kê thu chi"
-                        secondary={
-                            <Button
-                                variant="contained"
-                                startIcon={<BugReportOutlined />}
-                                onClick={handleOpenRepairModal}
+                {currentUser.isAdmin && (
+                    <>
+                        <Grid item sm={12} lg={8} xl={9}>
+                            <MainCard
+                                title="Thống kê thu chi"
+                                secondary={
+                                    <Button
+                                        variant="contained"
+                                        startIcon={<BugReportOutlined />}
+                                        onClick={handleOpenRepairModal}
+                                    >
+                                        Sửa lỗi thống kê
+                                    </Button>
+                                }
                             >
-                                Sửa lỗi thống kê
-                            </Button>
-                        }
-                    >
-                        <Grid container spacing={1}>
-                            <Grid item>
-                                <DatePicker
-                                    value={dayjs(ngaybd)}
-                                    onChange={({ $d }) => setNgaybd($d)}
-                                    inputFormat="DD/MM/YYYY"
-                                    label="Từ ngày"
-                                    placeholder="Ngày bắt đầu"
-                                    renderInput={(props) => <TextField {...props} />}
-                                />
-                            </Grid>
+                                <Grid container spacing={1}>
+                                    <Grid item>
+                                        <DatePicker
+                                            value={dayjs(ngaybd)}
+                                            onChange={({ $d }) => setNgaybd($d)}
+                                            inputFormat="DD/MM/YYYY"
+                                            label="Từ ngày"
+                                            placeholder="Ngày bắt đầu"
+                                            renderInput={(props) => <TextField {...props} />}
+                                        />
+                                    </Grid>
 
-                            <Grid item>
-                                <DatePicker
-                                    value={dayjs(ngaykt)}
-                                    onChange={({ $d }) => setNgaykt($d)}
-                                    inputFormat="DD/MM/YYYY"
-                                    label="Đến ngày"
-                                    placeholder="Ngày kết thúc"
-                                    renderInput={(props) => <TextField {...props} />}
-                                />
-                            </Grid>
+                                    <Grid item>
+                                        <DatePicker
+                                            value={dayjs(ngaykt)}
+                                            onChange={({ $d }) => setNgaykt($d)}
+                                            inputFormat="DD/MM/YYYY"
+                                            label="Đến ngày"
+                                            placeholder="Ngày kết thúc"
+                                            renderInput={(props) => <TextField {...props} />}
+                                        />
+                                    </Grid>
 
-                            <Grid item>
-                                <Select
-                                    defaultValue="thisYear"
-                                    onChange={(event) => {
-                                        const value = event.target.value;
+                                    <Grid item>
+                                        <Select
+                                            defaultValue="thisYear"
+                                            onChange={(event) => {
+                                                const value = event.target.value;
 
-                                        const now = new Date();
+                                                const now = new Date();
 
-                                        switch (value) {
-                                            case 'now':
-                                                setNgaybd(startOfDay(now));
-                                                setNgaykt(endOfDay(now));
-                                                break;
+                                                switch (value) {
+                                                    case 'now':
+                                                        setNgaybd(startOfDay(now));
+                                                        setNgaykt(endOfDay(now));
+                                                        break;
 
-                                            case 'thisWeek':
-                                                setNgaybd(startOfWeek(now));
-                                                setNgaykt(endOfWeek(now));
-                                                break;
+                                                    case 'thisWeek':
+                                                        setNgaybd(startOfWeek(now));
+                                                        setNgaykt(endOfWeek(now));
+                                                        break;
 
-                                            case 'thisMonth':
-                                                setNgaybd(startOfMonth(now));
-                                                setNgaykt(endOfMonth(now));
-                                                break;
+                                                    case 'thisMonth':
+                                                        setNgaybd(startOfMonth(now));
+                                                        setNgaykt(endOfMonth(now));
+                                                        break;
 
-                                            case 'thisYear':
-                                                setNgaybd(startOfYear(now));
-                                                setNgaykt(endOfYear(now));
-                                                break;
+                                                    case 'thisYear':
+                                                        setNgaybd(startOfYear(now));
+                                                        setNgaykt(endOfYear(now));
+                                                        break;
 
-                                            case 'lastYear':
-                                                setNgaybd(startOfYear(subYears(now, 1)));
-                                                setNgaykt(endOfYear(subYears(now, 1)));
-                                                break;
+                                                    case 'lastYear':
+                                                        setNgaybd(startOfYear(subYears(now, 1)));
+                                                        setNgaykt(endOfYear(subYears(now, 1)));
+                                                        break;
 
-                                            default:
-                                                throw new Error('Invalid option: ' + value);
-                                        }
+                                                    default:
+                                                        throw new Error('Invalid option: ' + value);
+                                                }
+                                            }}
+                                        >
+                                            <MenuItem value="now">Hôm nay</MenuItem>
+                                            <MenuItem value="thisWeek">Tuần này</MenuItem>
+                                            <MenuItem value="thisMonth">Tháng này</MenuItem>
+                                            <MenuItem value="thisYear">Năm nay</MenuItem>
+                                            <MenuItem value="lastYear">Năm trước</MenuItem>
+                                        </Select>
+                                    </Grid>
+                                </Grid>
+
+                                <ReactApexChart
+                                    options={{
+                                        noData: {
+                                            text: 'Chưa có dữ liệu',
+                                        },
+                                        dataLabels: {
+                                            enabled: false,
+                                        },
+
+                                        stroke: {
+                                            width: 2,
+                                            curve: 'smooth',
+                                        },
+                                        xaxis: {
+                                            categories: thongkeTheoNgay.map((e) => e.ngay),
+                                            labels: {
+                                                formatter(value) {
+                                                    return dayjs(value).format('HH:MM, DD/MM/YYYY');
+                                                },
+                                                show: false,
+                                            },
+                                        },
+                                        yaxis: {
+                                            labels: {
+                                                formatter(value) {
+                                                    return formatter.format(value);
+                                                },
+                                            },
+                                        },
                                     }}
-                                >
-                                    <MenuItem value="now">Hôm nay</MenuItem>
-                                    <MenuItem value="thisWeek">Tuần này</MenuItem>
-                                    <MenuItem value="thisMonth">Tháng này</MenuItem>
-                                    <MenuItem value="thisYear">Năm nay</MenuItem>
-                                    <MenuItem value="lastYear">Năm trước</MenuItem>
-                                </Select>
-                            </Grid>
+                                    series={[
+                                        {
+                                            name: 'Thu',
+                                            data: thongkeTheoNgay.map((e) => e.thu || 0),
+                                            color: '#00d950',
+                                        },
+                                        {
+                                            name: 'Chi',
+                                            data: thongkeTheoNgay.map((e) => e.chi || 0),
+                                            color: '#e00026',
+                                        },
+                                        {
+                                            name: 'Doanh thu',
+                                            data: thongkeTheoNgay.map((e) => e.conlai || 0),
+                                            color: '#007be6',
+                                        },
+                                    ]}
+                                    type="line"
+                                    height={350}
+                                />
+                            </MainCard>
                         </Grid>
-
-                        <ReactApexChart
-                            options={{
-                                noData: {
-                                    text: 'Chưa có dữ liệu',
-                                },
-                                dataLabels: {
-                                    enabled: false,
-                                },
-
-                                stroke: {
-                                    width: 2,
-                                    curve: 'smooth',
-                                },
-                                xaxis: {
-                                    categories: thongkeTheoNgay.map((e) => e.ngay),
-                                    labels: {
-                                        formatter(value) {
-                                            return dayjs(value).format('HH:MM, DD/MM/YYYY');
-                                        },
-                                        show: false,
-                                    },
-                                },
-                                yaxis: {
-                                    labels: {
-                                        formatter(value) {
-                                            return formatter.format(value);
-                                        },
-                                    },
-                                },
-                            }}
-                            series={[
-                                {
-                                    name: 'Thu',
-                                    data: thongkeTheoNgay.map((e) => e.thu || 0),
-                                    color: '#00d950',
-                                },
-                                {
-                                    name: 'Chi',
-                                    data: thongkeTheoNgay.map((e) => e.chi || 0),
-                                    color: '#e00026',
-                                },
-                                {
-                                    name: 'Doanh thu',
-                                    data: thongkeTheoNgay.map((e) => e.conlai || 0),
-                                    color: '#007be6',
-                                },
-                            ]}
-                            type="line"
-                            height={350}
-                        />
-                    </MainCard>
-                </Grid>
-
-                <Grid item sm={12} lg={4} xl={3}>
-                    <Stack spacing={2}>
-                        <ThuCard tongthu={thongke?.tongthu} />
-                        <ChiCard tongchi={thongke?.tongchi} />
-                        <DoanhThuCard doanhthu={thongke?.doanhthu} />
-                    </Stack>
-                </Grid>
+                        <Grid item sm={12} lg={4} xl={3}>
+                            <Stack spacing={2}>
+                                <ThuCard tongthu={thongke?.tongthu} />
+                                <ChiCard tongchi={thongke?.tongchi} />
+                                <DoanhThuCard doanhthu={thongke?.doanhthu} />
+                            </Stack>
+                        </Grid>
+                    </>
+                )}
 
                 {currentTinh && (
                     <Grid item xs={12}>

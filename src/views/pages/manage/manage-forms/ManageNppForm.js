@@ -3,23 +3,22 @@ import {
     Button,
     FormControl,
     FormControlLabel,
-    FormGroup,
     FormHelperText,
-    Grid,
+    FormLabel,
     InputAdornment,
     InputLabel,
     OutlinedInput,
-    Switch,
+    Radio,
+    RadioGroup,
     TextField,
-    Typography,
 } from '@mui/material';
 import { Stack } from '@mui/system';
 import { Formik } from 'formik';
 import ProvinceService from 'services/province.service';
 import * as Yup from 'yup';
 
-import MilkBox from 'assets/images/milk-box.png';
 import MilkBox2 from 'assets/images/milk-box-2.png';
+import MilkBox from 'assets/images/milk-box.png';
 
 function ManageNppForm({ value = {}, buttonText, onSubmit, onClose }) {
     return (
@@ -123,31 +122,25 @@ function ManageNppForm({ value = {}, buttonText, onSubmit, onClose }) {
                             <FormHelperText error>{errors.chietkhau}</FormHelperText>
                         </FormControl>
 
-                        <FormGroup>
-                            <Grid container alignItems="center" gap={[2, 2]}>
-                                <Grid item>
-                                    <Typography variant="h5" fontSize={20}>
-                                        Cách tính thuế
-                                    </Typography>
-                                </Grid>
-                                <Grid item>
-                                    <FormControlLabel
-                                        name="truocthue"
-                                        value={values.truocthue}
-                                        onChange={(e, check) => {
-                                            handleChange({
-                                                target: {
-                                                    name: 'truocthue',
-                                                    value: check,
-                                                },
-                                            });
-                                        }}
-                                        control={<Switch checked={values.truocthue} />}
-                                        label={values.truocthue ? 'Trước thuế' : 'Sau thuế'}
-                                    />
-                                </Grid>
-                            </Grid>
-                        </FormGroup>
+                        <FormControl>
+                            <FormLabel>Cách tinh thuế</FormLabel>
+                            <RadioGroup
+                                name="truocthue"
+                                value={Boolean(values.truocthue)}
+                                onChange={handleChange}
+                            >
+                                <FormControlLabel
+                                    value={true}
+                                    control={<Radio />}
+                                    label="Trước thuế"
+                                />
+                                <FormControlLabel
+                                    value={false}
+                                    control={<Radio />}
+                                    label="Sau thuế"
+                                />
+                            </RadioGroup>
+                        </FormControl>
 
                         <div style={{ position: 'relative' }} className="milk-box">
                             <img src={MilkBox2} alt="milk-box" width="100%" />

@@ -123,7 +123,7 @@ const KhoQua = () => {
                             fullWidth
                         ></TextField>
                     </Grid>
-                    <Grid xs={1} justifyContent="center" container>
+                    <Grid xs={1} justifyContent="center" item>
                         <SearchRounded />
                     </Grid>
                 </Grid>

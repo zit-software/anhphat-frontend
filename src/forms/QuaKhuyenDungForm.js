@@ -15,7 +15,7 @@ const validationSchema = Yup.object().shape({
     ten: Yup.string().required('Vui lòng nhập tên'),
     diem: Yup.number()
         .required('Vui lòng nhập điểm')
-        .min(1, 'Điểm quy đổi phải lớn hơn 0')
+        .min(0, 'Điểm quy đổi phải lớn hơn 0')
         .integer('Điểm quy đổi phải là số nguyên'),
     soluong: Yup.number(),
     gia: Yup.number().min(0, 'Giá phải lớn hơn 0'),
