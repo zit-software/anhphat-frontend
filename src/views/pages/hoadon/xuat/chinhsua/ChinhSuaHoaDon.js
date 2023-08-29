@@ -4,6 +4,7 @@ import {
     DeleteOutline,
     Edit,
     GifBox,
+    InputOutlined,
     LocalOffer,
     PanToolAlt,
     Save,
@@ -22,6 +23,7 @@ import {
     FormControl,
     FormControlLabel,
     FormHelperText,
+    FormLabel,
     Grid,
     IconButton,
     InputAdornment,
@@ -29,6 +31,8 @@ import {
     LinearProgress,
     MenuItem,
     OutlinedInput,
+    Radio,
+    RadioGroup,
     Select,
     Switch,
     Table,
@@ -579,6 +583,7 @@ function ChinhSuaHoaDon() {
     const { data: mathang } = useQuery(['tatcamathang', {}], productcategoryservice.getAllMatHang);
 
     const [autoRows, setAutoRows] = useState([]);
+    const refNPPFormik = useRef(null);
 
     const addAutoRow = () => {
         setAutoRows((prev) => [
@@ -618,7 +623,12 @@ function ChinhSuaHoaDon() {
 
     const handleSave = async () => {
         try {
+            if (!refNPPFormik.current.isValid) {
+                alert('Vui lòng kiếm tra lại thông tin');
+                return;
+            }
             await HoaDonXuatService.luuPhieuXuat(params.ma, {
+                ...refNPPFormik.current.values,
                 auto: autoRows,
                 manual: selectedManual.map((e) => ({
                     mh: e.ma,
@@ -740,6 +750,7 @@ function ChinhSuaHoaDon() {
                             <TableCell>Số điện thoại</TableCell>
                             <TableCell>Tỉnh thành</TableCell>
                             <TableCell>Chiết khấu</TableCell>
+                            <TableCell>Tính Thuế</TableCell>
                         </TableRow>
                     </TableHead>
 
@@ -751,7 +762,79 @@ function ChinhSuaHoaDon() {
                             <TableCell>
                                 {ProvinceService.findByCode(phieuxuat.npp.tinh)?.name}
                             </TableCell>
-                            <TableCell>{Math.imul(phieuxuat.npp.chietkhau * 100, 1)}%</TableCell>
+                            {phieuxuat.daluu ? (
+                                <>
+                                    <TableCell>
+                                        {Math.imul(phieuxuat.chietkhau * 100, 1)}%
+                                    </TableCell>
+                                    <TableCell>
+                                        {phieuxuat.isTruocThue ? 'Trước thuế' : 'Sau thuế'}
+                                    </TableCell>
+                                </>
+                            ) : (
+                                <>
+                                    <Formik
+                                        innerRef={refNPPFormik}
+                                        initialValues={{
+                                            chietkhau: phieuxuat.npp.chietkhau,
+                                            truocthue: phieuxuat.npp.truocthue,
+                                        }}
+                                        validationSchema={Yup.object({
+                                            chietkhau: Yup.number()
+                                                .required('Chiết khấu không được trống')
+                                                .min(0, 'Chiết khấu không thể nhỏ hơn 0'),
+                                            truocthue: Yup.boolean().required('Không được trống'),
+                                        })}
+                                        validateOnChange
+                                    >
+                                        {({ handleChange, errors, values, setFieldValue }) => (
+                                            <>
+                                                <TableCell>
+                                                    <FormControl>
+                                                        <TextField
+                                                            name="chietkhau"
+                                                            error={errors.chietkhau}
+                                                            helperText={errors.chietkhau}
+                                                            value={values.chietkhau}
+                                                            label={'Chiết khấu cho phiếu'}
+                                                            type="number"
+                                                            onChange={handleChange}
+                                                        />
+                                                    </FormControl>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <FormControl>
+                                                        <FormLabel>Chọn cách tính</FormLabel>
+                                                        <RadioGroup
+                                                            row
+                                                            value={
+                                                                values.truocthue ? 'truoc' : 'sau'
+                                                            }
+                                                            onChange={({ target: { value } }) => {
+                                                                setFieldValue(
+                                                                    'truocthue',
+                                                                    value === 'truoc'
+                                                                );
+                                                            }}
+                                                        >
+                                                            <FormControlLabel
+                                                                value="truoc"
+                                                                control={<Radio />}
+                                                                label="Trước Thuế"
+                                                            />
+                                                            <FormControlLabel
+                                                                value="sau"
+                                                                control={<Radio />}
+                                                                label="Sau Thuế"
+                                                            />
+                                                        </RadioGroup>
+                                                    </FormControl>
+                                                </TableCell>
+                                            </>
+                                        )}
+                                    </Formik>
+                                </>
+                            )}
                         </TableRow>
                     </TableBody>
                 </Table>
