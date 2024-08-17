@@ -17,7 +17,7 @@
         "@reduxjs/toolkit": "^1.9.5",
         "@tabler/icons": "^1.72.0",
         "apexcharts": "^3.35.3",
-        "axios": "^1.2.2",
+        "axios": "^1.6.2",
         "caniuse-lite": "^1.0.30001519",
         "date-fns": "^2.29.3",
         "dayjs": "^1.11.9",
@@ -92,7 +92,7 @@
         "eslint-plugin-react-hooks": "4.6.0",
         "husky": "^8.0.0",
         "prettier": "^3.0.3",
-        "sass": "^1.53.0",
+        "sass": "^1.69.5",
         "standard-version": "^9.5.0"
     }
 }
