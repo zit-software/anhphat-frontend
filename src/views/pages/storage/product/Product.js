@@ -54,7 +54,13 @@ const Product = () => {
         refetch: refetchAllMH,
     } = useQuery(
         ['allMH', { ...selected, order: selectedOrder, page: currentPage, group }],
-        productcategoryservice.getAllMatHang,
+        () =>
+            productcategoryservice.getAllMatHang({
+                ...selected,
+                order: selectedOrder,
+                page: currentPage,
+                group,
+            }),
         { enabled: false, initialData: { data: [], total: 0 } }
     );
     const columnsChiTiet = [

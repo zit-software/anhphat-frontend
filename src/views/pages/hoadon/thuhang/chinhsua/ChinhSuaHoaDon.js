@@ -9,6 +9,7 @@ import {
     FormControl,
     FormControlLabel,
     FormHelperText,
+    FormLabel,
     IconButton,
     InputAdornment,
     InputLabel,
@@ -255,6 +256,7 @@ function ChinhSuaHoaDon() {
     );
     const [saveModal, setSaveModal] = useState(null);
     const [isSaving, setIsSaving] = useState(false);
+    const [ghichu, setGhichu] = useState('');
 
     const [rows, setRows] = useState([]);
 
@@ -271,6 +273,7 @@ function ChinhSuaHoaDon() {
 
                     return _return;
                 }),
+                ghichu,
             };
 
             await HoaDonNhapService.luu(phieunhap.ma, payload);
@@ -500,6 +503,21 @@ function ChinhSuaHoaDon() {
                                     )}
                                 </Table>
                             </TableContainer>
+
+                            <FormControl>
+                                <FormLabel>Ghi chú</FormLabel>
+
+                                {phieunhap.daluu ? (
+                                    <p>{phieunhap.ghichu}</p>
+                                ) : (
+                                    <TextField
+                                        multiline
+                                        rows={4}
+                                        defaultValue={phieunhap.ghichu}
+                                        onChange={(event) => setGhichu(event.target.value)}
+                                    />
+                                )}
+                            </FormControl>
 
                             <Stack direction="row" spacing={2}>
                                 {!phieunhap.daluu && (

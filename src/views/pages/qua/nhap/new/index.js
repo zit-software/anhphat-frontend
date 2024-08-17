@@ -25,6 +25,7 @@ import InputNumber from 'ui-component/input-number';
 import SelectGiftModal from './SelectGiftModal';
 import quakhuyendungService from 'services/quakhuyendung.service';
 import dayjs from 'dayjs';
+import formatter from 'views/utilities/formatter';
 
 const NewNhapQua = () => {
     const [ngaynhap, setNgaynhap] = useState(new Date());
@@ -147,9 +148,13 @@ const NewNhapQua = () => {
 
                                 <TableCell>Tên quà</TableCell>
 
+                                <TableCell>Điểm quy đổi</TableCell>
+
                                 <TableCell>Số lượng nhập</TableCell>
 
-                                <TableCell>Điểm quy đổi</TableCell>
+                                <TableCell>Giá</TableCell>
+
+                                <TableCell>Thành tiền</TableCell>
 
                                 <TableCell>Xóa</TableCell>
                             </TableRow>
@@ -160,6 +165,8 @@ const NewNhapQua = () => {
                                 <TableRow key={gift.ma}>
                                     <TableCell>{gift.ma}</TableCell>
                                     <TableCell>{gift.ten}</TableCell>
+                                    <TableCell>{gift.diem}</TableCell>
+
                                     <TableCell>
                                         <InputNumber
                                             placeholder="Số lượng"
@@ -174,7 +181,27 @@ const NewNhapQua = () => {
                                         />
                                     </TableCell>
 
-                                    <TableCell>{gift.diem}</TableCell>
+                                    <TableCell>
+                                        <TextField
+                                            placeholder="Giá"
+                                            label="Giá"
+                                            type="number"
+                                            value={gift.gia}
+                                            InputProps={{
+                                                endAdornment: <span>đ</span>,
+                                            }}
+                                            onChange={({ target: { value } }) => {
+                                                updateSelectedGift(gift.ma, {
+                                                    ...gift,
+                                                    gia: value,
+                                                });
+                                            }}
+                                        />
+                                    </TableCell>
+
+                                    <TableCell>
+                                        {formatter.format(gift.gia * gift.soluong)}
+                                    </TableCell>
 
                                     <TableCell>
                                         <Button
@@ -189,6 +216,23 @@ const NewNhapQua = () => {
                                 </TableRow>
                             ))}
                         </TableBody>
+
+                        <TableRow>
+                            <TableCell colSpan={3}>Tổng cộng</TableCell>
+                            <TableCell>
+                                {selectedGift.reduce((prev, current) => {
+                                    return prev + current.soluong;
+                                }, 0)}
+                            </TableCell>
+                            <TableCell colSpan={2}>
+                                {formatter.format(
+                                    selectedGift.reduce((prev, current) => {
+                                        return prev + current.soluong * current.gia;
+                                    }, 0)
+                                )}
+                            </TableCell>
+                            <TableCell></TableCell>
+                        </TableRow>
                     </Table>
                 </Stack>
             </MainCard>

@@ -53,16 +53,18 @@ const productcategoryservice = {
     async xoaQuyCach(ma) {
         await request.delete(`/quycach/${ma}`);
     },
-    async getAllMatHang({ queryKey: [, params] }) {
+    async getAllMatHang(params) {
+        console.log(params);
         try {
             const lh = params?.malh || '';
             const dv = params?.madv || '';
             const ngaynhap = params?.ngaynhap || '';
+            const ten = params?.ten || '';
             const order = params?.order || '';
             const page = params?.page || 0;
             const group = params?.group || '';
             const res = await request.get(
-                `/mathang?loaihang=${lh}&donvi=${dv}&ngaynhap=${ngaynhap}&order=${order}&page=${page}&group=${group}`
+                `/mathang?loaihang=${lh}&donvi=${dv}&ngaynhap=${ngaynhap}&order=${order}&page=${page}&group=${group}&ten=${ten}`
             );
             return res.data;
         } catch (error) {

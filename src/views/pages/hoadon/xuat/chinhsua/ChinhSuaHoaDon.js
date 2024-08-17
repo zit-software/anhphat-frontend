@@ -4,9 +4,11 @@ import {
     DeleteOutline,
     Edit,
     GifBox,
+    InputOutlined,
     LocalOffer,
     PanToolAlt,
     Save,
+    SearchOutlined,
     SwipeVertical,
 } from '@mui/icons-material';
 import {
@@ -21,6 +23,7 @@ import {
     FormControl,
     FormControlLabel,
     FormHelperText,
+    FormLabel,
     Grid,
     IconButton,
     InputAdornment,
@@ -28,6 +31,8 @@ import {
     LinearProgress,
     MenuItem,
     OutlinedInput,
+    Radio,
+    RadioGroup,
     Select,
     Switch,
     Table,
@@ -38,11 +43,12 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
-import { Stack } from '@mui/system';
+import { Stack, width } from '@mui/system';
 import { DataGrid, GridActionsCellItem, GridToolbar, viVN } from '@mui/x-data-grid';
 import { IconX } from '@tabler/icons';
 import dayjs from 'dayjs';
 import { Formik } from 'formik';
+import useDelay from 'hooks/useDelay';
 import { useEffect, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useNavigate, useParams } from 'react-router';
@@ -256,25 +262,58 @@ const AutoHangHoaRow = ({ index, value, disabled, onChange, onRemove }) => {
 };
 
 const ManualAddModal = ({ open, selecteds = [], onUpdate, onClose }) => {
-    const { data: mathang } = useQuery(['mathang'], productcategoryservice.getAllMatHang);
+    const [page, setPage] = useState(0);
+    const [selectedsState, setSelectedState] = useState(selecteds);
+    const [pageRowsInfo, setPageRowsInfo] = useState({});
+    const [search, setSearch] = useState('');
+    const delayedSearch = useDelay(search, 500);
 
+    const { data: mathang } = useQuery(['mathang', page, delayedSearch], () =>
+        productcategoryservice.getAllMatHang({ page, delayedSearch })
+    );
     const fixedMathang = mathang || {
         data: [],
         total: 0,
     };
 
+    useEffect(() => {
+        const updatePageRowsInfo = () => {
+            const newPageRowsInfo = { ...pageRowsInfo };
+            for (const mh of fixedMathang.data) {
+                if (newPageRowsInfo[mh.ma] != null) return;
+                newPageRowsInfo[mh.ma] = mh;
+            }
+            setPageRowsInfo(newPageRowsInfo);
+        };
+        updatePageRowsInfo();
+    }, [fixedMathang]);
+
+    const onPageChange = (page) => {
+        setPage(page);
+    };
+    const save = () => {
+        onUpdate(selectedsState.map((selected) => pageRowsInfo[selected]));
+        onClose();
+    };
+
     return (
-        <Dialog fullWidth open={open} onClose={onClose}>
+        <Dialog fullScreen open={open} onClose={onClose}>
             <DialogTitle>Thêm mặt hàng</DialogTitle>
             <DialogContent>
+                <TextField
+                    onChange={({ target: { value } }) => {
+                        setSearch(value);
+                    }}
+                    fullWidth
+                    placeholder="Tìm kiếm mặt hàng theo tên"
+                    InputProps={{ endAdornment: <SearchOutlined /> }}
+                ></TextField>
                 <DataGrid
                     sx={{ height: 600 }}
                     autoPageSize
                     density="compact"
-                    rows={fixedMathang.data.map((e) => ({
-                        ...e,
-                        id: e.ma,
-                    }))}
+                    rows={fixedMathang?.data}
+                    getRowId={(row) => row.ma}
                     columns={[
                         {
                             field: 'ma',
@@ -326,13 +365,21 @@ const ManualAddModal = ({ open, selecteds = [], onUpdate, onClose }) => {
                     }}
                     localeText={viVN.components.MuiDataGrid.defaultProps.localeText}
                     checkboxSelection
-                    selectionModel={selecteds}
-                    onSelectionModelChange={onUpdate}
+                    selectionModel={selectedsState}
+                    onSelectionModelChange={(selections) => {
+                        setSelectedState(selections);
+                    }}
+                    keepNonExistentRowsSelected
+                    paginationMode="server"
+                    page={page}
+                    pageSize={15}
+                    onPageChange={onPageChange}
+                    rowCount={mathang?.total || 0}
                 />
             </DialogContent>
 
             <DialogActions>
-                <Button variant="contained" onClick={onClose}>
+                <Button variant="text" onClick={save}>
                     Lưu
                 </Button>
             </DialogActions>
@@ -536,6 +583,7 @@ function ChinhSuaHoaDon() {
     const { data: mathang } = useQuery(['tatcamathang', {}], productcategoryservice.getAllMatHang);
 
     const [autoRows, setAutoRows] = useState([]);
+    const refNPPFormik = useRef(null);
 
     const addAutoRow = () => {
         setAutoRows((prev) => [
@@ -575,11 +623,16 @@ function ChinhSuaHoaDon() {
 
     const handleSave = async () => {
         try {
+            if (!refNPPFormik.current.isValid) {
+                alert('Vui lòng kiếm tra lại thông tin');
+                return;
+            }
             await HoaDonXuatService.luuPhieuXuat(params.ma, {
+                ...refNPPFormik.current.values,
                 auto: autoRows,
                 manual: selectedManual.map((e) => ({
-                    mh: e,
-                    giaban: manualDongia[e],
+                    mh: e.ma,
+                    giaban: manualDongia[e.ma],
                 })),
                 kmg,
                 kmt,
@@ -697,6 +750,7 @@ function ChinhSuaHoaDon() {
                             <TableCell>Số điện thoại</TableCell>
                             <TableCell>Tỉnh thành</TableCell>
                             <TableCell>Chiết khấu</TableCell>
+                            <TableCell>Tính Thuế</TableCell>
                         </TableRow>
                     </TableHead>
 
@@ -708,7 +762,79 @@ function ChinhSuaHoaDon() {
                             <TableCell>
                                 {ProvinceService.findByCode(phieuxuat.npp.tinh)?.name}
                             </TableCell>
-                            <TableCell>{Math.imul(phieuxuat.npp.chietkhau * 100, 1)}%</TableCell>
+                            {phieuxuat.daluu ? (
+                                <>
+                                    <TableCell>
+                                        {Math.imul(phieuxuat.chietkhau * 100, 1)}%
+                                    </TableCell>
+                                    <TableCell>
+                                        {phieuxuat.isTruocThue ? 'Trước thuế' : 'Sau thuế'}
+                                    </TableCell>
+                                </>
+                            ) : (
+                                <>
+                                    <Formik
+                                        innerRef={refNPPFormik}
+                                        initialValues={{
+                                            chietkhau: phieuxuat.npp.chietkhau,
+                                            truocthue: phieuxuat.npp.truocthue,
+                                        }}
+                                        validationSchema={Yup.object({
+                                            chietkhau: Yup.number()
+                                                .required('Chiết khấu không được trống')
+                                                .min(0, 'Chiết khấu không thể nhỏ hơn 0'),
+                                            truocthue: Yup.boolean().required('Không được trống'),
+                                        })}
+                                        validateOnChange
+                                    >
+                                        {({ handleChange, errors, values, setFieldValue }) => (
+                                            <>
+                                                <TableCell>
+                                                    <FormControl>
+                                                        <TextField
+                                                            name="chietkhau"
+                                                            error={errors.chietkhau}
+                                                            helperText={errors.chietkhau}
+                                                            value={values.chietkhau}
+                                                            label={'Chiết khấu cho phiếu'}
+                                                            type="number"
+                                                            onChange={handleChange}
+                                                        />
+                                                    </FormControl>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <FormControl>
+                                                        <FormLabel>Chọn cách tính</FormLabel>
+                                                        <RadioGroup
+                                                            row
+                                                            value={
+                                                                values.truocthue ? 'truoc' : 'sau'
+                                                            }
+                                                            onChange={({ target: { value } }) => {
+                                                                setFieldValue(
+                                                                    'truocthue',
+                                                                    value === 'truoc'
+                                                                );
+                                                            }}
+                                                        >
+                                                            <FormControlLabel
+                                                                value="truoc"
+                                                                control={<Radio />}
+                                                                label="Trước Thuế"
+                                                            />
+                                                            <FormControlLabel
+                                                                value="sau"
+                                                                control={<Radio />}
+                                                                label="Sau Thuế"
+                                                            />
+                                                        </RadioGroup>
+                                                    </FormControl>
+                                                </TableCell>
+                                            </>
+                                        )}
+                                    </Formik>
+                                </>
+                            )}
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -770,21 +896,19 @@ function ChinhSuaHoaDon() {
                                 <TableCell colSpan={10}>Các mặt hàng thêm thủ công</TableCell>
                             </TableRow>
 
-                            {fixedMathang.data
-                                .filter((e) => selectedManual.includes(e.ma))
-                                .map((mathang, index) => (
-                                    <ManualRow
-                                        key={mathang.ma}
-                                        index={index}
-                                        mathang={mathang}
-                                        updateDongia={(dongia) => {
-                                            setManualDongia((prev) => {
-                                                return { ...prev, [mathang.ma]: dongia };
-                                            });
-                                        }}
-                                        dongia={manualDongia[mathang.ma]}
-                                    />
-                                ))}
+                            {selectedManual.map((mathang, index) => (
+                                <ManualRow
+                                    key={mathang.ma}
+                                    index={index}
+                                    mathang={mathang}
+                                    updateDongia={(dongia) => {
+                                        setManualDongia((prev) => {
+                                            return { ...prev, [mathang.ma]: dongia };
+                                        });
+                                    }}
+                                    dongia={manualDongia[mathang.ma]}
+                                />
+                            ))}
 
                             <TableRow>
                                 <TableCell colSpan={10}>

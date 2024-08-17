@@ -18,6 +18,7 @@ import {
     FormControl,
     FormControlLabel,
     FormHelperText,
+    FormLabel,
     IconButton,
     InputAdornment,
     InputLabel,
@@ -424,6 +425,7 @@ function ChinhSuaHoaDon() {
     const params = useParams();
     const [chitiet, setChitiet] = useState(false);
     const [kmg, setKmg] = useState(null);
+    const [ghichu, setGhichu] = useState('');
 
     const {
         data: phieuxuat,
@@ -481,6 +483,7 @@ function ChinhSuaHoaDon() {
                     giaban: manualDongia[e],
                 })),
                 kmg,
+                ghichu,
             });
         } catch (error) {
             alert(error.response.data.message);
@@ -697,6 +700,21 @@ function ChinhSuaHoaDon() {
                         </TableBody>
                     )}
                 </Table>
+
+                <FormControl>
+                    <FormLabel>Ghi chú</FormLabel>
+
+                    {phieuxuat.daluu ? (
+                        <p>{phieuxuat.ghichu}</p>
+                    ) : (
+                        <TextField
+                            multiline
+                            rows={4}
+                            defaultValue={phieuxuat.ghichu}
+                            onChange={(event) => setGhichu(event.target.value)}
+                        />
+                    )}
+                </FormControl>
 
                 <Stack direction="row" spacing={2}>
                     <Button
