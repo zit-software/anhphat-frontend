@@ -25,7 +25,8 @@ import { SaveRounded } from '@mui/icons-material';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-hot-toast';
 import quakhuyendungService from 'services/quakhuyendung.service';
-const currentDate = new Date();
+import dayjs from 'dayjs';
+const currentDate = dayjs(Date.now());
 const { default: MainCard } = require('ui-component/cards/MainCard');
 
 const GiftRow = ({ gift, setSelectedGift }) => {

@@ -1,6 +1,7 @@
 // material-ui
 
 import {
+    Button,
     Grid,
     LinearProgress,
     MenuItem,
@@ -29,20 +30,20 @@ import {
     subYears,
 } from 'date-fns';
 import dayjs from 'dayjs';
-import { useEffect } from 'react';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { useQuery } from 'react-query';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router';
 import productcategoryservice from 'services/productcategory.service';
 import ProvinceService from 'services/province.service';
 
+import { BugReportOutlined } from '@mui/icons-material';
 import ThongKeService from 'services/thongke.service';
 import MainCard from 'ui-component/cards/MainCard';
 import formatter from 'views/utilities/formatter';
 import ChiCard from './ChiCard';
 import DoanhThuCard from './DoanhThuCard';
+import RepairModal from './RepairModal';
 import ThuCard from './ThuCard';
 
 // project imports
@@ -51,8 +52,17 @@ import ThuCard from './ThuCard';
 
 const Dashboard = () => {
     const currentUser = useSelector((state) => state.auth.user);
-    const navigate = useNavigate();
-    if (!currentUser.laAdmin) navigate('/');
+
+    const [isOpenRepairModal, setIsOpenRepairModal] = useState(false);
+
+    const handleOpenRepairModal = () => {
+        setIsOpenRepairModal(true);
+    };
+
+    const handleCloseRepairModal = () => {
+        setIsOpenRepairModal(false);
+    };
+
     const { data: allTinhs, isLoading: isLoadingAllTinh } = useQuery(['allTinh'], () =>
         ThongKeService.laytatcatinh()
     );
@@ -119,9 +129,9 @@ const Dashboard = () => {
 
     if (isLoadingAllTinh) return <LinearProgress />;
     return (
-        <Grid container spacing={2}>
-            <Grid item sm={12} lg={8} xl={9}>
-                <MainCard title="Thống kê thu chi">
+        <>
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
                     <Grid container spacing={1}>
                         <Grid item>
                             <DatePicker
@@ -192,188 +202,209 @@ const Dashboard = () => {
                             </Select>
                         </Grid>
                     </Grid>
-
-                    <ReactApexChart
-                        options={{
-                            noData: {
-                                text: 'Chưa có dữ liệu',
-                            },
-                            dataLabels: {
-                                enabled: false,
-                            },
-
-                            stroke: {
-                                width: 2,
-                                curve: 'smooth',
-                            },
-                            xaxis: {
-                                categories: thongkeTheoNgay.map((e) => e.ngay),
-                                labels: {
-                                    formatter(value) {
-                                        return dayjs(value).format('HH:MM, DD/MM/YYYY');
-                                    },
-                                    show: false,
-                                },
-                            },
-                            yaxis: {
-                                labels: {
-                                    formatter(value) {
-                                        return formatter.format(value);
-                                    },
-                                },
-                            },
-                        }}
-                        series={[
-                            {
-                                name: 'Thu',
-                                data: thongkeTheoNgay.map((e) => e.thu || 0),
-                                color: '#00d950',
-                            },
-                            {
-                                name: 'Chi',
-                                data: thongkeTheoNgay.map((e) => e.chi || 0),
-                                color: '#e00026',
-                            },
-                            {
-                                name: 'Doanh thu',
-                                data: thongkeTheoNgay.map((e) => e.conlai || 0),
-                                color: '#007be6',
-                            },
-                        ]}
-                        type="line"
-                        height={350}
-                    />
-                </MainCard>
-            </Grid>
-
-            <Grid item sm={12} lg={4} xl={3}>
-                <Stack spacing={2}>
-                    <ThuCard tongthu={thongke?.tongthu} />
-                    <ChiCard tongchi={thongke?.tongchi} />
-                    <DoanhThuCard doanhthu={thongke?.doanhthu} />
-                </Stack>
-            </Grid>
-
-            {currentTinh && (
-                <Grid item xs={12}>
-                    <MainCard title="Thống kê theo tỉnh">
-                        {isLoadingAllTinh || isLoadingThongKeTinh ? (
-                            <LinearProgress />
-                        ) : (
-                            <TableContainer>
-                                <Grid container justifyContent="flex-end">
-                                    <Tabs
-                                        onChange={(e, value) => setCurrentTinh(value)}
-                                        value={currentTinh}
-                                        aria-label="basic tabs example"
+                </Grid>
+                {currentUser.laAdmin && (
+                    <>
+                        <Grid item sm={12} lg={8} xl={8}>
+                            <MainCard
+                                title="Thống kê thu chi"
+                                secondary={
+                                    <Button
+                                        variant="contained"
+                                        startIcon={<BugReportOutlined />}
+                                        onClick={handleOpenRepairModal}
                                     >
-                                        {allTinhs.map((tinh) => (
-                                            <Tab
-                                                label={ProvinceService.findByCode(tinh).name}
-                                                key={tinh}
-                                                value={tinh}
-                                            ></Tab>
-                                        ))}
-                                    </Tabs>
-                                </Grid>
-                                <Table>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>Loại Hàng</TableCell>
-                                            {thongkeTinh.npp.map((npp) => (
-                                                <TableCell key={npp.ma}>{npp.ten}</TableCell>
+                                        Sửa lỗi thống kê
+                                    </Button>
+                                }
+                            >
+                                <ReactApexChart
+                                    options={{
+                                        noData: {
+                                            text: 'Chưa có dữ liệu',
+                                        },
+                                        dataLabels: {
+                                            enabled: false,
+                                        },
+
+                                        stroke: {
+                                            width: 2,
+                                            curve: 'smooth',
+                                        },
+                                        xaxis: {
+                                            categories: thongkeTheoNgay.map((e) => e.ngay),
+                                            labels: {
+                                                formatter(value) {
+                                                    return dayjs(value).format('HH:MM, DD/MM/YYYY');
+                                                },
+                                                show: false,
+                                            },
+                                        },
+                                        yaxis: {
+                                            labels: {
+                                                formatter(value) {
+                                                    return formatter.format(value);
+                                                },
+                                            },
+                                        },
+                                    }}
+                                    series={[
+                                        {
+                                            name: 'Thu',
+                                            data: thongkeTheoNgay.map((e) => e.thu || 0),
+                                            color: '#00d950',
+                                        },
+                                        {
+                                            name: 'Chi',
+                                            data: thongkeTheoNgay.map((e) => e.chi || 0),
+                                            color: '#e00026',
+                                        },
+                                        {
+                                            name: 'Doanh thu',
+                                            data: thongkeTheoNgay.map((e) => e.conlai || 0),
+                                            color: '#007be6',
+                                        },
+                                    ]}
+                                    type="line"
+                                    height={350}
+                                />
+                            </MainCard>
+                        </Grid>
+                        <Grid item sm={12} lg={4} xl={4}>
+                            <Stack spacing={2}>
+                                <ThuCard tongthu={thongke?.tongthu} />
+                                <ChiCard tongchi={thongke?.tongchi} />
+                                <DoanhThuCard doanhthu={thongke?.doanhthu} />
+                            </Stack>
+                        </Grid>
+                    </>
+                )}
+
+                {currentTinh && (
+                    <Grid item xs={12}>
+                        <MainCard title="Thống kê theo tỉnh">
+                            {isLoadingAllTinh || isLoadingThongKeTinh ? (
+                                <LinearProgress />
+                            ) : (
+                                <TableContainer>
+                                    <Grid container justifyContent="flex-end">
+                                        <Tabs
+                                            onChange={(e, value) => setCurrentTinh(value)}
+                                            value={currentTinh}
+                                            aria-label="basic tabs example"
+                                        >
+                                            {allTinhs.map((tinh) => (
+                                                <Tab
+                                                    label={ProvinceService.findByCode(tinh).name}
+                                                    key={tinh}
+                                                    value={tinh}
+                                                ></Tab>
                                             ))}
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {thongkeTinhRows.map((thongke, index) => {
-                                            return (
-                                                <TableRow key={index}>
-                                                    {thongke.map((col, index) => {
-                                                        if (index === 0)
+                                        </Tabs>
+                                    </Grid>
+                                    <Table>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell>Loại Hàng</TableCell>
+                                                {thongkeTinh.npp.map((npp) => (
+                                                    <TableCell key={npp.ma}>{npp.ten}</TableCell>
+                                                ))}
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {thongkeTinhRows.map((thongke, index) => {
+                                                return (
+                                                    <TableRow key={index}>
+                                                        {thongke.map((col, index) => {
+                                                            if (index === 0)
+                                                                return (
+                                                                    <TableCell key={index}>
+                                                                        {col.ten}
+                                                                    </TableCell>
+                                                                );
                                                             return (
                                                                 <TableCell key={index}>
-                                                                    {col.ten}
+                                                                    {col}
                                                                 </TableCell>
                                                             );
-                                                        return (
-                                                            <TableCell key={index}>{col}</TableCell>
-                                                        );
-                                                    })}
-                                                </TableRow>
-                                            );
-                                        })}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        )}
+                                                        })}
+                                                    </TableRow>
+                                                );
+                                            })}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            )}
+                        </MainCard>
+                    </Grid>
+                )}
+
+                <Grid item xs={12}>
+                    <MainCard title="Thống kê hàng nhập">
+                        <ReactApexChart
+                            options={{
+                                chart: {
+                                    type: 'bar',
+                                },
+                                dataLabels: {
+                                    enabled: false,
+                                },
+                                xaxis: {
+                                    categories: fixedThongkenhap.map((e) => e.loaihang.ten),
+                                },
+                                plotOptions: {
+                                    bar: {
+                                        distributed: true,
+                                    },
+                                },
+                            }}
+                            type="bar"
+                            series={[
+                                {
+                                    data: fixedThongkenhap.map((e) => e.soluong),
+                                    name: 'Số lượng',
+                                },
+                            ]}
+                            height={350}
+                        />
                     </MainCard>
                 </Grid>
-            )}
 
-            <Grid item xs={12}>
-                <MainCard title="Thống kê hàng nhập">
-                    <ReactApexChart
-                        options={{
-                            chart: {
-                                type: 'bar',
-                            },
-                            dataLabels: {
-                                enabled: false,
-                            },
-                            xaxis: {
-                                categories: fixedThongkenhap.map((e) => e.loaihang.ten),
-                            },
-                            plotOptions: {
-                                bar: {
-                                    distributed: true,
+                <Grid item xs={12}>
+                    <MainCard title="Thống kê hàng xuất">
+                        <ReactApexChart
+                            options={{
+                                chart: {
+                                    type: 'bar',
+                                    height: 350,
                                 },
-                            },
-                        }}
-                        type="bar"
-                        series={[
-                            {
-                                data: fixedThongkenhap.map((e) => e.soluong),
-                                name: 'Số lượng',
-                            },
-                        ]}
-                        height={350}
-                    />
-                </MainCard>
+                                dataLabels: {
+                                    enabled: false,
+                                },
+                                xaxis: {
+                                    categories: fixedThongkeban.map((e) => e.loaihang.ten),
+                                },
+                                plotOptions: {
+                                    bar: {
+                                        distributed: true,
+                                    },
+                                },
+                            }}
+                            type="bar"
+                            series={[
+                                {
+                                    data: fixedThongkeban.map((e) => e.soluong),
+                                    name: 'Số lượng',
+                                },
+                            ]}
+                            height={350}
+                        />
+                    </MainCard>
+                </Grid>
             </Grid>
 
-            <Grid item xs={12}>
-                <MainCard title="Thống kê hàng xuất">
-                    <ReactApexChart
-                        options={{
-                            chart: {
-                                type: 'bar',
-                                height: 350,
-                            },
-                            dataLabels: {
-                                enabled: false,
-                            },
-                            xaxis: {
-                                categories: fixedThongkeban.map((e) => e.loaihang.ten),
-                            },
-                            plotOptions: {
-                                bar: {
-                                    distributed: true,
-                                },
-                            },
-                        }}
-                        type="bar"
-                        series={[
-                            {
-                                data: fixedThongkeban.map((e) => e.soluong),
-                                name: 'Số lượng',
-                            },
-                        ]}
-                        height={350}
-                    />
-                </MainCard>
-            </Grid>
-        </Grid>
+            <RepairModal open={isOpenRepairModal} onClose={handleCloseRepairModal} />
+        </>
     );
 };
 

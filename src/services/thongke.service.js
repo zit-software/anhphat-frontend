@@ -43,6 +43,10 @@ class ThongKeService {
             })
         ).data;
     }
+
+    static async repair() {
+        return await request.post('thongke/re-check');
+    }
 }
 
 export default ThongKeService;

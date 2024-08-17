@@ -26,7 +26,6 @@ const dashboard = {
             url: 'dashboard/statistic',
             icon: icons.IconDashboard,
             breadcrumbs: true,
-            onlyAdmin: true,
         },
         {
             id: 'storage',

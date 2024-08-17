@@ -27,6 +27,7 @@ import toast from 'react-hot-toast';
 import { useQuery } from 'react-query';
 import quakhuyendungService from 'services/quakhuyendung.service';
 import MainCard from 'ui-component/cards/MainCard';
+import formatter from 'views/utilities/formatter';
 
 const KhoQua = () => {
     const [creating, setCreating] = useState(false);
@@ -77,6 +78,7 @@ const KhoQua = () => {
             toast.error(error.message);
         } finally {
             setIsUpdating(false);
+            refetchListQua();
         }
     };
 
@@ -121,7 +123,7 @@ const KhoQua = () => {
                             fullWidth
                         ></TextField>
                     </Grid>
-                    <Grid xs={1} justifyContent="center" container>
+                    <Grid xs={1} justifyContent="center" item>
                         <SearchRounded />
                     </Grid>
                 </Grid>
@@ -143,6 +145,13 @@ const KhoQua = () => {
                             field: 'diem',
                             headerName: 'Điểm quy đổi',
                             flex: 1,
+                        },
+                        {
+                            field: 'gia',
+                            headerName: 'Giá',
+                            renderCell({ value }) {
+                                return formatter.format(value);
+                            },
                         },
                         {
                             field: 'soluong',

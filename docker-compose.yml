@@ -5,9 +5,7 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
-        image: anhphat-frontend
-        volumes:
-            - ./build:/app/build
+            target: deployment
+        image: thangved/anhphat-frontend
         ports:
             - 3000:3000
-        command: ['npm', 'run', 'build']

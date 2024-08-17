@@ -22,7 +22,7 @@ root.render(
         <BrowserRouter basename={config.basename}>
             <App />
         </BrowserRouter>
-    </Provider>
+    </Provider>,
 );
 
 // If you want your app to work offline and load faster, you can change

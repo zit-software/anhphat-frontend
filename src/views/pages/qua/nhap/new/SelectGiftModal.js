@@ -20,6 +20,7 @@ import { useState } from 'react';
 import { useQuery } from 'react-query';
 import quakhuyendungService from 'services/quakhuyendung.service';
 import InputNumber from 'ui-component/input-number';
+import formatter from 'views/utilities/formatter';
 
 const SelectGiftModal = ({ open = false, onClose = () => {}, onSelected = () => {} }) => {
     const [page, setPage] = useState(0);
@@ -88,6 +89,7 @@ const SelectGiftModal = ({ open = false, onClose = () => {}, onSelected = () => 
                                             <TableCell>Mã quà</TableCell>
                                             <TableCell>Tên quà</TableCell>
                                             <TableCell>Điểm</TableCell>
+                                            <TableCell>Giá nhập</TableCell>
                                             <TableCell>Tồn kho</TableCell>
                                             <TableCell>Chọn</TableCell>
                                         </TableRow>
@@ -98,6 +100,7 @@ const SelectGiftModal = ({ open = false, onClose = () => {}, onSelected = () => 
                                             <TableRow key={qua.ma}>
                                                 <TableCell>{qua.ma}</TableCell>
                                                 <TableCell>{qua.ten}</TableCell>
+                                                <TableCell>{formatter.format(qua.gia)}</TableCell>
                                                 <TableCell>{qua.diem}</TableCell>
                                                 <TableCell>{qua.soluong}</TableCell>
                                                 <TableCell>
