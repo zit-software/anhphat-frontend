@@ -19,7 +19,7 @@
         "apexcharts": "^3.35.3",
         "axios": "^1.6.2",
         "caniuse-lite": "^1.0.30001519",
-        "date-fns": "^2.29.3",
+        "date-fns": "^3.6.0",
         "dayjs": "^1.11.9",
         "formik": "^2.2.9",
         "framer-motion": "^11.3.28",
