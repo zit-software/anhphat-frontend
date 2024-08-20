@@ -22,7 +22,7 @@
         "date-fns": "^2.29.3",
         "dayjs": "^1.11.9",
         "formik": "^2.2.9",
-        "framer-motion": "^10.16.1",
+        "framer-motion": "^11.3.28",
         "material-ui-popup-state": "^5.0.9",
         "prop-types": "^15.8.1",
         "react": "^18.2.0",
