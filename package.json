@@ -37,7 +37,7 @@
         "react-router": "6.26.1",
         "react-router-dom": "6.26.1",
         "react-scripts": "^5.0.1",
-        "redux": "^4.2.1",
+        "redux": "^5.0.1",
         "yup": "^1.2.0"
     },
     "scripts": {
